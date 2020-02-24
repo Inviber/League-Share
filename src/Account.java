@@ -5,6 +5,7 @@ public class Account {
 	String username;
 	
 	ArrayList<String> leaguesOwnedIDs = new ArrayList<String>();
+	ArrayList<String> leaguesCastedIDs = new ArrayList<String>();
 	ArrayList<String> leaguesFollowedIDs = new ArrayList<String>();
 	ArrayList<String> teamsOwnedIDs = new ArrayList<String>();
 	ArrayList<String> teamsManagedIDs = new ArrayList<String>();
@@ -37,7 +38,7 @@ public class Account {
 		}
 	}
 	
-	void addLeague(String _ID, boolean owns)
+	void addLeague(String _ID, boolean owns, boolean casting)
 	{
 		// Need logic to prevent adding one league to multiple lists
 		// lookup league by _ID, pass it here, add to appropriate array
@@ -45,10 +46,12 @@ public class Account {
 		{
 			leaguesOwnedIDs.add(_ID);
 		}
-		else // following
+		else if (casting)
 		{
-			leaguesFollowedIDs.add(_ID);
+			leaguesCastedIDs.add(_ID);
 		}
+		
+		leaguesFollowedIDs.add(_ID);
 	}
 	
 	void addTeam(String _ID, boolean owns, boolean manages)
@@ -62,15 +65,23 @@ public class Account {
 		{
 			teamsManagedIDs.add(_ID);
 		}
-		else
-		{
-			teamsFollowedIDs.add(_ID);
-		}
+		
+		teamsFollowedIDs.add(_ID);
 	}
 	
 	void unfollowLeague(String _ID)
 	{
 		leaguesFollowedIDs.remove(_ID);
+	}
+	
+	void promoteLeagueCaster(String _ID)
+	{
+		leaguesCastedIDs.add(_ID);
+	}
+	
+	void demoteLeagueCaster(String _ID)
+	{
+		leaguesCastedIDs.remove(_ID);
 	}
 	
 	void unfollowTeam(String _ID)
@@ -81,7 +92,6 @@ public class Account {
 	void promoteTeamManager(String _ID)
 	{
 		teamsManagedIDs.add(_ID);
-		teamsFollowedIDs.remove(_ID);
 	}
 	
 	void demoteTeamManager(String _ID)
