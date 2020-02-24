@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
-public class Account {
-	String ID;		// _ID is the naming used by MongoDB.
-	String username;
+class Account {
+	private String ID;		// _ID is the naming used by MongoDB.
+	private String username;
 	
-	ArrayList<String> leaguesOwnedIDs = new ArrayList<String>();
-	ArrayList<String> leaguesCastedIDs = new ArrayList<String>();
-	ArrayList<String> leaguesFollowedIDs = new ArrayList<String>();
-	ArrayList<String> teamsOwnedIDs = new ArrayList<String>();
-	ArrayList<String> teamsManagedIDs = new ArrayList<String>();
-	ArrayList<String> teamsFollowedIDs = new ArrayList<String>();
+	private ArrayList<String> leaguesOwnedIDs = new ArrayList<String>();
+	private ArrayList<String> leaguesCastedIDs = new ArrayList<String>();
+	private ArrayList<String> leaguesFollowedIDs = new ArrayList<String>();
+	private ArrayList<String> teamsOwnedIDs = new ArrayList<String>();
+	private ArrayList<String> teamsManagedIDs = new ArrayList<String>();
+	private ArrayList<String> teamsFollowedIDs = new ArrayList<String>();
 	
 	Account(String _ID, String username) 
 	{
@@ -97,5 +97,45 @@ public class Account {
 	void demoteTeamManager(String _ID)
 	{
 		teamsManagedIDs.remove(_ID);
+	}
+	
+	String getID()
+	{
+		return this.ID;
+	}
+	
+	String getUsername()
+	{
+		return this.username;
+	}
+	
+	ArrayList<String> getLeaguesOwnedIDs() 
+	{
+		return leaguesOwnedIDs;
+	}
+
+	ArrayList<String> getLeaguesCastedIDs() 
+	{
+		return leaguesCastedIDs;
+	}
+
+	ArrayList<String> getLeaguesFollowedIDs() 
+	{
+		return leaguesFollowedIDs;
+	}
+
+	ArrayList<String> getTeamsOwnedIDs() 
+	{
+		return teamsOwnedIDs;
+	}
+
+	ArrayList<String> getTeamsManagedIDs() 
+	{
+		return teamsManagedIDs;
+	}
+
+	ArrayList<String> getTeamsFollowedIDs() 
+	{
+		return teamsFollowedIDs;
 	}
 }
