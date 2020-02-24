@@ -3,6 +3,7 @@ import java.util.ArrayList;
 class Account {
 	private String ID;		// _ID is the naming used by MongoDB.
 	private String username;
+	//private database db;	// pseudo code for when we have the database working.
 	
 	private ArrayList<String> leaguesOwnedIDs = new ArrayList<String>();
 	private ArrayList<String> leaguesCastedIDs = new ArrayList<String>();
@@ -15,6 +16,12 @@ class Account {
 	{
 		this.ID = _ID;
 		this.username = username;
+	}
+	
+	/*
+	void connectDatabase(database db)
+	{
+		this.db = db;
 	}
 	
 	void createLeague(String leagueName, String leagueDescription)
@@ -37,23 +44,9 @@ class Account {
 			return false;
 		}
 	}
+	*/ 
 	
-	void addLeague(String _ID, boolean owns, boolean casting)
-	{
-		// Need logic to prevent adding one league to multiple lists
-		// lookup league by _ID, pass it here, add to appropriate array
-		if (owns)
-		{
-			leaguesOwnedIDs.add(_ID);
-		}
-		else if (casting)
-		{
-			leaguesCastedIDs.add(_ID);
-		}
-		
-		leaguesFollowedIDs.add(_ID);
-	}
-	
+	/*
 	void createTeam(String teamName)
 	{
 		// access db, this call will likely return an ID from the db.
@@ -73,6 +66,23 @@ class Account {
 			System.out.println("Not authorized to update this Team.");
 			return false;
 		}
+	}
+	*/ 
+	
+	void addLeague(String _ID, boolean owns, boolean casting)
+	{
+		// Need logic to prevent adding one league to multiple lists
+		// lookup league by _ID, pass it here, add to appropriate array
+		if (owns)
+		{
+			leaguesOwnedIDs.add(_ID);
+		}
+		else if (casting)
+		{
+			leaguesCastedIDs.add(_ID);
+		}
+		
+		leaguesFollowedIDs.add(_ID);
 	}
 	
 	void addTeam(String _ID, boolean owns, boolean manages)
