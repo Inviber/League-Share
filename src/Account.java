@@ -18,6 +18,46 @@ class Account {
 		this.username = username;
 	}
 	
+	String getID()
+	{
+		return this.ID;
+	}
+	
+	String getUsername()
+	{
+		return this.username;
+	}
+	
+	ArrayList<String> getLeaguesOwnedIDs() 
+	{
+		return leaguesOwnedIDs;
+	}
+
+	ArrayList<String> getLeaguesCastedIDs() 
+	{
+		return leaguesCastedIDs;
+	}
+
+	ArrayList<String> getLeaguesFollowedIDs() 
+	{
+		return leaguesFollowedIDs;
+	}
+
+	ArrayList<String> getTeamsOwnedIDs() 
+	{
+		return teamsOwnedIDs;
+	}
+
+	ArrayList<String> getTeamsManagedIDs() 
+	{
+		return teamsManagedIDs;
+	}
+
+	ArrayList<String> getTeamsFollowedIDs() 
+	{
+		return teamsFollowedIDs;
+	}
+	
 	/*
 	void connectDatabase(database db)
 	{
@@ -128,45 +168,5 @@ class Account {
 	void demoteTeamManager(String _ID)
 	{
 		teamsManagedIDs.remove(_ID);
-	}
-	
-	String getID()
-	{
-		return this.ID;
-	}
-	
-	String getUsername()
-	{
-		return this.username;
-	}
-	
-	ArrayList<String> getLeaguesOwnedIDs() 
-	{
-		return leaguesOwnedIDs;
-	}
-
-	ArrayList<String> getLeaguesCastedIDs() 
-	{
-		return leaguesCastedIDs;
-	}
-
-	ArrayList<String> getLeaguesFollowedIDs() 
-	{
-		return leaguesFollowedIDs;
-	}
-
-	ArrayList<String> getTeamsOwnedIDs() 
-	{
-		return teamsOwnedIDs;
-	}
-
-	ArrayList<String> getTeamsManagedIDs() 
-	{
-		return teamsManagedIDs;
-	}
-
-	ArrayList<String> getTeamsFollowedIDs() 
-	{
-		return teamsFollowedIDs;
 	}
 }
