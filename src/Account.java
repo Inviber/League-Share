@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Account {
-	String _ID;		// _ID is the naming used by MongoDB.
+	String ID;		// _ID is the naming used by MongoDB.
 	String username;
 	
 	ArrayList<String> leaguesOwnedIDs = new ArrayList<String>();
@@ -12,25 +12,36 @@ public class Account {
 	
 	Account(String _ID, String username) 
 	{
-		this._ID = _ID;
+		this.ID = _ID;
 		this.username = username;
 	}
 	
-	/*
-	// stub of function to be created at a later date, will create a league, league will access the database to announce its self
-	// then this function will access that league and get its ID, and tell this class to add it to its arrayList.
-	void createLeague(params)
+	void createLeague(String leagueName, String leagueDescription)
 	{
-		League L = new League(params);		
-		addLeague(L.getID, true);
+		// access db, this call will likely return an ID from the db.
+		String _ID = db.createLeague(this.ID, leagueName, leagueDescription); 
+		addLeague(_ID, true);
 	}
-	*/
 	
-	void addLeague(String _ID, boolean own)
+	boolean updateLeague(String _ID, String leagueName, String leagueDescription) // returns boolean for if update was successful
+	{
+		if (leaguesOwnedIDs.contains(_ID))
+		{
+			// access DB, this call will probably return a boolean on update success.
+			return db.updateLeague(this.ID, leagueName, leagueDescription);
+		}
+		else
+		{
+			System.out.println("Not authorized to update this league.");
+			return false;
+		}
+	}
+	
+	void addLeague(String _ID, boolean owns)
 	{
 		// Need logic to prevent adding one league to multiple lists
 		// lookup league by _ID, pass it here, add to appropriate array
-		if (own)
+		if (owns)
 		{
 			leaguesOwnedIDs.add(_ID);
 		}
@@ -40,14 +51,14 @@ public class Account {
 		}
 	}
 	
-	void addTeam(String _ID, boolean own, boolean manage)
+	void addTeam(String _ID, boolean owns, boolean manages)
 	{
 		// lookup team by _ID, pass it here, add to appropriate array
-		if (own)
+		if (owns)
 		{
 			teamsOwnedIDs.add(_ID);
 		}
-		else if (manage)
+		else if (manages)
 		{
 			teamsManagedIDs.add(_ID);
 		}
