@@ -57,6 +57,12 @@ public class Account {
 		teamsFollowedIDs.remove(_ID);
 	}
 	
+	void promoteTeamManager(String _ID)
+	{
+		teamsManagedIDs.add(_ID);
+		teamsFollowedIDs.remove(_ID);
+	}
+	
 	void demoteTeamManager(String _ID)
 	{
 		teamsManagedIDs.remove(_ID);
