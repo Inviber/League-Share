@@ -16,6 +16,16 @@ public class Account {
 		this.username = username;
 	}
 	
+	/*
+	// stub of function to be created at a later date, will create a league, league will access the database to announce its self
+	// then this function will access that league and get its ID, and tell this class to add it to its arrayList.
+	void createLeague(params)
+	{
+		League L = new League(params);		
+		addLeague(L.getID, true);
+	}
+	*/
+	
 	void addLeague(String _ID, boolean own)
 	{
 		// Need logic to prevent adding one league to multiple lists
