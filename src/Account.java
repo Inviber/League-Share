@@ -21,7 +21,7 @@ class Account {
 	{
 		// access db, this call will likely return an ID from the db.
 		String _ID = db.createLeague(this.ID, leagueName, leagueDescription); 
-		addLeague(_ID, true);
+		addLeague(_ID, true, false);
 	}
 	
 	boolean updateLeague(String _ID, String leagueName, String leagueDescription) // returns boolean for if update was successful
@@ -52,6 +52,27 @@ class Account {
 		}
 		
 		leaguesFollowedIDs.add(_ID);
+	}
+	
+	void createTeam(String teamName)
+	{
+		// access db, this call will likely return an ID from the db.
+		String _ID = db.createTeam(this.ID, teamName); 
+		addTeam(_ID, true, false);
+	}
+	
+	boolean updateTeam(String _ID, String teamName) // returns boolean for if update was successful
+	{
+		if (teamsOwnedIDs.contains(_ID) || teamsManagedIDs.contains(_ID))
+		{
+			// access DB, this call will probably return a boolean on update success.
+			return db.updateTeam(this.ID, teamName);
+		}
+		else
+		{
+			System.out.println("Not authorized to update this Team.");
+			return false;
+		}
 	}
 	
 	void addTeam(String _ID, boolean owns, boolean manages)
