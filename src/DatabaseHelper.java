@@ -1,19 +1,13 @@
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bson.Document;
-import org.json.simple.JSONObject;
-
+import org.bson.types.ObjectId;
 
 
 public class DatabaseHelper {
@@ -58,9 +52,22 @@ public class DatabaseHelper {
 		this.database.getCollection(collectionName).insertOne(newDocument);
 	}
 	
+	public Document getDocument(String collectionName, String uniqueID)
+	{
+		System.out.println("Retrieving document...");
+		
+		return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
+	}
+	
 	public Document createDocument()
 	{
 		return new Document();
+	}
+	
+	public String createNewUser() 
+	{
+		//return unique ID
+		return "";
 	}
 	
 	
@@ -81,7 +88,7 @@ public class DatabaseHelper {
 		MongoCollection<Document> leagues = dbHelper.getCollection("Leagues");
 		
 		/*
-		 * User
+		 * User Document
 		 * 		- _id
 		 * 
 		 * 		- username
@@ -89,30 +96,40 @@ public class DatabaseHelper {
 		 * 		- firstName
 		 * 		- lastName
 		 * 		
-		 * 		- followedLeagues[]
-		 * 		- ownedLeagues[]
-		 * 		- ownedTeams[]
+		 * 		- followedLeagues[] string
+		 * 		- followedTeams[] string
 		 * 
+		 * 		- ownedLeagues[] string
+		 * 		- ownedTeams[] string
+		 * 
+		 * 		- teamsManaged[] string
+		 * 		- leaguesCasted[] string
 		 */
 		
 		
 		/*
-		 * League
+		 * League Document
 		 * 		- _id
 		 * 
 		 * 		- name
+		 * 		- ownerID
 		 * 		- description
-		 * 		- zipcode
-		 * 		- adminIDs[]
+		 *		 
+		 * 		- casterIDs[]
 		 *		
 		 * 		- teams[]
 		 *			- teamName
 		 *			- zipcode
-		 *			- casterIDs[]
 		 *			- players[]
+		 *				- firstName
+		 *				- lastName
 		 *				- stats[]
-		 *			- matchDates
-		 * 
+		 *					- completely unique to the league
+		 *			- matches[]
+		 *				- homeTeam
+		 *				- awayTeam
+		 *				- date
+		 *				- finalScore
 		 */
 		
 		
@@ -127,36 +144,40 @@ public class DatabaseHelper {
 		
 		
 		ArrayList<String> followedLeagueIDs = new ArrayList<String>();
+		ArrayList<String> followedTeamIDs = new ArrayList<String>();
+		ArrayList<String> ownedLeagueIDs = new ArrayList<String>();
+		ArrayList<String> ownedTeamIDs = new ArrayList<String>();
+		ArrayList<String> managedTeamIDs = new ArrayList<String>();
+		ArrayList<String> leaguesCastedIDs = new ArrayList<String>();
+		
+		
 		followedLeagueIDs.add("029384oe098hi234");
 		followedLeagueIDs.add("203948aod234oeduh2234");
+		followedLeagueIDs.add("ai7u7e6d9e7u6e7eui43567");
+		
 		
 		newUserDocument.put("followedLeagueIDs", followedLeagueIDs);
-		
-		
-		dbHelper.addDocument("Users", newUserDocument);
-		System.out.println(newUserDocument.toString());
-			
-			
-		
-//		newDocument.forEach
-		
-		
-//		collection.insertOne(newDocument);
+		newUserDocument.put("followedTeamIDs", followedTeamIDs);
+		newUserDocument.put("ownedLeagueIDs", ownedLeagueIDs);
+		newUserDocument.put("ownedTeamIDs", ownedTeamIDs);
+		newUserDocument.put("managedTeamIDs", managedTeamIDs);
+		newUserDocument.put("leaguesCastedIDs", leaguesCastedIDs);
+					
 
-//		//collection to be iterated over
-//		FindIterable<Document> iterDoc = collection.find(); 
-//
-//		MongoCursor<Document> it = iterDoc.iterator(); 
-//
-//		while(it.hasNext())
-//		{  
-//			System.out.println(it.next());  
-//		}
-
+		//adding new user
+//		dbHelper.addDocument("Users", newUserDocument);
+//		//printing new user
+//		System.out.println(newUserDocument.toString());
+//		//example of how to get the value by using the key
+//		System.out.println(newUserDocument.get("username"));
+//		//example of how to get the users unique id
+//		System.out.println(newUserDocument.get("_id"));
 		
+		Document searchedDocument = dbHelper.getDocument("Users", "5e558fa2db3ad400422015af"); 
 		
+		System.out.println(searchedDocument.toJson());
+	
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
 	}
-
 }
