@@ -38,24 +38,41 @@ public class League {
 		return ownerID;
 	}
 	
+	ArrayList<String> getTeams()
+	{
+		return teams;
+	}
+	
 	ArrayList<String> getAdmins() 
 	{
 		return admins;
 	}
 	
-	void addTeam(String teamID)
+	boolean addTeam(String teamID)
 	{
-		teams.add(teamID);
+		if(!teams.contains(teamID))
+		{
+			teams.add(teamID);
+			if(teams.contains(teamID))
+				return true;
+		}
+		
+		return false;
+			
 	}
 	
-	void removeTeam(String teamID)
+	boolean removeTeam(String teamID)
 	{
 		int indexOfTeam;
 		if(teams.contains(teamID))
 		{
 			indexOfTeam = teams.indexOf(teamID);
 			teams.remove(indexOfTeam);
+			if(!teams.contains(teamID))
+				return true;
 		}
+		
+		return false;
 	}
 	
 	void setLeagueDescription(String leagueDescription)
