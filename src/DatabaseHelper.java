@@ -2,10 +2,17 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bson.Document;
+import org.json.simple.JSONObject;
 
 
 
@@ -42,7 +49,7 @@ public class DatabaseHelper {
 	
 	public MongoCollection<Document> getCollection(String collectionName)
 	{
-		//collections -- will be Users, Leagues, Teams, Players
+		//collections -- will be Users and Leagues
 		return this.database.getCollection(collectionName);
 	}
 	
@@ -68,28 +75,70 @@ public class DatabaseHelper {
 //		Do not need to uncomment this because the collections already exist on the database
 //		dbHelper.createCollection("Users");
 //		dbHelper.createCollection("Leagues");
-//		dbHelper.createCollection("Teams");
-//		dbHelper.createCollection("Players");
+		
+		
+		MongoCollection<Document> users = dbHelper.getCollection("Users");
+		MongoCollection<Document> leagues = dbHelper.getCollection("Leagues");
+		
+		/*
+		 * User
+		 * 		- _id
+		 * 
+		 * 		- username
+		 * 		- password
+		 * 		- firstName
+		 * 		- lastName
+		 * 		
+		 * 		- followedLeagues[]
+		 * 		- ownedLeagues[]
+		 * 		- ownedTeams[]
+		 * 
+		 */
+		
+		
+		/*
+		 * League
+		 * 		- _id
+		 * 
+		 * 		- name
+		 * 		- description
+		 * 		- zipcode
+		 * 		- adminIDs[]
+		 *		
+		 * 		- teams[]
+		 *			- teamName
+		 *			- zipcode
+		 *			- casterIDs[]
+		 *			- players[]
+		 *				- stats[]
+		 *			- matchDates
+		 * 
+		 */
 		
 		
 		
-//		MongoCollection<Document> collection = dbHelper.getCollection("Users");
+		//CREATING NEW USER
+		Document newUserDocument = dbHelper.createDocument();
 		
-		Document newDocument = dbHelper.createDocument();
+		newUserDocument.put("username", "grasseater421");
+		newUserDocument.put("password", "eatbeans");
+		newUserDocument.put("firstName", "Tot");
+		newUserDocument.put("lastName", "The Cat");
 		
-		newDocument.append("cats", 100);
-		newDocument.put("smiles", 200);
+		
+		ArrayList<String> followedLeagueIDs = new ArrayList<String>();
+		followedLeagueIDs.add("029384oe098hi234");
+		followedLeagueIDs.add("203948aod234oeduh2234");
+		
+		newUserDocument.put("followedLeagueIDs", followedLeagueIDs);
+		
+		
+		dbHelper.addDocument("Users", newUserDocument);
+		System.out.println(newUserDocument.toString());
 			
-		//adding newDocument to the Users collection
-		dbHelper.addDocument("Users", newDocument);
-		
 			
-		
-		
-		System.out.println(newDocument);
 		
 //		newDocument.forEach
-//		
 		
 		
 //		collection.insertOne(newDocument);
@@ -103,9 +152,6 @@ public class DatabaseHelper {
 //		{  
 //			System.out.println(it.next());  
 //		}
-//		
-//		
-//		
 
 		
 		
