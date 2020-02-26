@@ -1,16 +1,11 @@
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Updates;
 
-
 import java.util.ArrayList;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 
@@ -170,8 +165,6 @@ public class DatabaseHelper {
 	}
 	
 	
-	
-
 	
 	public static void main(String[] args)
 	{
