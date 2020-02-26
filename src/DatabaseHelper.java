@@ -48,32 +48,33 @@ public class DatabaseHelper {
 		this.database.createCollection(collectionName);
 	}
 	
-	public MongoCollection<Document> getCollection(String collectionName)
-	{
-		//collections -- will be Users and Leagues
-		return this.database.getCollection(collectionName);
-	}
+//	public MongoCollection<Document> getCollection(String collectionName)
+//	{
+//		//collections -- will be Users and Leagues
+//		return this.database.getCollection(collectionName);
+//	}
 	
-	public void addDocument(String collectionName, Document newDocument)
-	{
-		//example use
-		//dbHelper.addDocument("Users", newUserDocument);
-
-		this.database.getCollection(collectionName).insertOne(newDocument);
-	}
+//	public void addDocument(String collectionName, Document newDocument)
+//	{
+//		//example use
+//		//dbHelper.addDocument("Users", newUserDocument);
+//		this.database.getCollection(collectionName).insertOne(newDocument);
+//	}
+	
+//	public Document createDocument()
+//	{
+//		//example use
+//		//Document newUserDocument = dbHelper.createDocument();
+//		//example of how to get the value by using the key
+//		System.out.println(newUserDocument.get("username"));
+//		//example of how to get the users unique id - will be null unless added to or is in DB 
+//		System.out.println(newUserDocument.get("_id").toString());
+//		return new Document();
+//	}
 	
 	public Document getDocument(String collectionName, String uniqueID)
 	{
-		System.out.println("Retrieving document...");
-		
 		return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
-	}
-	
-	public Document createDocument()
-	{
-		//example use
-		//Document newUserDocument = dbHelper.createDocument();
-		return new Document();
 	}
 	
 	public String createNewUser(String username, String password, String firstName, String lastName) 
@@ -180,9 +181,7 @@ public class DatabaseHelper {
 //		dbHelper.createCollection("Users");
 //		dbHelper.createCollection("Leagues");
 		
-//		MongoCollection<Document> users = dbHelper.getCollection("Users");
-//		MongoCollection<Document> leagues = dbHelper.getCollection("Leagues");
-						
+		
 //		//creating new user and returning the new unique ID
 //		String newUserID = dbHelper.createNewUser("leaf_consumer", "herbivore1993", "Jasper", "Jellington");
 //		
@@ -207,27 +206,7 @@ public class DatabaseHelper {
 //		dbHelper.removeManagedTeamID("5e55dcdf8fe1f34ed9f230ed", "d92123347897oeu00");
 //		dbHelper.removeLeagueCastedID("5e55dcdf8fe1f34ed9f230ed", "hdm123bngf234871duht");
 	
-	
-		/*
-		 * User Document
-		 * 		- _id
-		 * 
-		 * 		- username
-		 * 		- password
-		 * 		- firstName
-		 * 		- lastName
-		 * 		
-		 * 		- followedLeagues[] string
-		 * 		- followedTeams[] string
-		 * 
-		 * 		- ownedLeagues[] string
-		 * 		- ownedTeams[] string
-		 * 
-		 * 		- teamsManaged[] string
-		 * 		- leagueCasted[] string
-		 */
-		
-		
+
 		/*
 		 * League Document
 		 * 		- _id
@@ -253,17 +232,7 @@ public class DatabaseHelper {
 		 *				- finalScore
 		 */
 		
-		
-		
-		
-		
-//		//example of how to get the value by using the key
-//		System.out.println(newUserDocument.get("username"));
-//		//example of how to get the users unique id - will be null unless added to or is in DB 
-//		System.out.println(newUserDocument.get("_id").toString());
-			
-		
-	
+
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
 	}
