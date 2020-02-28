@@ -1,4 +1,5 @@
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
@@ -79,7 +80,7 @@ public class DatabaseHelper {
 	
 	//USER METHODS
 		
-	public String createNewUser(String username, String password, String firstName, String lastName) 
+	public String createUser(String username, String password, String firstName, String lastName) 
 	{
 		//creating document that will be passed into DB
 		Document newUserDocument = new Document();
@@ -110,6 +111,10 @@ public class DatabaseHelper {
 		//return unique ID
 		return newUserDocument.get("_id").toString();
 	}
+	
+	/*
+	 * deleteUser()
+	 */
 	
 	
 	public String getUserIDByUsername(String username)
@@ -225,7 +230,7 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
-	public String createNewLeague(String leagueName, String ownerID, String sport, String description) 
+	public String createLeague(String leagueName, String ownerID, String sport, String description) 
 	{
 		//creating document that will be passed into DB
 		Document newLeagueDocument = new Document();
@@ -237,8 +242,8 @@ public class DatabaseHelper {
 
 		//initializing arrays
 		ArrayList<String> casterIDs = new ArrayList<String>();
-		ArrayList<String> teams = new ArrayList<String>();
-								
+		ArrayList<Document> teams = new ArrayList<Document>();
+	
 		newLeagueDocument.put("casterIDs", casterIDs);
 		newLeagueDocument.put("teams", teams);
 	
@@ -248,6 +253,10 @@ public class DatabaseHelper {
 		//return unique ID
 		return newLeagueDocument.get("_id").toString();
 	}
+	
+	/*
+	 * deleteLeague
+	 */
 	
 	public void addLeagueCasterID(String leagueID, String leagueCasterID)
 	{
@@ -259,6 +268,81 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("casterIDs", leagueCasterID));
 	}
 	
+	public String createTeam(String leagueID, String teamName, String zipcode) 
+	{
+		Document newTeamDocument = new Document();
+		
+		newTeamDocument.put("_id", new ObjectId());
+		newTeamDocument.put("teamName", teamName);
+		newTeamDocument.put("zipcode", zipcode);
+		
+		ArrayList<String> matches = new ArrayList<String>();
+		ArrayList<Document> players = new ArrayList<Document>();
+		
+		newTeamDocument.put("matches", matches);
+		newTeamDocument.put("players", players);
+		
+		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("teams", newTeamDocument));
+		
+		return newTeamDocument.get("_id").toString();
+	}
+	
+	public void deleteTeam(String leagueID, String teamID)
+	{
+		BasicDBObject query = new BasicDBObject();
+	    query.put("_id", new ObjectId(teamID));
+		
+		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("teams", query));
+	}
+	
+	public String createPlayer(String leagueID, String teamID, String firstName, String lastName)
+	{
+		
+		Document newPlayerDocument = new Document();
+		
+		newPlayerDocument.put("_id", new ObjectId());
+		newPlayerDocument.put("firstName", firstName);
+		newPlayerDocument.put("lastName", lastName);
+		
+		ArrayList<Document> statistics = new ArrayList<Document>();
+			
+		newPlayerDocument.put("statistics", statistics);
+		
+		
+		BasicDBObject query = new BasicDBObject();
+		query.put("_id", new ObjectId(leagueID));
+		
+		//find league to update
+		FindIterable<Document> documents = this.database.getCollection(LEAGUES).find(query);
+		
+		//find team to update
+		documents = documents.filter(eq("teams._id", new ObjectId(teamID)));
+		
+		Document foundLeague = documents.first();
+		
+		foundLeague.append("players", newPlayerDocument);
+		
+		
+		
+		System.out.println(foundLeague.toString());
+		
+//		MongoCursor<Document> cursor = leagueDocuments.iterator();
+//		
+//		
+		
+		
+//		this.database.getCollection(LEAGUES).updateOne(eq("teams._id", new ObjectId(teamID)), Updates.addToSet("players", newPlayerDocument));
+				
+		return newPlayerDocument.get("_id").toString();
+	}
+	
+
+	
+	/*
+	 * createStatistic()
+	 */
+	
+	
 	
 	
 	
@@ -267,51 +351,32 @@ public class DatabaseHelper {
 	
 	public static void main(String[] args)
 	{
+		// -- ESTABLISHING CONNECTION TO DATABASE --
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
-//		Do not need to uncomment this because the collections already exist on the database
+		
+		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
 //		dbHelper.createCollection("Leagues");
 		
 		
-//		//creating new user and returning the new unique ID
-//		String newUserID = dbHelper.createNewUser("leaf_consumer", "herbivore1993", "Jasper", "Jellington");
-//		
-//		//searching for a specific document by userID
-//		Document searchedDocument = dbHelper.getDocument("Users", newUserID); 
-//		
-//		//printing found document
-//		System.out.println(searchedDocument.toJson());
-	
+		// -- CREATING NEW USER -- 
+//		String newUserID = dbHelper.createUser("leaf_consumer", "herbivore1993", "Jasper", "Jellington");
+//		System.out.println(newUserID);
 		
-		String id = dbHelper.getUserIDByUsername("leaf_consumer");
-		Document searchedDocument = dbHelper.getDocument("Users", id); 
-		System.out.println(searchedDocument.toJson());
 		
-//		String newLeagueID = dbHelper.createNewLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
+		// -- CREATING NEW LEAGUE -- 
+//		String newLeagueID = dbHelper.createLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
 //		System.out.println(newLeagueID);
 		
-		dbHelper.addLeagueCasterID("5e59612b284ef9642dd7c652", id);
-//		dbHelper.removeLeagueCasterID("5e59612b284ef9642dd7c652", id);
+		// -- CREATING AND DELETING NEW TEAMS -- 
+//		dbHelper.createTeam("5e59763368ec36619a66bfdc", "Boxer Bruisers", "41015");
+//		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e59763368ec36619a66bfdd");
 		
+		// -- CREATING AND DELETING NEW PLAYERS -- 
+		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington");
 		
 	
-//		dbHelper.addFollowedLeagueID(id, "aoeua123eu34098akdsank");
-//		dbHelper.addFollowedTeamID(id, "02934ha123okb");
-//		dbHelper.addOwnedLeagueID(id, "asoenu123thbx90ou70");
-//		dbHelper.addOwnedTeamID(id, "rcg123xbroe98234");
-//		dbHelper.addManagedTeamID(id, "d92123347897oeu00");
-//		dbHelper.addLeagueCastedID(id, "hdm123bngf234871duht");
-	
-//		dbHelper.removeFollowedLeagueID(id, "aoeua123eu34098akdsank");
-//		dbHelper.removeFollowedTeamID(id, "02934ha123okb");
-//		dbHelper.removeOwnedLeagueID(id, "asoenu123thbx90ou70");
-//		dbHelper.removeOwnedTeamID(id, "rcg123xbroe98234");
-//		dbHelper.removeManagedTeamID(id, "d92123347897oeu00");
-//		dbHelper.removeLeagueCastedID(id, "hdm123bngf234871duht");
-	
-
-		
 
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
