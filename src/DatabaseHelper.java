@@ -1,4 +1,7 @@
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import static com.mongodb.client.model.Filters.eq;
@@ -43,6 +46,12 @@ public class DatabaseHelper {
 		this.database.createCollection(collectionName);
 	}
 	
+	public Document getDocument(String collectionName, String uniqueID)
+	{
+		return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
+	}
+	
+	
 //	public MongoCollection<Document> getCollection(String collectionName)
 //	{
 //		//collections -- will be Users and Leagues
@@ -66,12 +75,7 @@ public class DatabaseHelper {
 //		System.out.println(newUserDocument.get("_id").toString());
 //		return new Document();
 //	}
-	
-	public Document getDocument(String collectionName, String uniqueID)
-	{
-		return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
-	}
-	
+		
 	public String createNewUser(String username, String password, String firstName, String lastName) 
 	{
 		//creating document that will be passed into DB
@@ -102,6 +106,26 @@ public class DatabaseHelper {
 		
 		//return unique ID
 		return newUserDocument.get("_id").toString();
+	}
+	
+	
+	public String getUserIDByUsername(String username)
+	{
+		//creating query request to be searched for
+		BasicDBObject query = new BasicDBObject();
+	    query.put("username", username);
+	        
+	    //retrieving all documents that match query
+	    FindIterable<Document> userDocuments = this.database.getCollection(USERS).find(query);
+	    
+	    //choosing the first document because it is known that all usernames are unique
+	    Document userDocument = userDocuments.first();
+	    
+	    //retrieving id
+	    ObjectId userID = (ObjectId) userDocument.get("_id");
+	    
+	    //toStringing it
+	    return userID.toString();
 	}
 	
 	public void addFollowedLeagueID(String userID, String followedLeagueID)
@@ -184,13 +208,23 @@ public class DatabaseHelper {
 //		//printing found document
 //		System.out.println(searchedDocument.toJson());
 	
-			
-		dbHelper.addFollowedLeagueID("5e55dcdf8fe1f34ed9f230ed", "aoeua123eu34098akdsank");
-		dbHelper.addFollowedTeamID("5e55dcdf8fe1f34ed9f230ed", "02934ha123okb");
-		dbHelper.addOwnedLeagueID("5e55dcdf8fe1f34ed9f230ed", "asoenu123thbx90ou70");
-		dbHelper.addOwnedTeamID("5e55dcdf8fe1f34ed9f230ed", "rcg123xbroe98234");
-		dbHelper.addManagedTeamID("5e55dcdf8fe1f34ed9f230ed", "d92123347897oeu00");
-		dbHelper.addLeagueCastedID("5e55dcdf8fe1f34ed9f230ed", "hdm123bngf234871duht");
+//			
+//		dbHelper.addFollowedLeagueID("5e55dcdf8fe1f34ed9f230ed", "aoeua123eu34098akdsank");
+//		dbHelper.addFollowedTeamID("5e55dcdf8fe1f34ed9f230ed", "02934ha123okb");
+//		dbHelper.addOwnedLeagueID("5e55dcdf8fe1f34ed9f230ed", "asoenu123thbx90ou70");
+//		dbHelper.addOwnedTeamID("5e55dcdf8fe1f34ed9f230ed", "rcg123xbroe98234");
+//		dbHelper.addManagedTeamID("5e55dcdf8fe1f34ed9f230ed", "d92123347897oeu00");
+//		dbHelper.addLeagueCastedID("5e55dcdf8fe1f34ed9f230ed", "hdm123bngf234871duht");
+//		
+		
+		String id = dbHelper.getUserIDByUsername("leaf_consumer");
+		
+		Document searchedDocument = dbHelper.getDocument("Users", id); 
+		
+		System.out.println(searchedDocument.toJson());
+//		System.out.println(id);
+		
+		
 		
 //		dbHelper.removeFollowedLeagueID("5e55dcdf8fe1f34ed9f230ed", "aoeua123eu34098akdsank");
 //		dbHelper.removeFollowedTeamID("5e55dcdf8fe1f34ed9f230ed", "02934ha123okb");
