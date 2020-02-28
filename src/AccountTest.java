@@ -10,13 +10,12 @@ class AccountTest {
 	@BeforeAll
 	static void createAccount()
 	{
-		account = new Account("125A684", "Geralt");
+		account = new Account("WhiteWolf");
 	}
 	
 	@Test
 	void accountCreatedSuccessfully() {
-		assertEquals(account.getID(), "125A684");
-		assertEquals(account.getUsername(), "Geralt");
+		assertEquals(account.getUsername(), "WhiteWolf");
 	}
 	
 	@Test
@@ -123,6 +122,4 @@ class AccountTest {
 		assertEquals(account.getTeamsFollowedIDs().contains("demotedTeam"), true);
 	}
 	
-	
-
 }
