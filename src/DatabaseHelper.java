@@ -1,7 +1,6 @@
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import static com.mongodb.client.model.Filters.eq;
@@ -75,6 +74,10 @@ public class DatabaseHelper {
 //		System.out.println(newUserDocument.get("_id").toString());
 //		return new Document();
 //	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//USER METHODS
 		
 	public String createNewUser(String username, String password, String firstName, String lastName) 
 	{
@@ -188,6 +191,78 @@ public class DatabaseHelper {
 		this.database.getCollection(USERS).updateOne(eq("_id", new ObjectId(userID)), Updates.pull("leagueCastedIDs", leagueCastedID));
 	}
 	
+
+	
+	
+	/*
+	 * League Document
+	 * 		- _id
+	 * 
+	 * 		- name
+	 * 		- ownerID
+	 * 		- sport
+	 * 		- description
+	 *		 
+	 * 		- casterIDs[]
+	 *		
+	 * 		- teams[]				createTeam(String leagueID, String teamName, String zipcode)
+	 *			- teamName
+	 *			- zipcode
+	 *			- players[]			addPlayer(String leagueID, String teamName, String firstName, String lastName, ...) //each player will need a unique ID because people can have the same names
+	 *				- firstName
+	 *				- lastName
+	 *				- stats[]
+	 *					- completely unique to the league
+	 *			- matches[]
+	 *				- homeTeam
+	 *				- awayTeam
+	 *				- date
+	 *				- finalScore
+	 */
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//LEAGUE METHODS
+	
+	public String createNewLeague(String leagueName, String ownerID, String sport, String description) 
+	{
+		//creating document that will be passed into DB
+		Document newLeagueDocument = new Document();
+		
+		newLeagueDocument.put("leagueName", leagueName);
+		newLeagueDocument.put("ownerID", ownerID);
+		newLeagueDocument.put("sport", sport);
+		newLeagueDocument.put("description", description);
+
+		//initializing arrays
+		ArrayList<String> casterIDs = new ArrayList<String>();
+		ArrayList<String> teams = new ArrayList<String>();
+								
+		newLeagueDocument.put("casterIDs", casterIDs);
+		newLeagueDocument.put("teams", teams);
+	
+		//adding new league to leagues collection
+		this.database.getCollection(LEAGUES).insertOne(newLeagueDocument);
+		
+		//return unique ID
+		return newLeagueDocument.get("_id").toString();
+	}
+	
+	public void addLeagueCasterID(String leagueID, String leagueCasterID)
+	{
+		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("casterIDs", leagueCasterID));
+	}
+	
+	public void removeLeagueCasterID(String leagueID, String leagueCasterID)
+	{
+		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("casterIDs", leagueCasterID));
+	}
+	
+	
+	
+	
+	
 	
 	
 	public static void main(String[] args)
@@ -210,11 +285,15 @@ public class DatabaseHelper {
 	
 		
 		String id = dbHelper.getUserIDByUsername("leaf_consumer");
-		
 		Document searchedDocument = dbHelper.getDocument("Users", id); 
-		
 		System.out.println(searchedDocument.toJson());
-
+		
+//		String newLeagueID = dbHelper.createNewLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
+//		System.out.println(newLeagueID);
+		
+		dbHelper.addLeagueCasterID("5e59612b284ef9642dd7c652", id);
+//		dbHelper.removeLeagueCasterID("5e59612b284ef9642dd7c652", id);
+		
 		
 	
 //		dbHelper.addFollowedLeagueID(id, "aoeua123eu34098akdsank");
@@ -224,38 +303,14 @@ public class DatabaseHelper {
 //		dbHelper.addManagedTeamID(id, "d92123347897oeu00");
 //		dbHelper.addLeagueCastedID(id, "hdm123bngf234871duht");
 	
-		dbHelper.removeFollowedLeagueID(id, "aoeua123eu34098akdsank");
-		dbHelper.removeFollowedTeamID(id, "02934ha123okb");
-		dbHelper.removeOwnedLeagueID(id, "asoenu123thbx90ou70");
-		dbHelper.removeOwnedTeamID(id, "rcg123xbroe98234");
-		dbHelper.removeManagedTeamID(id, "d92123347897oeu00");
-		dbHelper.removeLeagueCastedID(id, "hdm123bngf234871duht");
+//		dbHelper.removeFollowedLeagueID(id, "aoeua123eu34098akdsank");
+//		dbHelper.removeFollowedTeamID(id, "02934ha123okb");
+//		dbHelper.removeOwnedLeagueID(id, "asoenu123thbx90ou70");
+//		dbHelper.removeOwnedTeamID(id, "rcg123xbroe98234");
+//		dbHelper.removeManagedTeamID(id, "d92123347897oeu00");
+//		dbHelper.removeLeagueCastedID(id, "hdm123bngf234871duht");
 	
 
-		/*
-		 * League Document
-		 * 		- _id
-		 * 
-		 * 		- name
-		 * 		- ownerID
-		 * 		- description
-		 *		 
-		 * 		- casterIDs[]
-		 *		
-		 * 		- teams[]
-		 *			- teamName
-		 *			- zipcode
-		 *			- players[]
-		 *				- firstName
-		 *				- lastName
-		 *				- stats[]
-		 *					- completely unique to the league
-		 *			- matches[]
-		 *				- homeTeam
-		 *				- awayTeam
-		 *				- date
-		 *				- finalScore
-		 */
 		
 
 		//shutting down mongoDB connection
