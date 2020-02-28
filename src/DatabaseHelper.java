@@ -208,30 +208,28 @@ public class DatabaseHelper {
 //		//printing found document
 //		System.out.println(searchedDocument.toJson());
 	
-//			
-//		dbHelper.addFollowedLeagueID("5e55dcdf8fe1f34ed9f230ed", "aoeua123eu34098akdsank");
-//		dbHelper.addFollowedTeamID("5e55dcdf8fe1f34ed9f230ed", "02934ha123okb");
-//		dbHelper.addOwnedLeagueID("5e55dcdf8fe1f34ed9f230ed", "asoenu123thbx90ou70");
-//		dbHelper.addOwnedTeamID("5e55dcdf8fe1f34ed9f230ed", "rcg123xbroe98234");
-//		dbHelper.addManagedTeamID("5e55dcdf8fe1f34ed9f230ed", "d92123347897oeu00");
-//		dbHelper.addLeagueCastedID("5e55dcdf8fe1f34ed9f230ed", "hdm123bngf234871duht");
-//		
 		
 		String id = dbHelper.getUserIDByUsername("leaf_consumer");
 		
 		Document searchedDocument = dbHelper.getDocument("Users", id); 
 		
 		System.out.println(searchedDocument.toJson());
-//		System.out.println(id);
+
 		
-		
-		
-//		dbHelper.removeFollowedLeagueID("5e55dcdf8fe1f34ed9f230ed", "aoeua123eu34098akdsank");
-//		dbHelper.removeFollowedTeamID("5e55dcdf8fe1f34ed9f230ed", "02934ha123okb");
-//		dbHelper.removeOwnedLeagueID("5e55dcdf8fe1f34ed9f230ed", "asoenu123thbx90ou70");
-//		dbHelper.removeOwnedTeamID("5e55dcdf8fe1f34ed9f230ed", "rcg123xbroe98234");
-//		dbHelper.removeManagedTeamID("5e55dcdf8fe1f34ed9f230ed", "d92123347897oeu00");
-//		dbHelper.removeLeagueCastedID("5e55dcdf8fe1f34ed9f230ed", "hdm123bngf234871duht");
+	
+//		dbHelper.addFollowedLeagueID(id, "aoeua123eu34098akdsank");
+//		dbHelper.addFollowedTeamID(id, "02934ha123okb");
+//		dbHelper.addOwnedLeagueID(id, "asoenu123thbx90ou70");
+//		dbHelper.addOwnedTeamID(id, "rcg123xbroe98234");
+//		dbHelper.addManagedTeamID(id, "d92123347897oeu00");
+//		dbHelper.addLeagueCastedID(id, "hdm123bngf234871duht");
+	
+		dbHelper.removeFollowedLeagueID(id, "aoeua123eu34098akdsank");
+		dbHelper.removeFollowedTeamID(id, "02934ha123okb");
+		dbHelper.removeOwnedLeagueID(id, "asoenu123thbx90ou70");
+		dbHelper.removeOwnedTeamID(id, "rcg123xbroe98234");
+		dbHelper.removeManagedTeamID(id, "d92123347897oeu00");
+		dbHelper.removeLeagueCastedID(id, "hdm123bngf234871duht");
 	
 
 		/*
