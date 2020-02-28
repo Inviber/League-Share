@@ -5,6 +5,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.elemMatch;
+
 import com.mongodb.client.model.Updates;
 
 import java.util.ArrayList;
@@ -309,30 +311,48 @@ public class DatabaseHelper {
 		newPlayerDocument.put("statistics", statistics);
 		
 		
-		BasicDBObject query = new BasicDBObject();
-		query.put("_id", new ObjectId(leagueID));
 		
-		//find league to update
-		FindIterable<Document> documents = this.database.getCollection(LEAGUES).find(query);
 		
-		//find team to update
-		documents = documents.filter(eq("teams._id", new ObjectId(teamID)));
+		Document leagueQuery = new Document();
+		leagueQuery.append("_id", new ObjectId(leagueID));
+		System.out.println("League query: " + leagueQuery.toString());
 		
-		Document foundLeague = documents.first();
-		
-		foundLeague.append("players", newPlayerDocument);
+		Document teamQuery = new Document();
+		teamQuery.append("_id", new ObjectId(teamID));
+		System.out.println("Team query: " + teamQuery.toString());
 		
 		
 		
-		System.out.println(foundLeague.toString());
+//		this.database.getCollection(LEAGUES).findOneAndUpdate(arg0, arg1)
+		
+		
+		this.database.getCollection(LEAGUES).updateOne(elemMatch("teams", eq("_id", new ObjectId(teamID))), Updates.addToSet("players", newPlayerDocument));
+//		this.database.getCollection(LEAGUES).updateOne(eq("teams._id", new ObjectId(teamID)), Updates.addToSet("players", newPlayerDocument));
+		
+		
+		
+		
+//		BasicDBObject query = new BasicDBObject();
+//		query.put("_id", new ObjectId(leagueID));
+//		
+//		//find league to update
+//		FindIterable<Document> documents = this.database.getCollection(LEAGUES).find(query);
+//		
+//		//find team to update
+//		documents = documents.filter(eq("teams._id", new ObjectId(teamID)));
+//		
+//		Document foundLeague = documents.first();
+//		
+//		foundLeague.get("players").
+//	
+////		
+////		foundLeague.append("players", Updates.addToSet("players", newPlayerDocument));
+////		
+//		System.out.println(foundLeague.toString());
 		
 //		MongoCursor<Document> cursor = leagueDocuments.iterator();
 //		
-//		
 		
-		
-//		this.database.getCollection(LEAGUES).updateOne(eq("teams._id", new ObjectId(teamID)), Updates.addToSet("players", newPlayerDocument));
-				
 		return newPlayerDocument.get("_id").toString();
 	}
 	
