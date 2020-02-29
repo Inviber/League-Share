@@ -81,29 +81,40 @@ public class League {
 		return casterIDs;
 	}
 
+	boolean createTeam(String teamName, String zipcode) {
+		return addTeam(dbHelper.createTeam(leagueID, teamName, zipcode));
+	}
+	
 	boolean addTeam(String teamID) {
 		if (!teamIDs.contains(teamID)) {
 			teamIDs.add(teamID);
-			if (teamIDs.contains(teamID))
+			if (teamIDs.contains(teamID)){
 				return true;
+			}
 		}
 
 		return false;
 
+	}
+	
+	boolean deleteTeam(String teamID) {
+		dbHelper.deleteTeam(leagueID, teamID);
+		return removeTeam(teamID);
 	}
 
 	boolean removeTeam(String teamID) {
 		if (teamIDs.contains(teamID)) {
 			teamIDs.remove(teamID);
-			if (!teamIDs.contains(teamID))
+			if (!teamIDs.contains(teamID)){
 				return true;
+			}
 		}
 
 		return false;
 	}
 
-	void setDescription(String leagueDescription) {
-		this.description = leagueDescription;
+	void setDescription(String description) {
+		this.description = description;
 	}
 
 	void setOwnerID(String ownerID) {
@@ -115,7 +126,7 @@ public class League {
 			return; // already within array.
 		} else {
 			this.casterIDs.add(casterID);
-			// dbHelper.addCasterID(this.leagueID, casterID);
+			dbHelper.addLeagueCasterID(this.leagueID, casterID);
 		}
 
 	}
@@ -123,7 +134,7 @@ public class League {
 	void removeCasterIDs(String casterID) {
 		if (this.casterIDs.contains(casterID)) {
 			this.casterIDs.remove(casterID);
-			// dbHelper.removeCasterID(this.leagueID, casterID);
+			dbHelper.removeLeagueCasterID(this.leagueID, casterID);
 		} else {
 			return; // not within array.
 		}
