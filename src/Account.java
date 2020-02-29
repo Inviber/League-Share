@@ -308,9 +308,8 @@ class Account {
 		dbHelper.removeManagedTeamID(this._ID, team_ID);
 	}
 	
-	boolean logOut()
+	void closeDatabase()
 	{
 		dbHelper.getClient().close();
-		return true;
 	}
 }

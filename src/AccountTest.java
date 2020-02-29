@@ -156,7 +156,7 @@ class AccountTest {
 	{
 		account.getAccountDetails();
 		
-		assertEquals(account.logOut(),true);
+		account.closeDatabase();
 	}
 	
 }
