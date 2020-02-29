@@ -1,25 +1,31 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class LeagueTester {
-	private League sut = new League("testing", "owner");
+	
+	private static League league;
+
+
 
 	@Test
 	void addTeamToLeague() {
-		assertTrue(sut.addTeam("testAdd1"), "testAdd1 must be successfully added to League");
-		assertTrue(sut.addTeam("testAdd2"), "testAdd2 must be successfully added to League");
-		assertTrue(sut.addTeam("testAdd3"), "testAdd3 must be successfully added to League");
+		league = new League("Major League Doge Dodgeball");
+//		assertTrue(league.addTeam("testAdd1"), "testAdd1 must be successfully added to League");
+//		assertTrue(league.addTeam("testAdd2"), "testAdd2 must be successfully added to League");
+//		assertTrue(league.addTeam("testAdd3"), "testAdd3 must be successfully added to League");
 //		sut.getTeams().forEach((id) -> System.out.println(id));
 	}
 	
-	@Test
-	void removeTeamFromLeague()
-	{
-		sut.addTeam("removeTest");
-		assertFalse(sut.removeTeam("teamNotPresent"), "teamNotPresent is not present in League to be removed");
-		assertTrue(sut.removeTeam("removeTest"), "removeTest must be removed from the League");
-	}
+//	@Test
+//	void removeTeamFromLeague()
+//	{
+//		league.addTeam("removeTest");
+//		assertFalse(league.removeTeam("teamNotPresent"), "teamNotPresent is not present in League to be removed");
+//		assertTrue(league.removeTeam("removeTest"), "removeTest must be removed from the League");
+//	}
 	
 	
 
