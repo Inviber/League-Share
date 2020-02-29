@@ -6,11 +6,13 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.elemMatch;
+import static com.mongodb.client.model.Projections.*;
 
 import com.mongodb.client.model.Updates;
 
 import java.util.ArrayList;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 
@@ -322,13 +324,52 @@ public class DatabaseHelper {
 		System.out.println("Team query: " + teamQuery.toString());
 		
 		
+		// ---- JOSH's VERSION
+		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+		
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
+
+		Bson update = new Document().append("teams.$.players", newPlayerDocument);
+		
+		Bson set = new Document().append("$set", update);
+				
+		this.database.getCollection(LEAGUES).updateOne(where , set);
+		
+		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+		
+		/*
+		 // Longer version with catch error. This really helped with figuring out where it was going wrong. I removed these imports too.
+		 try {
+
+		    UpdateResult result = this.database.getCollection(LEAGUES).updateOne(where , set, new UpdateOptions());
+
+		    if(result.getModifiedCount() > 0){
+		        System.out.println("updated");
+		    }else {
+		        System.out.println("failed");
+		    }
+		} catch (MongoWriteException e) {
+		  e.printStackTrace();
+		}
+		 */
+		
+		// ---- END JOSH'S VERSION
+		
+		
+		
 		
 //		this.database.getCollection(LEAGUES).findOneAndUpdate(arg0, arg1)
 		
 		
-		this.database.getCollection(LEAGUES).updateOne(elemMatch("teams", eq("_id", new ObjectId(teamID))), Updates.addToSet("players", newPlayerDocument));
+		//this.database.getCollection(LEAGUES).updateOne(elemMatch("teams", eq("_id", new ObjectId(teamID))), Updates.addToSet("players", newPlayerDocument));
 //		this.database.getCollection(LEAGUES).updateOne(eq("teams._id", new ObjectId(teamID)), Updates.addToSet("players", newPlayerDocument));
 		
+		
+		//Document leagueDoc = this.database.getCollection(USERS).find(eq("firstName", "Jasper")).first();
+		//System.out.println(leagueDoc);
+		
+//		Docu teams = leagueDoc.get("teams");
+//		System.out.println(teams.);
 		
 		
 		
@@ -363,12 +404,6 @@ public class DatabaseHelper {
 	 */
 	
 	
-	
-	
-	
-	
-	
-	
 	public static void main(String[] args)
 	{
 		// -- ESTABLISHING CONNECTION TO DATABASE --
@@ -394,9 +429,13 @@ public class DatabaseHelper {
 //		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e59763368ec36619a66bfdd");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington");
+		//System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 		
-	
+		
+		
+		System.out.println(dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington"));
+		
+		//dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
 
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
