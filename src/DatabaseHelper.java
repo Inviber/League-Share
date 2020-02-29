@@ -234,6 +234,25 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
+	public String getLeagueIDByLeagueName(String leagueName)
+	{
+		//creating query request to be searched for
+		BasicDBObject query = new BasicDBObject();
+	    query.put("leagueName", leagueName);
+	        
+	    //retrieving all documents that match query
+	    FindIterable<Document> leagueDocuments = this.database.getCollection(LEAGUES).find(query);
+	    
+	    //choosing the first document because currently the firstNames are unique... and Josh doesn't know what else to do currently. <3
+	    Document leagueDocument = leagueDocuments.first();
+	    
+	    //retrieving id
+	    ObjectId leagueID = (ObjectId) leagueDocument.get("_id");
+	    
+	    //toStringing it
+	    return leagueID.toString();
+	}
+	
 	public String createLeague(String leagueName, String ownerID, String sport, String description) 
 	{
 		//creating document that will be passed into DB
