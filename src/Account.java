@@ -12,6 +12,7 @@ class Account {
 	private JSONParser parser = new JSONParser();
 	private DatabaseHelper dbHelper = 
 			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
+	private JSONObject accountData;
 
 	private ArrayList<String> ownedLeagueIDs = new ArrayList<String>();
 	private ArrayList<String> leagueCastedIDs = new ArrayList<String>();
@@ -29,26 +30,31 @@ class Account {
 	
 	private void populateAccountDetails()
 	{
+		getAccountDetails();
+		
+		this.firstName = (String) accountData.get("firstName");
+		this.lastName = (String) accountData.get("lastName");
+		
+		this.ownedLeagueIDs = (ArrayList<String>) accountData.get("ownedLeagueIDs");
+		this.leagueCastedIDs = (ArrayList<String>) accountData.get("leagueCastedIDs");
+		this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
+		this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
+		this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
+		this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
+	}
+	
+	void getAccountDetails()
+	{
 		Document accountDocument = dbHelper.getDocument("Users", _ID); 	
-		
-		try
-		{
-			Object obj = parser.parse(accountDocument.toJson());
-			JSONObject jsonData = (JSONObject) obj;
-			
-			this.firstName = (String) jsonData.get("firstName");
-			this.lastName = (String) jsonData.get("lastName");
-			
-			this.ownedLeagueIDs = (ArrayList<String>) jsonData.get("ownedLeagueIDs");
-			this.leagueCastedIDs = (ArrayList<String>) jsonData.get("leagueCastedIDs");
-			this.followedLeagueIDs = (ArrayList<String>) jsonData.get("followedLeagueIDs");
-			this.ownedTeamIDs = (ArrayList<String>) jsonData.get("ownedTeamIDs");
-			this.managedTeamIDs = (ArrayList<String>) jsonData.get("managedTeamIDs");
-			this.followedTeamIDs = (ArrayList<String>) jsonData.get("followedTeamIDs");
-		}
-		catch (Exception e) { e.printStackTrace(); }
-		
-		dbHelper.getClient().close();
+				
+				try
+				{
+					Object obj = parser.parse(accountDocument.toJson());
+					accountData = (JSONObject) obj;
+					
+					System.out.println(accountData.toString());
+				}
+				catch (Exception e) { e.printStackTrace(); }
 	}
 	
 	String getID()
@@ -69,37 +75,36 @@ class Account {
 		return lastName;
 	}
 	
-	ArrayList<String> getLeaguesOwnedIDs() 
+	ArrayList<String> getOwnedLeagueIDs() 
 	{
 		return ownedLeagueIDs;
 	}
 
-	ArrayList<String> getLeaguesCastedIDs() 
+	ArrayList<String> getLeagueCastedIDs() 
 	{
 		return leagueCastedIDs;
 	}
 
-	ArrayList<String> getLeaguesFollowedIDs() 
+	ArrayList<String> getFollowedLeagueIDs() 
 	{
 		return followedLeagueIDs;
 	}
 
-	ArrayList<String> getTeamsOwnedIDs() 
+	ArrayList<String> getOwnedTeamIDs() 
 	{
 		return ownedTeamIDs;
 	}
 
-	ArrayList<String> getTeamsManagedIDs() 
+	ArrayList<String> getManagedTeamIDs() 
 	{
 		return managedTeamIDs;
 	}
 
-	ArrayList<String> getTeamsFollowedIDs() 
+	ArrayList<String> getFollowedTeamIDs() 
 	{
 		return followedTeamIDs;
 	}
-	
-	
+
 	void createLeague(String leagueName, String sport, String leagueDescription)
 	{
 		// access db, this call will likely return an ID from the db.
@@ -227,6 +232,46 @@ class Account {
 		}
 	}
 	
+	void deleteLeague(String league_ID)
+	{
+		if (ownedLeagueIDs.contains(league_ID))
+		{
+			ownedLeagueIDs.remove(league_ID);
+			dbHelper.removeOwnedLeagueID(this._ID, league_ID);
+			if (leagueCastedIDs.contains(league_ID))
+			{
+				leagueCastedIDs.remove(league_ID);
+				dbHelper.removeLeagueCastedID(this._ID, league_ID);
+			}
+
+			if (followedLeagueIDs.contains(league_ID))
+			{
+				followedLeagueIDs.remove(league_ID);
+				dbHelper.removeFollowedLeagueID(this._ID, league_ID);
+			}
+		}	
+	}
+	
+	void deleteTeam(String team_ID)
+	{
+		if (ownedTeamIDs.contains(team_ID))
+		{
+			ownedTeamIDs.remove(team_ID);
+			dbHelper.removeOwnedTeamID(this._ID, team_ID);
+			if (managedTeamIDs.contains(team_ID))
+			{
+				managedTeamIDs.remove(team_ID);
+				dbHelper.removeManagedTeamID(this._ID, team_ID);
+			}
+
+			if (followedTeamIDs.contains(team_ID))
+			{
+				followedTeamIDs.remove(team_ID);
+				dbHelper.removeFollowedTeamID(this._ID, team_ID);
+			}
+		}	
+	}
+	
 	void unfollowLeague(String league_ID)
 	{
 		followedLeagueIDs.remove(league_ID);
@@ -261,5 +306,11 @@ class Account {
 	{
 		managedTeamIDs.remove(team_ID);
 		dbHelper.removeManagedTeamID(this._ID, team_ID);
+	}
+	
+	boolean logOut()
+	{
+		dbHelper.getClient().close();
+		return true;
 	}
 }

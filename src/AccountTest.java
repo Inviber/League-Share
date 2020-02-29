@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -14,112 +15,148 @@ class AccountTest {
 	}
 	
 	@Test
-	void accountCreatedSuccessfully() {
+	void accountPopulatedSuccessfully() {
 		assertEquals(account.getUsername(), "WhiteWolf");
+		assertEquals(account.getFirstName(), "Geralt");
+		assertEquals(account.getLastName(), "Of Rivia");
+		assertNotEquals(account.getID(), "");
 	}
 	
 	@Test
 	void accountAddsLeagueAndPersists() {
 		account.addLeague("ownedLeague", true, false);
 		
-		assertEquals(account.getLeaguesOwnedIDs().contains("ownedLeague"), true);
+		assertEquals(account.getOwnedLeagueIDs().contains("ownedLeague"), true);
+		
+		account.deleteLeague("ownedLeague");
 		
 		account.addLeague("castedLeague", false, true);
 		
-		assertEquals(account.getLeaguesCastedIDs().contains("castedLeague"), true);
+		assertEquals(account.getLeagueCastedIDs().contains("castedLeague"), true);
+		
+		account.demoteLeagueCaster("castedLeague");
+		account.unfollowLeague("castedLeague");
 		
 		account.addLeague("followedLeague", false, false);
+
+		assertEquals(account.getFollowedLeagueIDs().contains("followedLeague"), true);
 		
-		assertEquals(account.getLeaguesFollowedIDs().contains("followedLeague"), true);
+		account.unfollowLeague("followedLeague");
 	}
 	
 	@Test
 	void accountAddsTeamAndPersists() {
 		account.addTeam("ownedTeam", true, false);
 		
-		assertEquals(account.getTeamsOwnedIDs().contains("ownedTeam"), true);
+		assertEquals(account.getOwnedTeamIDs().contains("ownedTeam"), true);
+		
+		account.deleteTeam("ownedTeam");
 		
 		account.addTeam("managedTeam", false, true);
 		
-		assertEquals(account.getTeamsManagedIDs().contains("managedTeam"), true);
+		assertEquals(account.getManagedTeamIDs().contains("managedTeam"), true);
 		
+		account.demoteTeamManager("managedTeam");
+		account.unfollowTeam("managedTeam");
+
+
 		account.addTeam("followedTeam", false, false);
 		
-		assertEquals(account.getTeamsFollowedIDs().contains("followedTeam"), true);
+		assertEquals(account.getFollowedTeamIDs().contains("followedTeam"), true);
+		
+		account.unfollowTeam("followedTeam");
 	}
 	
 	@Test
 	void accountAddsLeagueAndUnfollows() {
 		account.addLeague("followedLeague", false, false);
 		
-		assertEquals(account.getLeaguesFollowedIDs().contains("followedLeague"), true);
+		assertEquals(account.getFollowedLeagueIDs().contains("followedLeague"), true);
 		
 		account.unfollowLeague("followedLeague");
 
-		assertEquals(account.getLeaguesFollowedIDs().contains("followedLeague"), false);
+		assertEquals(account.getFollowedLeagueIDs().contains("followedLeague"), false);
 	}
 	
 	@Test
 	void accountAddsLeagueAndPromotes() {
 		account.addLeague("promotedLeague", false, true);
 		
-		assertEquals(account.getLeaguesCastedIDs().contains("promotedLeague"), true);
+		assertEquals(account.getLeagueCastedIDs().contains("promotedLeague"), true);
 		
 		account.promoteLeagueCaster("promotedLeague");
 
-		assertEquals(account.getLeaguesCastedIDs().contains("promotedLeague"), true);
+		assertEquals(account.getLeagueCastedIDs().contains("promotedLeague"), true);
 
-		assertEquals(account.getLeaguesFollowedIDs().contains("promotedLeague"), true);
+		assertEquals(account.getFollowedLeagueIDs().contains("promotedLeague"), true);
+		
+		account.demoteLeagueCaster("promotedLeague");
+		account.unfollowLeague("promotedLeague");
 	}
 	
 	@Test
 	void accountAddsLeagueAndDemotes() {
 		account.addLeague("demotedLeague", false, true);
 		
-		assertEquals(account.getLeaguesCastedIDs().contains("demotedLeague"), true);
+		assertEquals(account.getLeagueCastedIDs().contains("demotedLeague"), true);
 		
 		account.demoteLeagueCaster("demotedLeague");
 
-		assertEquals(account.getLeaguesCastedIDs().contains("demotedLeague"), false);
+		assertEquals(account.getLeagueCastedIDs().contains("demotedLeague"), false);
 
-		assertEquals(account.getLeaguesFollowedIDs().contains("demotedLeague"), true);
+		assertEquals(account.getFollowedLeagueIDs().contains("demotedLeague"), true);
+		
+		account.unfollowLeague("demotedLeague");
 	}
 	
 	@Test
 	void accountAddsTeamAndUnfollows() {
 		account.addTeam("followedTeam", false, false);
 		
-		assertEquals(account.getTeamsFollowedIDs().contains("followedTeam"), true);
+		assertEquals(account.getFollowedTeamIDs().contains("followedTeam"), true);
 		
 		account.unfollowTeam("followedTeam");
 
-		assertEquals(account.getTeamsFollowedIDs().contains("followedTeam"), false);
+		assertEquals(account.getFollowedTeamIDs().contains("followedTeam"), false);
 	}
 	
 	@Test
 	void accountAddsTeamAndPromotes() {
 		account.addTeam("promotedTeam", false, true);
 		
-		assertEquals(account.getTeamsManagedIDs().contains("promotedTeam"), true);
+		assertEquals(account.getManagedTeamIDs().contains("promotedTeam"), true);
 		
 		account.promoteTeamManager("promotedTeam");
 
-		assertEquals(account.getTeamsManagedIDs().contains("promotedTeam"), true);
+		assertEquals(account.getManagedTeamIDs().contains("promotedTeam"), true);
 
-		assertEquals(account.getTeamsFollowedIDs().contains("promotedTeam"), true);
+		assertEquals(account.getFollowedTeamIDs().contains("promotedTeam"), true);
+		
+		account.demoteTeamManager("promotedTeam");
+		account.unfollowTeam("promotedTeam");
 	}
 	
 	@Test
 	void accountAddsTeamAndDemotes() {
 		account.addTeam("demotedTeam", false, true);
 		
-		assertEquals(account.getTeamsManagedIDs().contains("demotedTeam"), true);
+		assertEquals(account.getManagedTeamIDs().contains("demotedTeam"), true);
 		
 		account.demoteTeamManager("demotedTeam");
 
-		assertEquals(account.getTeamsManagedIDs().contains("demotedTeam"), false);
+		assertEquals(account.getManagedTeamIDs().contains("demotedTeam"), false);
 
-		assertEquals(account.getTeamsFollowedIDs().contains("demotedTeam"), true);
+		assertEquals(account.getFollowedTeamIDs().contains("demotedTeam"), true);
+		
+		account.unfollowTeam("demotedTeam");
+	}
+	
+	@AfterAll
+	static void accountTestCleansupAndLogsOut()
+	{
+		account.getAccountDetails();
+		
+		assertEquals(account.logOut(),true);
 	}
 	
 }
