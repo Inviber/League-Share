@@ -1,11 +1,11 @@
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.elemMatch;
 import static com.mongodb.client.model.Projections.*;
 
 import com.mongodb.client.model.Updates;
@@ -236,21 +236,24 @@ public class DatabaseHelper {
 	
 	public String getLeagueIDByLeagueName(String leagueName)
 	{
-		//creating query request to be searched for
-		BasicDBObject query = new BasicDBObject();
-	    query.put("leagueName", leagueName);
-	        
-	    //retrieving all documents that match query
-	    FindIterable<Document> leagueDocuments = this.database.getCollection(LEAGUES).find(query);
-	    
-	    //choosing the first document because currently the firstNames are unique... and Josh doesn't know what else to do currently. <3
-	    Document leagueDocument = leagueDocuments.first();
-	    
-	    //retrieving id
-	    ObjectId leagueID = (ObjectId) leagueDocument.get("_id");
-	    
-	    //toStringing it
-	    return leagueID.toString();
+		try
+		{
+		    //retrieving all documents that match query
+		    FindIterable<Document> leagueDocuments = this.database.getCollection(LEAGUES).find(eq("leagueName", leagueName));
+		    
+		    //choosing the first document because currently the firstNames are unique... and Josh doesn't know what else to do currently. <3
+		    Document leagueDocument = leagueDocuments.first();
+		    
+		    //retrieving id
+		    ObjectId leagueID = (ObjectId) leagueDocument.get("_id");
+		    
+		    //toStringing it
+		    return leagueID.toString();
+		}
+		catch (NullPointerException e)
+		{
+			return "";
+		}
 	}
 	
 	public String createLeague(String leagueName, String ownerID, String sport, String description) 
@@ -291,6 +294,39 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("casterIDs", leagueCasterID));
 	}
 	
+	public String getTeamIDByTeamName(String leagueID, String teamName)
+	{
+		MongoCollection<Document> collection = database.getCollection(LEAGUES);
+		
+		String dotNotation = "teams";
+
+		FindIterable<Document> projection = collection.find()
+		    .projection( fields( include( dotNotation ) ) ).projection( fields( include( "teams._id", "teams.teamName" ) ) );
+		
+	    Document doc = projection.first();
+	    
+	    String[] documents = doc.toString().split("Document");
+	    
+	    String[] ids = new String[documents.length];
+	    String[] teamNames = new String[documents.length];
+	    
+	    for (int i = 2; i < documents.length; i++) // spliting out team names and ID's into arrays.
+	    {
+	    	ids[i-2] = documents[i].split("_id=")[1].split(",")[0];
+	    	teamNames[i-2] = documents[i].split("teamName=")[1].split("}")[0];
+	    }
+	    
+	    for (int i = 0; i < teamNames.length; i++)
+	    {
+	    	if (teamNames[i].contains(teamName))
+	    	{
+		    	return ids[i];
+	    	}
+	    }
+	    
+	    return "";
+	}
+	
 	public String createTeam(String leagueID, String teamName, String zipcode) 
 	{
 		Document newTeamDocument = new Document();
@@ -312,10 +348,14 @@ public class DatabaseHelper {
 	
 	public void deleteTeam(String leagueID, String teamID)
 	{
-		BasicDBObject query = new BasicDBObject();
-	    query.put("_id", new ObjectId(teamID));
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
+
+		Bson update = new Document().append("teams", new BasicDBObject("_id", new ObjectId(teamID)));
 		
-		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("teams", query));
+		Bson set = new Document().append("$pull", update);
+
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+
 	}
 	
 	public String createPlayer(String leagueID, String teamID, String firstName, String lastName)
@@ -437,6 +477,8 @@ public class DatabaseHelper {
 		// -- CREATING NEW USER -- 
 //		String newUserID = dbHelper.createUser("leaf_consumer", "herbivore1993", "Jasper", "Jellington");
 //		System.out.println(newUserID);
+		//dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
+
 		
 		
 		// -- CREATING NEW LEAGUE -- 
@@ -450,12 +492,9 @@ public class DatabaseHelper {
 		// -- CREATING AND DELETING NEW PLAYERS -- 
 		//System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 		
-		
-		
+
 		System.out.println(dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington"));
 		
-		//dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
-
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
 	}
