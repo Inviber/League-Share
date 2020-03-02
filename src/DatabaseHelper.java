@@ -463,6 +463,46 @@ public class DatabaseHelper {
 		return newPlayerDocument.get("_id").toString();
 	}
 	
+	public String createMatch(String leagueID, String teamID, String homeTeam, String awayTeam, String date, String finalScore)
+	{
+		Document newMatchDocument = new Document();
+		
+		newMatchDocument.put("_id", new ObjectId());
+		newMatchDocument.put("homeTeam", homeTeam);
+		newMatchDocument.put("awayTeam", awayTeam);
+		newMatchDocument.put("date", date);
+		newMatchDocument.put("finalScore", finalScore);
+
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
+
+		Bson update = new Document().append("teams.$.matches", newMatchDocument);
+		
+		Bson set = new Document().append("$set", update);
+		
+		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+		
+		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+
+		return newMatchDocument.get("_id").toString();
+	}
+	
+	public void deleteMatch(String leagueID, String teamID, String matchID)
+	{
+		
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
+
+		Bson update = new Document().append("matches.$", new BasicDBObject(" _id", new ObjectId(matchID)));
+		
+		Bson set = new Document().append("$pull", update);
+
+		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+		
+		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+	}
 
 	
 	/*
@@ -499,8 +539,16 @@ public class DatabaseHelper {
 		// -- CREATING AND DELETING NEW PLAYERS -- 
 		//System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 		
-
-		System.out.println(dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington"));
+		//System.out.println(dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington"));
+		
+		// -- CREATING AND DELETING NEW MATCHES --
+		//System.out.println(dbHelper.createMatch("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "FastCats", "NeedlePointers", "TBA", "TBA"));
+		
+		// 5e5c793f1b19b3252e261efd match ID ^
+		
+		dbHelper.deleteMatch("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "5e5c793f1b19b3252e261efd");
+		
+		
 		
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
