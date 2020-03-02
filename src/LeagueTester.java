@@ -8,25 +8,63 @@ class LeagueTester {
 	
 	private static League league;
 
-
-
-	@Test
-	void addTeamToLeague() {
+	@BeforeAll
+	static void populateLeague()
+	{
 		league = new League("Major League Doge Dodgeball");
-//		assertTrue(league.addTeam("testAdd1"), "testAdd1 must be successfully added to League");
-//		assertTrue(league.addTeam("testAdd2"), "testAdd2 must be successfully added to League");
-//		assertTrue(league.addTeam("testAdd3"), "testAdd3 must be successfully added to League");
-//		sut.getTeams().forEach((id) -> System.out.println(id));
 	}
 	
-//	@Test
-//	void removeTeamFromLeague()
-//	{
-//		league.addTeam("removeTest");
-//		assertFalse(league.removeTeam("teamNotPresent"), "teamNotPresent is not present in League to be removed");
-//		assertTrue(league.removeTeam("removeTest"), "removeTest must be removed from the League");
-//	}
+	@Test
+	void createTeamInLeague() {
+		String testTeamID = league.createTeam("createTeamTest", "00000");
+		
+		System.out.println(league.getTeamIDs());
+		
+		assertTrue(league.getTeamIDs().contains(testTeamID), "createTeamTest is pressent in team array");
 	
+		league.deleteTeam("createTeamTest");
+	}
 	
+	@Test
+	void deleteTeamFromLeague()
+	{
+		String testTeamID = league.createTeam("removeTeamTest", "99999");
+		
+		assertTrue(league.getTeamIDs().contains(testTeamID), "removeTeamTest is pressent in team array");
+		
+		league.deleteTeam("removeTeamTest");
+
+		assertFalse(league.getTeamIDs().contains(testTeamID), "removeTeamTest is no longer present in team array");
+	}
+	
+	@Test
+	void addCasterToLeague()
+	{
+		league.addCasterIDs("casterAddTest");
+		
+		assertTrue(league.getCasterIDs().contains("casterAddTest"), "casterAddTest must be successfully added to League");
+	
+		league.removeCasterIDs("casterAddTest");
+	}
+	
+	@Test
+	void removeCasterFromLeague()
+	{
+		league.addCasterIDs("casterRemoveTest");
+		
+		assertTrue(league.getCasterIDs().contains("casterRemoveTest"), "casterRemoveTest is present in League");
+		
+		league.removeCasterIDs("casterRemoveTest");
+
+		assertFalse(league.getCasterIDs().contains("casterRemoveTest"), "casterRemoveTest is no longer present in League");
+	}
+	
+	@AfterAll
+	static void cleanUpAndClose()
+	{
+		league.getLeagueDetails();
+		
+		league.closeDatabase();
+	}
 
 }

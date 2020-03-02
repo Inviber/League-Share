@@ -1,16 +1,13 @@
 import java.util.ArrayList;
 
 public class Team {
+	private String leagueID;
 	private String teamID;
 	private ArrayList<Player> players = new ArrayList<Player>();
 	
-	Team()
+	Team(String leagueID, String teamID)
 	{
-		this.teamID = "";
-	}
-	
-	Team(String teamID)
-	{
+		this.leagueID = leagueID;
 		this.teamID = teamID;
 	}
 	
