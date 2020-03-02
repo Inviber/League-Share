@@ -296,35 +296,42 @@ public class DatabaseHelper {
 	
 	public String getTeamIDByTeamName(String leagueID, String teamName)
 	{
-		MongoCollection<Document> collection = database.getCollection(LEAGUES);
-		
-		String dotNotation = "teams";
+		try
+		{
+			MongoCollection<Document> collection = database.getCollection(LEAGUES);
+			
+			String dotNotation = "teams";
 
-		FindIterable<Document> projection = collection.find()
-		    .projection( fields( include( dotNotation ) ) ).projection( fields( include( "teams._id", "teams.teamName" ) ) );
-		
-	    Document doc = projection.first();
-	    
-	    String[] documents = doc.toString().split("Document");
-	    
-	    String[] ids = new String[documents.length];
-	    String[] teamNames = new String[documents.length];
-	    
-	    for (int i = 2; i < documents.length; i++) // spliting out team names and ID's into arrays.
-	    {
-	    	ids[i-2] = documents[i].split("_id=")[1].split(",")[0];
-	    	teamNames[i-2] = documents[i].split("teamName=")[1].split("}")[0];
-	    }
-	    
-	    for (int i = 0; i < teamNames.length; i++)
-	    {
-	    	if (teamNames[i].contains(teamName))
-	    	{
-		    	return ids[i];
-	    	}
-	    }
-	    
-	    return "";
+			FindIterable<Document> projection = collection.find()
+			    .projection( fields( include( dotNotation ) ) ).projection( fields( include( "teams._id", "teams.teamName" ) ) );
+			
+		    Document doc = projection.first();
+		    
+		    String[] documents = doc.toString().split("Document");
+		    
+		    String[] ids = new String[documents.length];
+		    String[] teamNames = new String[documents.length];
+		    
+		    for (int i = 2; i < documents.length; i++) // spliting out team names and ID's into arrays.
+		    {
+		    	ids[i-2] = documents[i].split("_id=")[1].split(",")[0];
+		    	teamNames[i-2] = documents[i].split("teamName=")[1].split("}")[0];
+		    }
+		    
+		    for (int i = 0; i < teamNames.length; i++)
+		    {
+		    	if (teamNames[i].contains(teamName))
+		    	{
+			    	return ids[i];
+		    	}
+		    }
+		    
+		    return "";
+		}
+		catch (NullPointerException e)
+		{
+			return "";
+		}
 	}
 	
 	public String createTeam(String leagueID, String teamName, String zipcode) 
@@ -384,8 +391,6 @@ public class DatabaseHelper {
 		
 		
 		// ---- JOSH's VERSION
-		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
-		
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
 
 		Bson update = new Document().append("teams.$.players", newPlayerDocument);
@@ -393,6 +398,8 @@ public class DatabaseHelper {
 		Bson set = new Document().append("$set", update);
 				
 		this.database.getCollection(LEAGUES).updateOne(where , set);
+		
+		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
 		
 		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
 		
