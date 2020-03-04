@@ -45,7 +45,7 @@ public class Team {
 	
 	void populateTeamDetails() 
 	{
-		getTeamDetails();
+		getTeamDetails(false);
 		  
 		  this.zipcode =(String) teamData.get("zipcode"); 
 		  
@@ -69,11 +69,11 @@ public class Team {
 			  matchIDs.add(id[3]); // id is stored in element 3.
 		  }
 		  
-		  System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString()  + " " +  matchIDs.toString());
+		  //System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString()  + " " +  matchIDs.toString());
 		  
 	}
 
-	void getTeamDetails() 
+	void getTeamDetails(boolean print) 
 	{
 		this.teamID = dbHelper.getTeamIDByTeamName(leagueID, teamName);
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
@@ -84,14 +84,17 @@ public class Team {
 			JSONObject leagueData = (JSONObject) obj;
 			
 			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
-			
+						
 			teamData = (JSONObject) teamDataArray.get(0);
-			
-			System.out.println(teamData.toString());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
+		}
+		
+		if (print)
+		{
+			System.out.println(teamData.toString());
 		}
 	}
 	
@@ -128,6 +131,48 @@ public class Team {
 	void setTeamID(String teamID)
 	{
 		this.teamID = teamID;
+	}
+	
+	String createPlayer(String firstName, String lastName) 
+	{
+		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
+		playerIDs.add(playerID);
+		new Player(playerID);
+		return playerID;
+	}
+	
+	void deletePlayer(String playerID) 
+	{
+		if (playerIDs.contains(playerID))
+		{
+			dbHelper.deletePlayer(leagueID, teamID, playerID);
+			playerIDs.remove(playerID);
+		}
+		else
+		{
+			return; // not in database.
+		}
+	}
+	
+	String createMatch(String homeTeam, String awayTeam, String date, String finalScore) 
+	{
+		String matchID = dbHelper.createMatch(leagueID, teamID, homeTeam, awayTeam, date, finalScore);
+		matchIDs.add(matchID);
+		new Match(matchID);
+		return matchID;
+	}
+	
+	void deleteMatch(String matchID) 
+	{
+		if (matchIDs.contains(matchID))
+		{
+			dbHelper.deleteMatch(leagueID, teamID, matchID);
+			matchIDs.remove(matchID);
+		}
+		else
+		{
+			return; // not in database.
+		}
 	}
 	
 	void closeDatabase() 
