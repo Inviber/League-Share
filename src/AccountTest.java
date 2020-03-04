@@ -154,7 +154,7 @@ class AccountTest {
 	@AfterAll
 	static void accountTestCleansupAndLogsOut()
 	{
-		account.getAccountDetails();
+		account.getAccountDetails(true);
 		
 		account.closeDatabase();
 	}

@@ -30,7 +30,7 @@ class Account {
 	
 	private void populateAccountDetails()
 	{
-		getAccountDetails();
+		getAccountDetails(false);
 		
 		this.firstName = (String) accountData.get("firstName");
 		this.lastName = (String) accountData.get("lastName");
@@ -43,18 +43,24 @@ class Account {
 		this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
 	}
 	
-	void getAccountDetails()
+	void getAccountDetails(boolean print)
 	{
 		Document accountDocument = dbHelper.getDocument("Users", _ID); 	
 				
-				try
-				{
-					Object obj = parser.parse(accountDocument.toJson());
-					accountData = (JSONObject) obj;
-					
-					System.out.println(accountData.toString());
-				}
-				catch (Exception e) { e.printStackTrace(); }
+		try
+		{
+			Object obj = parser.parse(accountDocument.toJson());
+			accountData = (JSONObject) obj;
+		}
+		catch (Exception e) 
+		{ 
+			e.printStackTrace(); 
+		}
+		
+		if (print)
+		{
+			System.out.println(accountData.toString());
+		}
 	}
 	
 	String getID()
