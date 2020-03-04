@@ -134,20 +134,30 @@ class Account {
 		}
 	}
 	
-	/*
-	void createTeam(String teamName)
+	
+	void createTeam(String leagueID, String teamName, String zipcode)
 	{
-		// access db, this call will likely return an ID from the db.
-		String _ID = db.createTeam(this.ID, teamName); 
-		addTeam(_ID, true, false);
+		
+		if (ownedLeagueIDs.contains(this._ID))
+		{
+			String teamID = dbHelper.createTeam(leagueID, teamName, zipcode); 
+			addTeam(teamID, true, false);
+		}
+		else
+		{
+			System.out.println("You don't have authority to create a team in this league.");
+		}
+			
 	}
 	
-	boolean updateTeam(String _ID, String teamName) // returns boolean for if update was successful
+	boolean updateTeam(String leagueID, String teamName) // returns boolean for if update was successful
 	{
-		if (teamsOwnedIDs.contains(_ID) || teamsManagedIDs.contains(_ID))
+		if (ownedLeagueIDs.contains(this._ID) || ownedTeamIDs.contains(this._ID) || managedTeamIDs.contains(this._ID))
 		{
 			// access DB, this call will probably return a boolean on update success.
-			return db.updateTeam(this.ID, teamName);
+			String teamID = dbHelper.getTeamIDByTeamName(leagueID, teamName);
+			//dbHelper.updateTeam(leagueID, teamID);
+			return true;
 		}
 		else
 		{
@@ -155,7 +165,7 @@ class Account {
 			return false;
 		}
 	}
-	*/ 
+	
 	
 	void addLeague(String league_ID, boolean owns, boolean casting)
 	{
