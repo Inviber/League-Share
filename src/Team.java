@@ -137,7 +137,7 @@ public class Team {
 	{
 		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
 		playerIDs.add(playerID);
-		new Player(playerID);
+		new Player(playerID, firstName, lastName);
 		return playerID;
 	}
 	
@@ -158,7 +158,7 @@ public class Team {
 	{
 		String matchID = dbHelper.createMatch(leagueID, teamID, homeTeam, awayTeam, date, finalScore);
 		matchIDs.add(matchID);
-		new Match(matchID);
+		new Match(matchID, homeTeam, awayTeam, date, finalScore);
 		return matchID;
 	}
 	
