@@ -1,5 +1,6 @@
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
@@ -11,6 +12,7 @@ import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Updates;
 
 import java.util.ArrayList;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -123,21 +125,29 @@ public class DatabaseHelper {
 	
 	public String getUserIDByUsername(String username)
 	{
-		//creating query request to be searched for
-		BasicDBObject query = new BasicDBObject();
-	    query.put("username", username);
-	        
-	    //retrieving all documents that match query
-	    FindIterable<Document> userDocuments = this.database.getCollection(USERS).find(query);
-	    
-	    //choosing the first document because it is known that all usernames are unique
-	    Document userDocument = userDocuments.first();
-	    
-	    //retrieving id
-	    ObjectId userID = (ObjectId) userDocument.get("_id");
-	    
-	    //toStringing it
-	    return userID.toString();
+		try 
+		{
+			//creating query request to be searched for
+			BasicDBObject query = new BasicDBObject();
+		    query.put("username", username);
+		        
+		    //retrieving all documents that match query
+		    FindIterable<Document> userDocuments = this.database.getCollection(USERS).find(query);
+		    
+		    //choosing the first document because it is known that all usernames are unique
+		    Document userDocument = userDocuments.first();
+		    
+		    //retrieving id
+		    ObjectId userID = (ObjectId) userDocument.get("_id");
+		    
+		    //toStringing it
+		    return userID.toString();
+		}
+		catch (NullPointerException e)
+		{
+			return "";
+		}
+		
 	}
 	
 	public void addFollowedLeagueID(String userID, String followedLeagueID)
@@ -379,88 +389,30 @@ public class DatabaseHelper {
 		newPlayerDocument.put("statistics", statistics);
 		
 		
+//		Document leagueQuery = new Document();
+//		leagueQuery.append("_id", new ObjectId(leagueID));
+//		System.out.println("League query: " + leagueQuery.toString());
+//		
+//		Document teamQuery = new Document();
+//		teamQuery.append("_id", new ObjectId(teamID));
+//		System.out.println("Team query: " + teamQuery.toString());
 		
-		
-		Document leagueQuery = new Document();
-		leagueQuery.append("_id", new ObjectId(leagueID));
-		System.out.println("League query: " + leagueQuery.toString());
-		
-		Document teamQuery = new Document();
-		teamQuery.append("_id", new ObjectId(teamID));
-		System.out.println("Team query: " + teamQuery.toString());
-		
-		
-		// ---- JOSH's VERSION
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
-
-		Bson update = new Document().append("teams.$.players", newPlayerDocument);
-		
-		Bson set = new Document().append("$set", update);
 				
-		this.database.getCollection(LEAGUES).updateOne(where , set);
-		
-		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
-		
-		//System.out.println(this.database.getCollection(LEAGUES).find(where).first());
-		
-		/*
-		 // Longer version with catch error. This really helped with figuring out where it was going wrong. I removed these imports too.
-		 try {
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$[].players", newPlayerDocument));
 
-		    UpdateResult result = this.database.getCollection(LEAGUES).updateOne(where , set, new UpdateOptions());
-
-		    if(result.getModifiedCount() > 0){
-		        System.out.println("updated");
-		    }else {
-		        System.out.println("failed");
-		    }
-		} catch (MongoWriteException e) {
-		  e.printStackTrace();
-		}
-		 */
-		
-		// ---- END JOSH'S VERSION
-		
-		
-		
-		
-//		this.database.getCollection(LEAGUES).findOneAndUpdate(arg0, arg1)
-		
-		
-		//this.database.getCollection(LEAGUES).updateOne(elemMatch("teams", eq("_id", new ObjectId(teamID))), Updates.addToSet("players", newPlayerDocument));
-//		this.database.getCollection(LEAGUES).updateOne(eq("teams._id", new ObjectId(teamID)), Updates.addToSet("players", newPlayerDocument));
-		
-		
-		//Document leagueDoc = this.database.getCollection(USERS).find(eq("firstName", "Jasper")).first();
-		//System.out.println(leagueDoc);
-		
-//		Docu teams = leagueDoc.get("teams");
-//		System.out.println(teams.);
-		
-		
-		
-//		BasicDBObject query = new BasicDBObject();
-//		query.put("_id", new ObjectId(leagueID));
-//		
-//		//find league to update
-//		FindIterable<Document> documents = this.database.getCollection(LEAGUES).find(query);
-//		
-//		//find team to update
-//		documents = documents.filter(eq("teams._id", new ObjectId(teamID)));
-//		
-//		Document foundLeague = documents.first();
-//		
-//		foundLeague.get("players").
-//	
-////		
-////		foundLeague.append("players", Updates.addToSet("players", newPlayerDocument));
-////		
-//		System.out.println(foundLeague.toString());
-		
-//		MongoCursor<Document> cursor = leagueDocuments.iterator();
-//		
-		
 		return newPlayerDocument.get("_id").toString();
+	}
+	
+	public void deletePlayer(String leagueID, String teamID, String playerID)
+	{	
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID));
+
+		Bson update = new Document().append("teams.$[].players", new BasicDBObject("_id", new ObjectId(playerID)));
+		
+		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
 	
 	public String createMatch(String leagueID, String teamID, String homeTeam, String awayTeam, String date, String finalScore)
@@ -474,47 +426,97 @@ public class DatabaseHelper {
 		newMatchDocument.put("finalScore", finalScore);
 
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
-
-		Bson update = new Document().append("teams.$.matches", newMatchDocument);
 		
-		Bson set = new Document().append("$set", update);
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$[].matches", newMatchDocument));
 		
-		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
-		
-		this.database.getCollection(LEAGUES).updateOne(where, set);
-		
-		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
-
 		return newMatchDocument.get("_id").toString();
 	}
 	
 	public void deleteMatch(String leagueID, String teamID, String matchID)
-	{
-		
-		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
+	{	
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.matches._id",new ObjectId(matchID));
 
-		Bson update = new Document().append("matches.$", new BasicDBObject(" _id", new ObjectId(matchID)));
+		Bson update = new Document().append("teams.$[].matches", new BasicDBObject("_id", new ObjectId(matchID)));
 		
 		Bson set = new Document().append("$pull", update);
-
-		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
 		
 		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
+	
+	public String createStatistic(String leagueID, String teamID, String playerID, String statisticName, String statistic)
+	{
 		
-		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+		Document newStatisticDocument = new Document();
+		
+		newStatisticDocument.put("_id", new ObjectId());
+		newStatisticDocument.put("statName", statisticName);
+		newStatisticDocument.put("statValue", statistic);
+		
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID));
+				
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$.players.$[].statistics", newStatisticDocument));
+
+		return newStatisticDocument.get("_id").toString();
+	}
+	
+	public void deleteStatistic(String leagueID, String teamID, String playerID, String statID)
+	{	
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID)).append("teams.players.statistics._id", new ObjectId(statID));
+
+		Bson update = new Document().append("teams.$[].players.$[].statistics", new BasicDBObject("_id", new ObjectId(statID)));
+		
+		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	 
+	
+	void printAllUsers()
+	{		
+		MongoCursor<Document> cursor = database.getCollection(USERS).find().iterator();
+		try {
+		    while (cursor.hasNext()) {
+		        System.out.println(cursor.next().toJson());
+		    }
+		} finally {
+		    cursor.close();
+		}
+	}
+	
+	void printUser(String UserID)
+	{		
+		Bson where = new Document().append("_id",new ObjectId(UserID));
+
+		System.out.println(this.database.getCollection(USERS).find(where).first());
 	}
 
 	
-	/*
-	 * createStatistic()
-	 */
+	void printAllLeagues()
+	{		
+		MongoCursor<Document> cursor = database.getCollection(LEAGUES).find().iterator();
+		try {
+		    while (cursor.hasNext()) {
+		        System.out.println(cursor.next().toJson());
+		    }
+		} finally {
+		    cursor.close();
+		}
+	}
 	
+	void printLeague(String leagueID)
+	{		
+		Bson where = new Document().append("_id",new ObjectId(leagueID));
+
+		System.out.println(this.database.getCollection(LEAGUES).find(where).first());
+	}
 	
 	public static void main(String[] args)
 	{
 		// -- ESTABLISHING CONNECTION TO DATABASE --
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
+		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
@@ -524,7 +526,8 @@ public class DatabaseHelper {
 		// -- CREATING NEW USER -- 
 //		String newUserID = dbHelper.createUser("leaf_consumer", "herbivore1993", "Jasper", "Jellington");
 //		System.out.println(newUserID);
-		//dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
+//		dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
+//		System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 
 		
 		
@@ -532,23 +535,32 @@ public class DatabaseHelper {
 //		String newLeagueID = dbHelper.createLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
 //		System.out.println(newLeagueID);
 		
+		
 		// -- CREATING AND DELETING NEW TEAMS -- 
 //		dbHelper.createTeam("5e59763368ec36619a66bfdc", "Boxer Bruisers", "41015");
-//		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e59763368ec36619a66bfdd");
+//		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e5fda4385ccc271daa47a41");
+//		dbHelper.createTeam("5e597b0b1b4ecc0001db20cc", "SharpClaws", "12345");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-		//System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
-		
-		//System.out.println(dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "Naomi", "Fluffington"));
+//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "Primp", "Doge");
+//		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
+
+//		dbHelper.deletePlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e600d8688302978a1ed1e52");
+
 		
 		// -- CREATING AND DELETING NEW MATCHES --
-		//System.out.println(dbHelper.createMatch("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "FastCats", "NeedlePointers", "TBA", "TBA"));
+//		dbHelper.createMatch("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "RoughBoyes", "Boxer Bruisers", "TBA", "TBA");
+
+//		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fdc02518e952252e0609c");
 		
-		// 5e5c793f1b19b3252e261efd match ID ^
+		// -- CREATING AND DELETING NEW PLAYER STATSTICS --
+//		dbHelper.createStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "Times pwnd", "-2");
+
+//		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
+
 		
-		dbHelper.deleteMatch("5e597b0b1b4ecc0001db20cc", "5e597b0b1b4ecc0001db20cd", "5e5c793f1b19b3252e261efd");
-		
-		
+		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+
 		
 		//shutting down mongoDB connection
 		dbHelper.getClient().close();
