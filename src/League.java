@@ -28,7 +28,7 @@ public class League {
 
 	private void populateLeagueDetails() 
 	{
-		getLeagueDetails();
+		getLeagueDetails(false);
 
 		  this.leagueName = (String) leagueData.get("leagueName"); 
 		  this.sport =(String) leagueData.get("sport"); 
@@ -49,7 +49,7 @@ public class League {
 		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs);
 	}
 
-	private void getLeagueDetails() 
+	void getLeagueDetails(boolean print) 
 	{
 		Document leagueDocument = dbHelper.getDocument("Leagues", leagueID);
 
@@ -62,11 +62,11 @@ public class League {
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	void printLeagueDetails()
-	{
-		System.out.println(leagueData.toString());
+		
+		if (print)
+		{
+			System.out.println(leagueData.toString());
+		}
 	}
 
 	String getLeagueID() 
