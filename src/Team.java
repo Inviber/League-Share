@@ -36,21 +36,21 @@ public class Team {
 			"LeagueShare");
 	private JSONObject teamData;
 	
-	Team(String leagueID, String teamID)
+	Team(String leagueID, String teamName)
 	{
 		this.leagueID = leagueID;
-		this.teamID = teamID;
+		this.teamName = teamName;
+		populateTeamDetails();
 	}
 	
-	void populateLeagueDetails() 
+	void populateTeamDetails() 
 	{
-		getLeagueDetails();
-
-		  this.teamName = (String) teamData.get("teamName"); 
+		getTeamDetails();
+		  
 		  this.zipcode =(String) teamData.get("zipcode"); 
 		  
-		  JSONArray players = (JSONArray) teamData.get("teams.$.players");
-		  
+		  JSONArray players = (JSONArray) teamData.get("players");
+		  		  
 		  for (int i = 0; i < players.size(); i++)
 		  {
 			  JSONObject player = (JSONObject) players.get(i);
@@ -59,7 +59,7 @@ public class Team {
 			  playerIDs.add(id[3]); // id is stored in element 3.
 		  }
 		  
-		  JSONArray matches = (JSONArray) teamData.get("teams.$.matches");
+		  JSONArray matches = (JSONArray) teamData.get("matches");
 		  
 		  for (int i = 0; i < matches.size(); i++)
 		  {
@@ -69,18 +69,24 @@ public class Team {
 			  matchIDs.add(id[3]); // id is stored in element 3.
 		  }
 		  
-		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs);
+		  System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString()  + " " +  matchIDs.toString());
+		  
 	}
 
-	void getLeagueDetails() 
+	void getTeamDetails() 
 	{
-		Document teamDocument = dbHelper.getDocument("Leagues", leagueID);
+		this.teamID = dbHelper.getTeamIDByTeamName(leagueID, teamName);
+		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
 
 		try 
 		{
 			Object obj = parser.parse(teamDocument.toJson());
-			teamData = (JSONObject) obj;
-
+			JSONObject leagueData = (JSONObject) obj;
+			
+			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
+			
+			teamData = (JSONObject) teamDataArray.get(0);
+			
 			System.out.println(teamData.toString());
 		} 
 		catch (Exception e) 
@@ -89,6 +95,26 @@ public class Team {
 		}
 	}
 	
+	String getLeagueID() 
+	{
+		return leagueID;
+	}
+
+	String getTeamName() 
+	{
+		return teamName;
+	}
+
+	String getZipcode() 
+	{
+		return zipcode;
+	}
+
+	ArrayList<String> getMatchIDs() 
+	{
+		return matchIDs;
+	}
+
 	ArrayList<String> getPlayerIDs()
 	{
 		return playerIDs;
@@ -102,5 +128,10 @@ public class Team {
 	void setTeamID(String teamID)
 	{
 		this.teamID = teamID;
+	}
+	
+	void closeDatabase() 
+	{
+		dbHelper.getClient().close();
 	}
 }
