@@ -62,7 +62,7 @@ class LeagueTester {
 	@AfterAll
 	static void cleanUpAndClose()
 	{
-		league.getLeagueDetails();
+		league.printLeagueDetails();
 		
 		league.closeDatabase();
 	}

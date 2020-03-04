@@ -49,7 +49,7 @@ public class League {
 		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs);
 	}
 
-	void getLeagueDetails() 
+	private void getLeagueDetails() 
 	{
 		Document leagueDocument = dbHelper.getDocument("Leagues", leagueID);
 
@@ -57,13 +57,16 @@ public class League {
 		{
 			Object obj = parser.parse(leagueDocument.toJson());
 			leagueData = (JSONObject) obj;
-
-			System.out.println(leagueData.toString());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	void printLeagueDetails()
+	{
+		System.out.println(leagueData.toString());
 	}
 
 	String getLeagueID() 
