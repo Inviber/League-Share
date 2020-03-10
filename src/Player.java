@@ -1,53 +1,37 @@
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Player {
-	private HashMap<String, String> stringData;
-	private HashMap<String, Integer> intData;
+	private String playerID;
+	private String firstName;
+	private String lastName;
+	private ArrayList<String> statistics = new ArrayList<String>();
 	
-	Player(HashMap<String, String> stringData, HashMap<String, Integer> intData)
+	Player(String playerID, String firstName, String lastName)
 	{
-		this.stringData = stringData;
-		this.intData = intData;
+		this.playerID = playerID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	String getPlayerID() 
+	{
+		return playerID;
+	}
+
+	String getFirstName() 
+	{
+		return firstName;
+	}
+
+	String getLastName() 
+	{
+		return lastName;
+	}
+
+	ArrayList<String> getStatistics() 
+	{
+		return statistics;
 	}
 	
-	String getPlayerStringData(String key)
-	{
-		return stringData.get(key);
-	}
-	
-	int getPlayerIntData(String key)
-	{
-		return intData.get(key);
-	}
-	
-	void addPlayerStringData(String key, String value)
-	{
-		stringData.put(key,  value);
-	}
-	
-	void addPlayerIntData(String key, Integer value)
-	{
-		intData.put(key,  value);
-	}
-	
-	void removePlayerStringData(String key)
-	{
-		stringData.remove(key);
-	}
-	
-	void removePlayerIntData(String key)
-	{
-		intData.remove(key);
-	}
-	
-	void changePlayerStringData(String key, String newValue)
-	{
-		stringData.replace(key,  newValue);
-	}
-	
-	void changePlayerIntData(String key, Integer newValue)
-	{
-		intData.replace(key, newValue);
-	}
 	
 }

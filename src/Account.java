@@ -1,26 +1,71 @@
 import java.util.ArrayList;
 
+import org.bson.Document;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 class Account {
-	private String ID;		// _ID is the naming used by MongoDB.
+	private String _ID;		// _ID is the naming used by MongoDB's unique ID system.
 	private String username;
-	//private database db;	// pseudo code for when we have the database working.
+	private String firstName;
+	private String lastName;
+	private JSONParser parser = new JSONParser();
+	private DatabaseHelper dbHelper = 
+			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
+	private JSONObject accountData;
+
+	private ArrayList<String> ownedLeagueIDs = new ArrayList<String>();
+	private ArrayList<String> leagueCastedIDs = new ArrayList<String>();
+	private ArrayList<String> followedLeagueIDs = new ArrayList<String>();
+	private ArrayList<String> ownedTeamIDs = new ArrayList<String>();
+	private ArrayList<String> managedTeamIDs = new ArrayList<String>();
+	private ArrayList<String> followedTeamIDs = new ArrayList<String>();
 	
-	private ArrayList<String> leaguesOwnedIDs = new ArrayList<String>();
-	private ArrayList<String> leaguesCastedIDs = new ArrayList<String>();
-	private ArrayList<String> leaguesFollowedIDs = new ArrayList<String>();
-	private ArrayList<String> teamsOwnedIDs = new ArrayList<String>();
-	private ArrayList<String> teamsManagedIDs = new ArrayList<String>();
-	private ArrayList<String> teamsFollowedIDs = new ArrayList<String>();
-	
-	Account(String _ID, String username) 
+	Account(String username)
 	{
-		this.ID = _ID;
 		this.username = username;
+		this._ID = dbHelper.getUserIDByUsername(username);
+		populateAccountDetails();
+	}
+	
+	private void populateAccountDetails()
+	{
+		getAccountDetails(false);
+		
+		this.firstName = (String) accountData.get("firstName");
+		this.lastName = (String) accountData.get("lastName");
+		
+		this.ownedLeagueIDs = (ArrayList<String>) accountData.get("ownedLeagueIDs");
+		this.leagueCastedIDs = (ArrayList<String>) accountData.get("leagueCastedIDs");
+		this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
+		this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
+		this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
+		this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
+	}
+	
+	void getAccountDetails(boolean print)
+	{
+		Document accountDocument = dbHelper.getDocument("Users", _ID); 	
+				
+		try
+		{
+			Object obj = parser.parse(accountDocument.toJson());
+			accountData = (JSONObject) obj;
+		}
+		catch (Exception e) 
+		{ 
+			e.printStackTrace(); 
+		}
+		
+		if (print)
+		{
+			System.out.println(accountData.toString());
+		}
 	}
 	
 	String getID()
 	{
-		return this.ID;
+		return this._ID;
 	}
 	
 	String getUsername()
@@ -28,55 +73,59 @@ class Account {
 		return this.username;
 	}
 	
-	ArrayList<String> getLeaguesOwnedIDs() 
-	{
-		return leaguesOwnedIDs;
+	String getFirstName() {
+		return firstName;
 	}
 
-	ArrayList<String> getLeaguesCastedIDs() 
-	{
-		return leaguesCastedIDs;
-	}
-
-	ArrayList<String> getLeaguesFollowedIDs() 
-	{
-		return leaguesFollowedIDs;
-	}
-
-	ArrayList<String> getTeamsOwnedIDs() 
-	{
-		return teamsOwnedIDs;
-	}
-
-	ArrayList<String> getTeamsManagedIDs() 
-	{
-		return teamsManagedIDs;
-	}
-
-	ArrayList<String> getTeamsFollowedIDs() 
-	{
-		return teamsFollowedIDs;
+	String getLastName() {
+		return lastName;
 	}
 	
-	/*
-	void connectDatabase(database db)
+	ArrayList<String> getOwnedLeagueIDs() 
 	{
-		this.db = db;
+		return ownedLeagueIDs;
 	}
-	
-	void createLeague(String leagueName, String leagueDescription)
+
+	ArrayList<String> getLeagueCastedIDs() 
+	{
+		return leagueCastedIDs;
+	}
+
+	ArrayList<String> getFollowedLeagueIDs() 
+	{
+		return followedLeagueIDs;
+	}
+
+	ArrayList<String> getOwnedTeamIDs() 
+	{
+		return ownedTeamIDs;
+	}
+
+	ArrayList<String> getManagedTeamIDs() 
+	{
+		return managedTeamIDs;
+	}
+
+	ArrayList<String> getFollowedTeamIDs() 
+	{
+		return followedTeamIDs;
+	}
+
+	void createLeague(String leagueName, String sport, String leagueDescription)
 	{
 		// access db, this call will likely return an ID from the db.
-		String _ID = db.createLeague(this.ID, leagueName, leagueDescription); 
-		addLeague(_ID, true, false);
+		String leage_ID = dbHelper.createLeague(leagueName, this._ID, sport, leagueDescription); 
+		new League(leage_ID, this._ID);
+		addLeague(leage_ID, true, false);
 	}
 	
 	boolean updateLeague(String _ID, String leagueName, String leagueDescription) // returns boolean for if update was successful
 	{
-		if (leaguesOwnedIDs.contains(_ID))
+		if (ownedLeagueIDs.contains(_ID))
 		{
 			// access DB, this call will probably return a boolean on update success.
-			return db.updateLeague(this.ID, leagueName, leagueDescription);
+			//return dbHelper.updateLeague(this._ID, leagueName, leagueDescription);
+			return true; // currently no update function for the database.
 		}
 		else
 		{
@@ -84,22 +133,31 @@ class Account {
 			return false;
 		}
 	}
-	*/ 
 	
-	/*
-	void createTeam(String teamName)
+	
+	void createTeam(String leagueID, String teamName, String zipcode)
 	{
-		// access db, this call will likely return an ID from the db.
-		String _ID = db.createTeam(this.ID, teamName); 
-		addTeam(_ID, true, false);
+		
+		if (ownedLeagueIDs.contains(this._ID))
+		{
+			String teamID = dbHelper.createTeam(leagueID, teamName, zipcode); 
+			addTeam(teamID, true, false);
+		}
+		else
+		{
+			System.out.println("You don't have authority to create a team in this league.");
+		}
+			
 	}
 	
-	boolean updateTeam(String _ID, String teamName) // returns boolean for if update was successful
+	boolean updateTeam(String leagueID, String teamName) // returns boolean for if update was successful
 	{
-		if (teamsOwnedIDs.contains(_ID) || teamsManagedIDs.contains(_ID))
+		if (ownedLeagueIDs.contains(this._ID) || ownedTeamIDs.contains(this._ID) || managedTeamIDs.contains(this._ID))
 		{
 			// access DB, this call will probably return a boolean on update success.
-			return db.updateTeam(this.ID, teamName);
+			String teamID = dbHelper.getTeamIDByTeamName(leagueID, teamName);
+			//dbHelper.updateTeam(leagueID, teamID);
+			return true;
 		}
 		else
 		{
@@ -107,66 +165,167 @@ class Account {
 			return false;
 		}
 	}
-	*/ 
 	
-	void addLeague(String _ID, boolean owns, boolean casting)
+	
+	void addLeague(String league_ID, boolean owns, boolean casting)
 	{
-		// Need logic to prevent adding one league to multiple lists
 		// lookup league by _ID, pass it here, add to appropriate array
 		if (owns)
 		{
-			leaguesOwnedIDs.add(_ID);
-		}
-		else if (casting)
-		{
-			leaguesCastedIDs.add(_ID);
+			if (ownedLeagueIDs.contains(league_ID))
+			{
+				return; // already within array.
+			}
+			else
+			{
+				ownedLeagueIDs.add(league_ID);
+				dbHelper.addOwnedLeagueID(this._ID, league_ID);
+			}
 		}
 		
-		leaguesFollowedIDs.add(_ID);
+		if (casting)
+		{
+			if (leagueCastedIDs.contains(league_ID))
+			{
+				return; // already within array.
+			}
+			else
+			{
+				leagueCastedIDs.add(league_ID);
+				dbHelper.addLeagueCastedID(this._ID, league_ID);
+			}
+		}
+		
+		if (followedLeagueIDs.contains(league_ID))
+		{
+			return; // already within array.
+		}
+		else
+		{
+			followedLeagueIDs.add(league_ID);
+			dbHelper.addFollowedLeagueID(this._ID, league_ID);
+		}
+		
 	}
 	
-	void addTeam(String _ID, boolean owns, boolean manages)
+	void addTeam(String team_ID, boolean owns, boolean manages)
 	{
 		// lookup team by _ID, pass it here, add to appropriate array
 		if (owns)
 		{
-			teamsOwnedIDs.add(_ID);
-		}
-		else if (manages)
-		{
-			teamsManagedIDs.add(_ID);
+			if (ownedTeamIDs.contains(team_ID))
+			{
+				return; // already within array.
+			}
+			else
+			{
+				ownedTeamIDs.add(team_ID);
+				dbHelper.addOwnedTeamID(this._ID, team_ID);
+			}
 		}
 		
-		teamsFollowedIDs.add(_ID);
+		if (manages)
+		{
+			if (managedTeamIDs.contains(team_ID))
+			{
+				return; // already within array.
+			}
+			else
+			{
+				managedTeamIDs.add(team_ID);
+				dbHelper.addManagedTeamID(this._ID, team_ID);
+			}
+		}
+		
+		if (followedTeamIDs.contains(team_ID))
+		{
+			return; // already within array.
+		}
+		else
+		{
+			followedTeamIDs.add(team_ID);
+			dbHelper.addFollowedTeamID(this._ID, team_ID);
+		}
 	}
 	
-	void unfollowLeague(String _ID)
+	void deleteLeague(String league_ID)
 	{
-		leaguesFollowedIDs.remove(_ID);
+		if (ownedLeagueIDs.contains(league_ID))
+		{
+			ownedLeagueIDs.remove(league_ID);
+			dbHelper.removeOwnedLeagueID(this._ID, league_ID);
+			if (leagueCastedIDs.contains(league_ID))
+			{
+				leagueCastedIDs.remove(league_ID);
+				dbHelper.removeLeagueCastedID(this._ID, league_ID);
+			}
+
+			if (followedLeagueIDs.contains(league_ID))
+			{
+				followedLeagueIDs.remove(league_ID);
+				dbHelper.removeFollowedLeagueID(this._ID, league_ID);
+			}
+		}	
 	}
 	
-	void promoteLeagueCaster(String _ID)
+	void deleteTeam(String team_ID)
 	{
-		leaguesCastedIDs.add(_ID);
+		if (ownedTeamIDs.contains(team_ID))
+		{
+			ownedTeamIDs.remove(team_ID);
+			dbHelper.removeOwnedTeamID(this._ID, team_ID);
+			if (managedTeamIDs.contains(team_ID))
+			{
+				managedTeamIDs.remove(team_ID);
+				dbHelper.removeManagedTeamID(this._ID, team_ID);
+			}
+
+			if (followedTeamIDs.contains(team_ID))
+			{
+				followedTeamIDs.remove(team_ID);
+				dbHelper.removeFollowedTeamID(this._ID, team_ID);
+			}
+		}	
 	}
 	
-	void demoteLeagueCaster(String _ID)
+	void unfollowLeague(String league_ID)
 	{
-		leaguesCastedIDs.remove(_ID);
+		followedLeagueIDs.remove(league_ID);
+		dbHelper.removeFollowedLeagueID(this._ID, league_ID);
 	}
 	
-	void unfollowTeam(String _ID)
+	void promoteLeagueCaster(String league_ID)
 	{
-		teamsFollowedIDs.remove(_ID);
+		leagueCastedIDs.add(league_ID);
+		dbHelper.addLeagueCastedID(this._ID, league_ID);
 	}
 	
-	void promoteTeamManager(String _ID)
+	void demoteLeagueCaster(String league_ID)
 	{
-		teamsManagedIDs.add(_ID);
+		leagueCastedIDs.remove(league_ID);
+		dbHelper.removeLeagueCastedID(this._ID, league_ID);
 	}
 	
-	void demoteTeamManager(String _ID)
+	void unfollowTeam(String team_ID)
 	{
-		teamsManagedIDs.remove(_ID);
+		followedTeamIDs.remove(team_ID);
+		dbHelper.removeFollowedTeamID(this._ID, team_ID);
+	}
+	
+	void promoteTeamManager(String team_ID)
+	{
+		managedTeamIDs.add(team_ID);
+		dbHelper.addManagedTeamID(this._ID, team_ID);
+	}
+	
+	void demoteTeamManager(String team_ID)
+	{
+		managedTeamIDs.remove(team_ID);
+		dbHelper.removeManagedTeamID(this._ID, team_ID);
+	}
+	
+	void closeDatabase()
+	{
+		dbHelper.getClient().close();
 	}
 }
