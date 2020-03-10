@@ -1,98 +1,169 @@
 import java.util.ArrayList;
+import org.bson.Document;
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
 
 public class League {
 	private String leagueID;
+	private String leagueName;
 	private String ownerID;
-	private ArrayList<String> teams;
-	private ArrayList<String> admins;
-	private String leagueDescription;
-	
-	League()
+	private String sport;
+	private String description;
+	private ArrayList<String> casterIDs = new ArrayList<String>();
+	private ArrayList<String> teamIDs = new ArrayList<String>();
+
+	// Database related variables
+	private JSONParser parser = new JSONParser();
+	private DatabaseHelper dbHelper = new DatabaseHelper(
+			"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
+			"LeagueShare");
+	private JSONObject leagueData;
+
+	League(String leagueName)  // will change once we determine how to get the unique identifier for this document.
 	{
-		this.leagueID = "";
-		this.ownerID = "";
-		this.teams = new ArrayList<String>();
-		this.setAdmins(new ArrayList<String>());
+		this.leagueName = leagueName;
+		leagueID = dbHelper.getLeagueIDByLeagueName(leagueName);
+		populateLeagueDetails();
 	}
-	
-	League(String leagueID, String ownerID)
+
+	private void populateLeagueDetails() 
 	{
-		this.leagueID = leagueID;
-		this.ownerID = ownerID;
-		this.teams = new ArrayList<String>();
-		this.setAdmins(new ArrayList<String>());
+		getLeagueDetails(false);
+
+		  this.leagueName = (String) leagueData.get("leagueName"); 
+		  this.sport =(String) leagueData.get("sport"); 
+		  this.description = (String) leagueData.get("description");
+		  
+		  this.casterIDs = (ArrayList<String>) leagueData.get("casterIDs");
+		  
+		  JSONArray teams = (JSONArray) leagueData.get("teams");
+		  
+		  for (int i = 0; i < teams.size(); i++)
+		  {
+			  JSONObject team = (JSONObject) teams.get(i);
+			  String oid = team.get("_id").toString(); 
+			  String[] id = oid.split("\""); // removing oid from string.
+			  teamIDs.add(id[3]); // id is stored in element 3.
+		  }
+		  
+		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs);
 	}
-	
-	String getLeagueID()
+
+	void getLeagueDetails(boolean print) 
+	{
+		Document leagueDocument = dbHelper.getDocument("Leagues", leagueID);
+
+		try 
+		{
+			Object obj = parser.parse(leagueDocument.toJson());
+			leagueData = (JSONObject) obj;
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if (print)
+		{
+			System.out.println(leagueData.toString());
+		}
+	}
+
+	String getLeagueID() 
 	{
 		return leagueID;
 	}
-	
-	String getLeagueDescription()
+
+	String getLeagueDescription() 
 	{
-		return leagueDescription;
+		return description;
 	}
-	
-	String getOwnerID()
+
+	String getOwnerID() 
 	{
 		return ownerID;
 	}
-	
-	ArrayList<String> getTeams()
+
+	ArrayList<String> getTeamIDs() 
 	{
-		return teams;
+		return teamIDs;
 	}
-	
-	ArrayList<String> getAdmins() 
+
+	ArrayList<String> getCasterIDs() 
 	{
-		return admins;
+		return casterIDs;
 	}
-	
-	boolean addTeam(String teamID)
+
+	String createTeam(String teamName, String zipcode) 
 	{
-		if(!teams.contains(teamID))
+		if (dbHelper.getTeamIDByTeamName(leagueID, teamName) == "")
 		{
-			teams.add(teamID);
-			if(teams.contains(teamID))
-				return true;
+			String teamID = dbHelper.createTeam(leagueID, teamName, zipcode);
+			addTeam(teamID);
+			new Team(leagueID, teamID);
+			return teamID;
 		}
-		
-		return false;
-			
+		else return "";
 	}
 	
-	boolean removeTeam(String teamID)
+	void addTeam(String teamID) 
 	{
-		int indexOfTeam;
-		if(teams.contains(teamID))
+		if (!teamIDs.contains(teamID)) 
 		{
-			indexOfTeam = teams.indexOf(teamID);
-			teams.remove(indexOfTeam);
-			if(!teams.contains(teamID))
-				return true;
+			teamIDs.add(teamID);
 		}
-		
-		return false;
 	}
 	
-	void setLeagueDescription(String leagueDescription)
+	void deleteTeam(String teamName) 
 	{
-		this.leagueDescription = leagueDescription;
+		String teamID = dbHelper.getTeamIDByTeamName(leagueID, teamName);
+		if (teamID == "")
+		{
+			return; // not in database.
+		}
+		dbHelper.deleteTeam(leagueID, teamID);
+		removeTeam(teamID);
 	}
-	
-	void setLeagueID(String leagueID)
+
+	void removeTeam(String teamID) 
 	{
-		this.leagueID = leagueID;
+		if (teamIDs.contains(teamID)) 
+		{
+			teamIDs.remove(teamID);
+		}
 	}
-	
-	void setOwnerID(String ownerID)
+
+	void setDescription(String description) 
+	{
+		this.description = description;
+	}
+
+	void setOwnerID(String ownerID) 
 	{
 		this.ownerID = ownerID;
 	}
 
-	void setAdmins(ArrayList<String> admins) 
+	void addCasterIDs(String casterID) 
 	{
-		this.admins = admins;
+		if (!this.casterIDs.contains(casterID)) 
+		{
+			this.casterIDs.add(casterID);
+			dbHelper.addLeagueCasterID(this.leagueID, casterID);
+		}
 	}
-	
+
+	void removeCasterIDs(String casterID) 
+	{
+		if (this.casterIDs.contains(casterID)) 
+		{
+			this.casterIDs.remove(casterID);
+			dbHelper.removeLeagueCasterID(this.leagueID, casterID);
+		} 
+	}
+
+	void closeDatabase() 
+	{
+		dbHelper.getClient().close();
+	}
+
 }
