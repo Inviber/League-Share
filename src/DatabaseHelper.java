@@ -344,6 +344,13 @@ public class DatabaseHelper {
 		}
 	}
 	
+	public Document getTeamDocumentByID(String leagueID, String teamID)
+	{
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
+
+		return this.database.getCollection(LEAGUES).find(where).first();
+	}
+	
 	public String createTeam(String leagueID, String teamName, String zipcode) 
 	{
 		Document newTeamDocument = new Document();
