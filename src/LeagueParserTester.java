@@ -4,14 +4,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class LeagueTester {
+class LeagueParserTester {
 	
-	private static League league;
+	private static LeagueParser league;
 
 	@BeforeAll
 	static void populateLeague()
 	{
-		league = new League("Major League Doge Dodgeball");
+		league = new LeagueParser("Major League Doge Dodgeball");
 	}
 	
 	@Test

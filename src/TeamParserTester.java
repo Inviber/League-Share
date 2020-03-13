@@ -4,14 +4,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class TeamTester {
+class TeamParserTester {
 	
-	private static Team team;
+	private static TeamParser team;
 
 	@BeforeAll
 	static void populateTeam()
 	{
-		team = new Team("5e59763368ec36619a66bfdc", "Boxer Bruisers");
+		team = new TeamParser("5e59763368ec36619a66bfdc", "Boxer Bruisers");
 		team.getTeamDetails(true);
 	}
 	

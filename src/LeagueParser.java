@@ -3,7 +3,7 @@ import org.bson.Document;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
-public class League {
+public class LeagueParser {
 	private String leagueID;
 	private String leagueName;
 	private String ownerID;
@@ -21,7 +21,7 @@ public class League {
 			"LeagueShare");
 	private JSONObject leagueData;
 
-	League(String leagueName)  // will change once we determine how to get the unique identifier for this document.
+	LeagueParser(String leagueName)  // will change once we determine how to get the unique identifier for this document.
 	{
 		this.leagueName = leagueName;
 		leagueID = dbHelper.getLeagueIDByLeagueName(leagueName);
@@ -117,7 +117,7 @@ public class League {
 		{
 			String teamID = dbHelper.createTeam(leagueID, teamName, zipcode);
 			teamIDs.add(teamID);
-			new Team(leagueID, teamID);
+			new TeamParser(leagueID, teamID);
 			return teamID;
 		}
 		else return "";
@@ -146,7 +146,7 @@ public class League {
 	{
 		String matchID = dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date);
 		matchIDs.add(matchID);
-		new Match(leagueID, matchID);
+		new MatchParser(leagueID, matchID);
 		return matchID;
 	}
 	

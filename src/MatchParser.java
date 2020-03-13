@@ -5,7 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Match {
+public class MatchParser {
 	private String leagueID;
 	private String matchID;
 	private String homeTeamID;
@@ -19,7 +19,7 @@ public class Match {
 			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 	private JSONObject matchData;
 	
-	Match(String leagueID, String matchID)
+	MatchParser(String leagueID, String matchID)
 	{
 		this.leagueID = leagueID;
 		this.matchID = matchID;

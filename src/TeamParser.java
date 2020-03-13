@@ -16,7 +16,7 @@ import org.json.simple.parser.JSONParser;
  *					- completely unique to the league
  */
 
-public class Team {
+public class TeamParser {
 	private String leagueID;
 	private String teamID;
 	private String teamName;
@@ -30,7 +30,7 @@ public class Team {
 			"LeagueShare");
 	private JSONObject teamData;
 	
-	Team(String leagueID, String teamName)
+	TeamParser(String leagueID, String teamName)
 	{
 		this.leagueID = leagueID;
 		this.teamName = teamName;
@@ -116,7 +116,7 @@ public class Team {
 	{
 		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
 		playerIDs.add(playerID);
-		new Player(playerID, firstName, lastName);
+		new PlayerParser(playerID, firstName, lastName);
 		return playerID;
 	}
 	
