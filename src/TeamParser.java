@@ -116,7 +116,7 @@ public class TeamParser {
 	{
 		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
 		playerIDs.add(playerID);
-		new PlayerParser(playerID, firstName, lastName);
+		new PlayerParser(leagueID, teamID, playerID);
 		return playerID;
 	}
 	
