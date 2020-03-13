@@ -567,9 +567,9 @@ public class DatabaseHelper {
 //		System.out.println(newLeagueID);
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
-//		dbHelper.createMatch("5e59763368ec36619a66bfdc", "5e6ba6772a60955184041484", "5e5fdb13762e9912f7f22a1f", "03/15/2020", "TBA");
+//		dbHelper.createMatch("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e6ba620833bc36df92f85b9", "03/01/2020");
 		
-//		dbHelper.updateMatchFinalScore("5e59763368ec36619a66bfdc", "5e6ba71a070fcb289c53a0a9", "0", true);
+//		dbHelper.updateMatchScore("5e59763368ec36619a66bfdc", "5e6ba71a070fcb289c53a0a9", "0", true);
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 
@@ -591,9 +591,9 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-		//dbHelper.printLeague("5e59763368ec36619a66bfdc");
+		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
-		//dbHelper.printAllLeagues();
+//		dbHelper.printAllLeagues();
 
 		
 		//shutting down mongoDB connection
