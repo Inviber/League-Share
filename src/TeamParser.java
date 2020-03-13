@@ -14,20 +14,14 @@ import org.json.simple.parser.JSONParser;
  *				- lastName
  *				- stats[]
  *					- completely unique to the league
- *			- matches[]
- *				- homeTeam
- *				- awayTeam
- *				- date
- *				- finalScore
  */
 
-public class Team {
+public class TeamParser {
 	private String leagueID;
 	private String teamID;
 	private String teamName;
 	private String zipcode;
 	private ArrayList<String> playerIDs = new ArrayList<String>();
-	private ArrayList<String> matchIDs = new ArrayList<String>();
 	
 	// Database related variables
 	private JSONParser parser = new JSONParser();
@@ -36,7 +30,7 @@ public class Team {
 			"LeagueShare");
 	private JSONObject teamData;
 	
-	Team(String leagueID, String teamName)
+	TeamParser(String leagueID, String teamName)
 	{
 		this.leagueID = leagueID;
 		this.teamName = teamName;
@@ -59,17 +53,7 @@ public class Team {
 			  playerIDs.add(id[3]); // id is stored in element 3.
 		  }
 		  
-		  JSONArray matches = (JSONArray) teamData.get("matches");
-		  
-		  for (int i = 0; i < matches.size(); i++)
-		  {
-			  JSONObject match = (JSONObject) matches.get(i);
-			  String oid = match.get("_id").toString(); 
-			  String[] id = oid.split("\""); // removing oid from string.
-			  matchIDs.add(id[3]); // id is stored in element 3.
-		  }
-		  
-		  //System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString()  + " " +  matchIDs.toString());
+		  //System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString());
 		  
 	}
 
@@ -113,11 +97,6 @@ public class Team {
 		return zipcode;
 	}
 
-	ArrayList<String> getMatchIDs() 
-	{
-		return matchIDs;
-	}
-
 	ArrayList<String> getPlayerIDs()
 	{
 		return playerIDs;
@@ -137,7 +116,7 @@ public class Team {
 	{
 		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
 		playerIDs.add(playerID);
-		new Player(playerID, firstName, lastName);
+		new PlayerParser(playerID, firstName, lastName);
 		return playerID;
 	}
 	
@@ -147,27 +126,6 @@ public class Team {
 		{
 			dbHelper.deletePlayer(leagueID, teamID, playerID);
 			playerIDs.remove(playerID);
-		}
-		else
-		{
-			return; // not in database.
-		}
-	}
-	
-	String createMatch(String homeTeam, String awayTeam, String date, String finalScore) 
-	{
-		String matchID = dbHelper.createMatch(leagueID, teamID, homeTeam, awayTeam, date, finalScore);
-		matchIDs.add(matchID);
-		new Match(matchID, homeTeam, awayTeam, date, finalScore);
-		return matchID;
-	}
-	
-	void deleteMatch(String matchID) 
-	{
-		if (matchIDs.contains(matchID))
-		{
-			dbHelper.deleteMatch(leagueID, teamID, matchID);
-			matchIDs.remove(matchID);
 		}
 		else
 		{

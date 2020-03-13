@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 
-public class Player {
+public class PlayerParser {
 	private String playerID;
 	private String firstName;
 	private String lastName;
 	private ArrayList<String> statistics = new ArrayList<String>();
 	
-	Player(String playerID, String firstName, String lastName)
+	PlayerParser(String playerID, String firstName, String lastName)
 	{
 		this.playerID = playerID;
 		this.firstName = firstName;

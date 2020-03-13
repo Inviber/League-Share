@@ -4,14 +4,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class TeamTester {
+class TeamParserTester {
 	
-	private static Team team;
+	private static TeamParser team;
 
 	@BeforeAll
 	static void populateTeam()
 	{
-		team = new Team("5e59763368ec36619a66bfdc", "Boxer Bruisers");
+		team = new TeamParser("5e59763368ec36619a66bfdc", "Boxer Bruisers");
 		team.getTeamDetails(true);
 	}
 	
@@ -39,27 +39,6 @@ class TeamTester {
 		team.deletePlayer(testRemovePlayerID);
 
 		assertFalse(team.getPlayerIDs().contains(testRemovePlayerID), "testRemovePlayerID is no longer present in team array");
-	}
-	
-	@Test
-	void createMatchInTeam() {
-		String testAddMatchID = team.createMatch("homeTeamAdd", "awayTeam", "date", "finalScore");
-				
-		assertTrue(team.getMatchIDs().contains(testAddMatchID), "testAddMatchID is pressent in team array");
-	
-		team.deleteMatch(testAddMatchID);
-	}
-	
-	@Test
-	void deleteMatchFromLeague()
-	{
-		String testRemoveMatchID = team.createMatch("homeTeamRemove", "awayTeam", "date", "finalScore");
-		
-		assertTrue(team.getMatchIDs().contains(testRemoveMatchID), "testRemoveMatchID is pressent in team array");
-
-		team.deleteMatch(testRemoveMatchID);
-
-		assertFalse(team.getMatchIDs().contains(testRemoveMatchID), "testRemoveMatchID is no longer present in team array");
 	}
 
 	@AfterAll
