@@ -11,7 +11,7 @@ class LeagueParserTester {
 	@BeforeAll
 	static void populateLeague()
 	{
-		league = new LeagueParser("Major League Doge Dodgeball");
+		league = new LeagueParser("5e59763368ec36619a66bfdc");
 	}
 	
 	@Test

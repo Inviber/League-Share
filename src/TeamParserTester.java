@@ -11,7 +11,7 @@ class TeamParserTester {
 	@BeforeAll
 	static void populateTeam()
 	{
-		team = new TeamParser("5e59763368ec36619a66bfdc", "Boxer Bruisers");
+		team = new TeamParser("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f");
 		team.getTeamDetails(true);
 	}
 	
