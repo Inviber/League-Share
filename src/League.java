@@ -11,6 +11,8 @@ public class League {
 	private String description;
 	private ArrayList<String> casterIDs = new ArrayList<String>();
 	private ArrayList<String> teamIDs = new ArrayList<String>();
+	private ArrayList<String> matchIDs = new ArrayList<String>();
+	
 
 	// Database related variables
 	private JSONParser parser = new JSONParser();
@@ -46,7 +48,17 @@ public class League {
 			  teamIDs.add(id[3]); // id is stored in element 3.
 		  }
 		  
-		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs);
+		  JSONArray matches = (JSONArray) leagueData.get("matches");
+		  
+		  for (int i = 0; i < matches.size(); i++)
+		  {
+			  JSONObject match = (JSONObject) matches.get(i);
+			  String oid = match.get("_id").toString(); 
+			  String[] id = oid.split("\""); // removing oid from string.
+			  matchIDs.add(id[3]); // id is stored in element 3.
+		  }
+		  
+		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs + " " + matchIDs);
 	}
 
 	void getLeagueDetails(boolean print) 
@@ -88,6 +100,11 @@ public class League {
 	{
 		return teamIDs;
 	}
+	
+	ArrayList<String> getMatchIDs() 
+	{
+		return matchIDs;
+	}
 
 	ArrayList<String> getCasterIDs() 
 	{
@@ -99,19 +116,11 @@ public class League {
 		if (dbHelper.getTeamIDByTeamName(leagueID, teamName) == "")
 		{
 			String teamID = dbHelper.createTeam(leagueID, teamName, zipcode);
-			addTeam(teamID);
+			teamIDs.add(teamID);
 			new Team(leagueID, teamID);
 			return teamID;
 		}
 		else return "";
-	}
-	
-	void addTeam(String teamID) 
-	{
-		if (!teamIDs.contains(teamID)) 
-		{
-			teamIDs.add(teamID);
-		}
 	}
 	
 	void deleteTeam(String teamName) 
@@ -122,7 +131,7 @@ public class League {
 			return; // not in database.
 		}
 		dbHelper.deleteTeam(leagueID, teamID);
-		removeTeam(teamID);
+		teamIDs.remove(teamID);
 	}
 
 	void removeTeam(String teamID) 
@@ -130,6 +139,27 @@ public class League {
 		if (teamIDs.contains(teamID)) 
 		{
 			teamIDs.remove(teamID);
+		}
+	}
+	
+	String createMatch(String homeTeamID, String awayTeamID, String date, String finalScore) 
+	{
+		String matchID = dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date, finalScore);
+		matchIDs.add(matchID);
+		new Match(matchID, homeTeamID, awayTeamID, date, finalScore);
+		return matchID;
+	}
+	
+	void deleteMatch(String matchID) 
+	{
+		if (matchIDs.contains(matchID))
+		{
+			dbHelper.deleteMatch(leagueID, matchID);
+			matchIDs.remove(matchID);
+		}
+		else
+		{
+			return; // not in database.
 		}
 	}
 
