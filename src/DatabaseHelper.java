@@ -457,7 +457,7 @@ public class DatabaseHelper {
 		return this.database.getCollection(LEAGUES).find(where).first();
 	}
 	
-	public String createMatch(String leagueID, String homeTeamID, String awayTeamID, String date, String finalScore)
+	public String createMatch(String leagueID, String homeTeamID, String awayTeamID, String date)
 	{
 		Document newMatchDocument = new Document();
 		
@@ -465,7 +465,8 @@ public class DatabaseHelper {
 		newMatchDocument.put("homeTeamID", homeTeamID);
 		newMatchDocument.put("awayTeamID", awayTeamID);
 		newMatchDocument.put("date", date);
-		newMatchDocument.put("finalScore", finalScore);
+		newMatchDocument.put("homeScore", "0");
+		newMatchDocument.put("awayScore", "0");
 	
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("matches", newMatchDocument));
 		
@@ -479,6 +480,22 @@ public class DatabaseHelper {
 		Bson update = new Document().append("matches", new BasicDBObject("_id", new ObjectId(matchID)));
 		
 		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
+	public void updateMatchScore(String leagueID, String matchID, String newScore, boolean awayScore)
+	{
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID));
+
+		Bson update = new Document().append("matches", new BasicDBObject("homeScore", newScore));
+
+		if (!awayScore)
+		{
+			update = new Document().append("matches", new BasicDBObject("awayScore", newScore));
+		}
+		
+		Bson set = new Document().append("$set", update);
 		
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
@@ -549,8 +566,10 @@ public class DatabaseHelper {
 //		String newLeagueID = dbHelper.createLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
 //		System.out.println(newLeagueID);
 		
-		// -- CREATING AND DELETING NEW MATCHES --
+		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
 //		dbHelper.createMatch("5e59763368ec36619a66bfdc", "5e6ba6772a60955184041484", "5e5fdb13762e9912f7f22a1f", "03/15/2020", "TBA");
+		
+//		dbHelper.updateMatchFinalScore("5e59763368ec36619a66bfdc", "5e6ba71a070fcb289c53a0a9", "0", true);
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 
@@ -572,7 +591,7 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+		//dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 		//dbHelper.printAllLeagues();
 

@@ -1,32 +1,66 @@
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
+import org.bson.Document;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class Match {
+	private String leagueID;
 	private String matchID;
 	private String homeTeamID;
 	private String awayTeamID;
+	private String homeScore;
+	private String awayScore;
 	private String date;
-	private String finalScore;
 	
-	Match(String matchID, String homeTeamID, String awayTeamID, String date, String finalScore)
+	private JSONParser parser = new JSONParser();
+	private DatabaseHelper dbHelper = 
+			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
+	private JSONObject matchData;
+	
+	Match(String leagueID, String matchID)
 	{
+		this.leagueID = leagueID;
 		this.matchID = matchID;
-		this.homeTeamID = homeTeamID;
-		this.awayTeamID = awayTeamID;
-		this.date = date;
-		this.finalScore = finalScore;
+		
+		populateMatchDetails();
 	}
-
-	String getFinalScore() 
+	
+	private void populateMatchDetails()
 	{
-		return finalScore;
+		getMatchDetails(false);
+		
+		this.homeTeamID = (String) matchData.get("homeTeamID");
+		this.awayTeamID = (String) matchData.get("awayTeamID");
+		this.homeScore = (String) matchData.get("homeScore");
+		this.awayScore = (String) matchData.get("awayScore");
+		this.date = (String) matchData.get("date");
+
 	}
-
-	void setFinalScore(String finalScore) 
+	
+	void getMatchDetails(boolean print) 
 	{
-		this.finalScore = finalScore;
+		Document teamDocument = dbHelper.getMatchDocumentByID(leagueID, matchID);
+
+		try 
+		{
+			Object obj = parser.parse(teamDocument.toJson());
+			JSONObject leagueData = (JSONObject) obj;
+			
+			JSONArray matchDataArray = (JSONArray) leagueData.get("matches");
+						
+			matchData = (JSONObject) matchDataArray.get(0);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		if (print)
+		{
+			System.out.println(matchData.toString());
+		}
 	}
 
 	String getMatchID() 
@@ -47,6 +81,26 @@ public class Match {
 	String getDate() 
 	{
 		return date;
+	}
+
+	String getHomeScore() 
+	{
+		return homeScore;
+	}
+
+	void setHomeScore(String homeScore) 
+	{
+		this.homeScore = homeScore;
+	}
+
+	String getAwayScore() 
+	{
+		return awayScore;
+	}
+
+	void setAwayScore(String awayScore) 
+	{
+		this.awayScore = awayScore;
 	}
 	
 	

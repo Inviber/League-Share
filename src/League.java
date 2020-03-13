@@ -142,11 +142,11 @@ public class League {
 		}
 	}
 	
-	String createMatch(String homeTeamID, String awayTeamID, String date, String finalScore) 
+	String createMatch(String homeTeamID, String awayTeamID, String date) 
 	{
-		String matchID = dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date, finalScore);
+		String matchID = dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date);
 		matchIDs.add(matchID);
-		new Match(matchID, homeTeamID, awayTeamID, date, finalScore);
+		new Match(leagueID, matchID);
 		return matchID;
 	}
 	
