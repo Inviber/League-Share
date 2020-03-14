@@ -119,7 +119,9 @@ public class LeagueParser {
 	{
 		return casterIDs;
 	}
-
+	
+	/*
+	// Creating team code, removed due to class turning into a Parser.
 	String createTeam(String teamName, String zipcode) 
 	{
 		if (dbHelper.getTeamIDByTeamName(leagueID, teamName) == "")
@@ -151,6 +153,10 @@ public class LeagueParser {
 		}
 	}
 	
+	*/
+	
+	/*
+	// Creating match code, removed due to class turning into a Parser.
 	String createMatch(String homeTeamID, String awayTeamID, String date) 
 	{
 		String matchID = dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date);
@@ -171,6 +177,8 @@ public class LeagueParser {
 			return; // not in database.
 		}
 	}
+	
+	*/
 
 	void setDescription(String description) 
 	{

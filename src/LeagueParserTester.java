@@ -14,6 +14,8 @@ class LeagueParserTester {
 		league = new LeagueParser("5e59763368ec36619a66bfdc");
 	}
 	
+	/*
+	
 	@Test
 	void createTeamInLeague() {
 		String testTeamID = league.createTeam("createTeamTest", "00000");
@@ -36,6 +38,8 @@ class LeagueParserTester {
 
 		assertFalse(league.getTeamIDs().contains(testTeamID), "removeTeamTest is no longer present in team array");
 	}
+	
+	*/
 	
 	@Test
 	void addCasterToLeague()
