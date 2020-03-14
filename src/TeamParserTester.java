@@ -19,7 +19,7 @@ class TeamParserTester {
 	void teamPopulatedSuccessfully() {
 		assertTrue(team.getZipcode().contains("41015"), "Team data populated successfully");
 	}
-	
+	/*
 	@Test
 	void createPlayerInTeam() {
 		String testAddPlayerID = team.createPlayer("Add", "Me");
@@ -40,6 +40,7 @@ class TeamParserTester {
 
 		assertFalse(team.getPlayerIDs().contains(testRemovePlayerID), "testRemovePlayerID is no longer present in team array");
 	}
+	*/
 
 	@AfterAll
 	static void cleanUpAndClose()

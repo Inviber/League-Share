@@ -27,47 +27,41 @@ public class PlayerParser {
 		this.leagueID = leagueID;
 		this.teamID = teamID;
 		this.playerID = playerID;
+		populateTeamDetails();
 	}
 	
 	void populateTeamDetails() 
 	{
-		getTeamDetails(false);
+		getPlayerDetails(false);
 		  
 		this.firstName = (String) playerData.get("firstName"); 
 		this.lastName = (String) playerData.get("lastName"); 
 		  
-		JSONArray matchStatNames = (JSONArray) playerData.get("statisticNames");
-		  		  
-		for (int i = 0; i < matchStatNames.size(); i++)
-		{
-			JSONObject stat = (JSONObject) matchStatNames.get(i);
-			String oid = stat.get("_id").toString(); 
-			String[] id = oid.split("\""); // removing oid from string.
-			statisticNames.add(id[3]); // id is stored in element 3.
-		}
+		JSONArray matchStatistics = (JSONArray) playerData.get("statistics");
 		
-		JSONArray matchStatValue = (JSONArray) playerData.get("statValue");
-		  
 		ArrayList<String> statisticValues = new ArrayList<String>();
-		
-		for (int i = 0; i < matchStatValue.size(); i++)
+
+		for (int i = 0; i < matchStatistics.size(); i++)
 		{
-			JSONObject stat = (JSONObject) matchStatValue.get(i);
-			String oid = stat.get("_id").toString(); 
-			String[] id = oid.split("\""); // removing oid from string.
-			statisticValues.add(id[3]); // id is stored in element 3.
+			JSONObject stat = (JSONObject) matchStatistics.get(i);
+			String statName = stat.get("statName").toString(); 
+			statisticNames.add(statName.split("\"")[0]); //  go to the next ", name is stored in element 1.
+			
+			String statValue = stat.get("statValue").toString(); 
+			statisticValues.add(statValue.split("\"")[0]); //  go to the next ", value is stored in element 1.
 		}
+
 		
 		for (int i = 0; i < statisticValues.size(); i++)
 		{
 			statistics.put(statisticNames.get(i), statisticValues.get(i)); // append each statisitic to the hash map
 		}
 		  
-		//System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString());
+		System.out.println(firstName + " " + lastName  + " " + statisticNames.toString() + " " + statistics.toString());
 		  
 	}
 
-	void getTeamDetails(boolean print) 
+	void getPlayerDetails(boolean print) 
 	{
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
 
@@ -123,5 +117,10 @@ public class PlayerParser {
 	String getStatstic(String statisticName)
 	{
 		return statistics.get(statisticName);
+	}
+	
+	void closeDatabase() 
+	{
+		dbHelper.getClient().close();
 	}
 }

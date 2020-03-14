@@ -112,6 +112,7 @@ public class TeamParser {
 		this.teamID = teamID;
 	}
 	
+	/*
 	String createPlayer(String firstName, String lastName) 
 	{
 		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
@@ -132,6 +133,8 @@ public class TeamParser {
 			return; // not in database.
 		}
 	}
+	
+	*/
 	
 	void closeDatabase() 
 	{
