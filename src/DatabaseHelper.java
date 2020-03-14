@@ -543,7 +543,7 @@ public class DatabaseHelper {
 		// -- ESTABLISHING CONNECTION TO DATABASE --
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
-		//dbHelper.printAllLeagues();
+//		dbHelper.printAllUsers();
 		
 		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		

@@ -11,7 +11,7 @@ class AccountTest {
 	@BeforeAll
 	static void createAccount()
 	{
-		account = new Account("WhiteWolf");
+		account = new Account("WhiteWolf", "Yennifer");
 	}
 	
 	@Test

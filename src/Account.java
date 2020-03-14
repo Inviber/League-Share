@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 class Account {
 	private String _ID;		// _ID is the naming used by MongoDB's unique ID system.
 	private String username;
+	private String passedPassword;
 	private String firstName;
 	private String lastName;
 	private JSONParser parser = new JSONParser();
@@ -21,9 +22,10 @@ class Account {
 	private ArrayList<String> managedTeamIDs = new ArrayList<String>();
 	private ArrayList<String> followedTeamIDs = new ArrayList<String>();
 	
-	Account(String username)
+	Account(String username, String password)
 	{
 		this.username = username;
+		passedPassword = password;
 		this._ID = dbHelper.getUserIDByUsername(username);
 		populateAccountDetails();
 	}
@@ -32,15 +34,23 @@ class Account {
 	{
 		getAccountDetails(false);
 		
-		this.firstName = (String) accountData.get("firstName");
-		this.lastName = (String) accountData.get("lastName");
+		if (passedPassword.compareTo((String) accountData.get("password")) == 0)
+		{
+			this.firstName = (String) accountData.get("firstName");
+			this.lastName = (String) accountData.get("lastName");
+			
+			this.ownedLeagueIDs = (ArrayList<String>) accountData.get("ownedLeagueIDs");
+			this.leagueCastedIDs = (ArrayList<String>) accountData.get("leagueCastedIDs");
+			this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
+			this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
+			this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
+			this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
+		}
+		else
+		{
+			// invalid password.
+		}
 		
-		this.ownedLeagueIDs = (ArrayList<String>) accountData.get("ownedLeagueIDs");
-		this.leagueCastedIDs = (ArrayList<String>) accountData.get("leagueCastedIDs");
-		this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
-		this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
-		this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
-		this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
 	}
 	
 	void getAccountDetails(boolean print)
