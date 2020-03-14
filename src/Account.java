@@ -7,9 +7,13 @@ import org.json.simple.parser.JSONParser;
 class Account {
 	private String _ID;		// _ID is the naming used by MongoDB's unique ID system.
 	private String username;
-	private String passedPassword;
 	private String firstName;
 	private String lastName;
+	
+	private String passedPassword;
+	private Boolean successfullyLoggedIn = false;
+	
+	// Database variables
 	private JSONParser parser = new JSONParser();
 	private DatabaseHelper dbHelper = 
 			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
@@ -45,12 +49,9 @@ class Account {
 			this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
 			this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
 			this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
+			
+			successfullyLoggedIn = true;
 		}
-		else
-		{
-			// invalid password.
-		}
-		
 	}
 	
 	void getAccountDetails(boolean print)
@@ -119,6 +120,12 @@ class Account {
 	ArrayList<String> getFollowedTeamIDs() 
 	{
 		return followedTeamIDs;
+	}
+	
+	
+	Boolean getSuccessfullyLoggedIn() 
+	{
+		return successfullyLoggedIn;
 	}
 
 	void createLeague(String leagueName, String sport, String leagueDescription)
