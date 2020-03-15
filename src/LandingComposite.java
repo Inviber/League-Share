@@ -40,24 +40,49 @@ public class LandingComposite extends Composite {
 		
 		List list = new List(this, SWT.BORDER | SWT.V_SCROLL);
 		list.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseDown(MouseEvent e) {
+//				System.out.println(list.getSelection()[0] + " selected...");
+//			}
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseDoubleClick(MouseEvent e) {
 				System.out.println(list.getSelection()[0] + " selected...");
 			}
 		});
-		list.setBounds(100, 200, 350, 200);
+		list.setBounds(178, 167, 350, 200);
 		
 		Label lblNewLabel_3 = new Label(this, SWT.CENTER);
-		lblNewLabel_3.setBounds(100, 181, 350, 17);
+		lblNewLabel_3.setBounds(178, 144, 350, 17);
 		lblNewLabel_3.setText("Followed Leagues");
+		
+		List list_1 = new List(this, SWT.BORDER | SWT.V_SCROLL);
+		list_1.setBounds(178, 430, 350, 200);
+		
+		Label lblNewLabel = new Label(this, SWT.NONE);
+		lblNewLabel.setAlignment(SWT.CENTER);
+		lblNewLabel.setBounds(178, 407, 350, 17);
+		lblNewLabel.setText("Owned Leagues");
+		
+		List list_2 = new List(this, SWT.BORDER | SWT.V_SCROLL);
+		list_2.setBounds(742, 167, 350, 200);
+		
+		List list_2_1 = new List(this, SWT.BORDER | SWT.V_SCROLL);
+		list_2_1.setBounds(742, 430, 350, 200);
+		
+		Label lblManagedTeams = new Label(this, SWT.NONE);
+		lblManagedTeams.setText("Managed Teams");
+		lblManagedTeams.setAlignment(SWT.CENTER);
+		lblManagedTeams.setBounds(742, 407, 350, 17);
+		
+		Label lblNewLabel_1_1 = new Label(this, SWT.NONE);
+		lblNewLabel_1_1.setText("Managed Leagues");
+		lblNewLabel_1_1.setAlignment(SWT.CENTER);
+		lblNewLabel_1_1.setBounds(742, 144, 350, 17);
+		
+		
 		
 		
 		ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
-//		System.out.println(followedLeagueIDs.toString());
-//		LeagueParser parser = new LeagueParser(followedLeagueIDs.get(0), dbHelper);
-//		list.add(parser.getLeagueName());
-//		LeagueParser parser2 = new LeagueParser(followedLeagueIDs.get(1), dbHelper);
-//		list.add(parser2.getLeagueName());
 		
 		for(int i = 0; i < followedLeagueIDs.size(); i++)
 		{

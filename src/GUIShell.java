@@ -57,7 +57,7 @@ public class GUIShell extends Shell {
 	 * @param display
 	 */
 	public GUIShell(Display display) {
-		super(display, SWT.SHELL_TRIM);
+		super(display, SWT.CLOSE | SWT.MIN | SWT.MAX | SWT.TITLE);
 		
 		dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 
