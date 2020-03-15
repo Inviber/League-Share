@@ -15,8 +15,9 @@ class Account {
 	
 	// Database variables
 	private JSONParser parser = new JSONParser();
-	private DatabaseHelper dbHelper = 
-			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
+	private DatabaseHelper dbHelper;
+//	private DatabaseHelper dbHelper = 
+//			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 	private JSONObject accountData;
 
 	private ArrayList<String> ownedLeagueIDs = new ArrayList<String>();
@@ -26,8 +27,9 @@ class Account {
 	private ArrayList<String> managedTeamIDs = new ArrayList<String>();
 	private ArrayList<String> followedTeamIDs = new ArrayList<String>();
 	
-	Account(String username, String password)
+	Account(String username, String password, DatabaseHelper dbHelper)
 	{
+		this.dbHelper = dbHelper;
 		this.username = username;
 		passedPassword = password;
 		this._ID = dbHelper.getUserIDByUsername(username);

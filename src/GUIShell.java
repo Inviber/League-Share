@@ -4,7 +4,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class GUIShell extends Shell {
-
+	
+	private DatabaseHelper dbHelper;
 	private Composite shell = this;
 	private Composite loginComposite = null;
 	private Composite landingComposite = null;
@@ -31,7 +32,8 @@ public class GUIShell extends Shell {
 				
 				if(shell.getSuccessfulLogin() == true)
 				{
-					shell.setText(shell.getAccount().getFirstName());
+//					shell.setText(shell.getAccount().getFirstName());
+					System.out.println(shell.getAccount().getFirstName());
 				}
 				
 				if (!display.readAndDispatch()) {
@@ -49,6 +51,9 @@ public class GUIShell extends Shell {
 	 */
 	public GUIShell(Display display) {
 		super(display, SWT.SHELL_TRIM);
+		
+		dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
+
 		createContents();
 	}
 
@@ -59,7 +64,7 @@ public class GUIShell extends Shell {
 		setText("League Share");
 		setSize(1280, 720);
 		
-		loginComposite = new LoginComposite(shell, SWT.NONE, this);
+		loginComposite = new LoginComposite(shell, SWT.NONE, this, dbHelper);
 		loginComposite.setSize(1280, 720);
 		loginComposite.setParent(shell);
 

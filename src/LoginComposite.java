@@ -18,7 +18,7 @@ public class LoginComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public LoginComposite(Composite parent, int style, GUIShell shell) {
+	public LoginComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper) {
 		super(parent, SWT.NONE);
 		setLayout(null);
 		
@@ -30,7 +30,7 @@ public class LoginComposite extends Composite {
 				System.out.println("Username: " + text.getText() + " Password: " + text_1.getText());
 
 				//WILL NEED TO ADD INPUT VALIDATION
-				currentUser = new Account(text.getText(), text_1.getText());
+				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
 				shell.setAccount(currentUser);
 				shell.setSuccessfulLogin(true);
 				
