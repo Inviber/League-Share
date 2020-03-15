@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 class AccountTest {
 
 	private static Account account;
+	private static DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 	
 	@BeforeAll
 	static void createAccount()
 	{
-		account = new Account("WhiteWolf", "Yennifer");
+		account = new Account("WhiteWolf", "Yennifer", dbHelper);
 	}
 	
 	@Test
