@@ -312,10 +312,8 @@ public class DatabaseHelper {
 		{
 			MongoCollection<Document> collection = database.getCollection(LEAGUES);
 			
-			String dotNotation = "teams";
-
 			FindIterable<Document> projection = collection.find()
-			    .projection( fields( include( dotNotation ) ) ).projection( fields( include( "teams._id", "teams.teamName" ) ) );
+			    .projection( fields( include( "teams" ) ) ).projection( fields( include( "teams._id", "teams.teamName" ) ) );
 			
 		    Document doc = projection.first();
 		    
@@ -545,7 +543,7 @@ public class DatabaseHelper {
 		// -- ESTABLISHING CONNECTION TO DATABASE --
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
-		//dbHelper.printAllLeagues();
+//		dbHelper.printAllUsers();
 		
 		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
@@ -572,7 +570,6 @@ public class DatabaseHelper {
 //		dbHelper.updateMatchScore("5e59763368ec36619a66bfdc", "5e6ba71a070fcb289c53a0a9", "0", true);
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
-
 		
 		// -- CREATING AND DELETING NEW TEAMS -- 
 //		dbHelper.createTeam("5e59763368ec36619a66bfdc", "Quick Boyes", "12345");

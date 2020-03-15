@@ -30,10 +30,10 @@ public class TeamParser {
 			"LeagueShare");
 	private JSONObject teamData;
 	
-	TeamParser(String leagueID, String teamName)
+	TeamParser(String leagueID, String teamID)
 	{
 		this.leagueID = leagueID;
-		this.teamName = teamName;
+		this.teamID = teamID;
 		populateTeamDetails();
 	}
 	
@@ -41,25 +41,25 @@ public class TeamParser {
 	{
 		getTeamDetails(false);
 		  
-		  this.zipcode =(String) teamData.get("zipcode"); 
+		this.teamName = (String) teamData.get("teamName"); 
+		this.zipcode = (String) teamData.get("zipcode"); 
 		  
-		  JSONArray players = (JSONArray) teamData.get("players");
+		JSONArray players = (JSONArray) teamData.get("players");
 		  		  
-		  for (int i = 0; i < players.size(); i++)
-		  {
-			  JSONObject player = (JSONObject) players.get(i);
-			  String oid = player.get("_id").toString(); 
-			  String[] id = oid.split("\""); // removing oid from string.
-			  playerIDs.add(id[3]); // id is stored in element 3.
-		  }
+		for (int i = 0; i < players.size(); i++)
+		{
+			JSONObject player = (JSONObject) players.get(i);
+			String oid = player.get("_id").toString(); 
+			String[] id = oid.split("\""); // removing oid from string.
+			playerIDs.add(id[3]); // id is stored in element 3.
+		}
 		  
-		  //System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString());
+		//System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString());
 		  
 	}
 
 	void getTeamDetails(boolean print) 
 	{
-		this.teamID = dbHelper.getTeamIDByTeamName(leagueID, teamName);
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
 
 		try 
@@ -112,11 +112,12 @@ public class TeamParser {
 		this.teamID = teamID;
 	}
 	
+	/*
 	String createPlayer(String firstName, String lastName) 
 	{
 		String playerID = dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
 		playerIDs.add(playerID);
-		new PlayerParser(playerID, firstName, lastName);
+		new PlayerParser(leagueID, teamID, playerID);
 		return playerID;
 	}
 	
@@ -132,6 +133,8 @@ public class TeamParser {
 			return; // not in database.
 		}
 	}
+	
+	*/
 	
 	void closeDatabase() 
 	{

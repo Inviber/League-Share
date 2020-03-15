@@ -21,10 +21,9 @@ public class LeagueParser {
 			"LeagueShare");
 	private JSONObject leagueData;
 
-	LeagueParser(String leagueName)  // will change once we determine how to get the unique identifier for this document.
+	LeagueParser(String leagueID)  // will change once we determine how to get the unique identifier for this document.
 	{
-		this.leagueName = leagueName;
-		leagueID = dbHelper.getLeagueIDByLeagueName(leagueName);
+		this.leagueID = leagueID;
 		populateLeagueDetails();
 	}
 
@@ -33,7 +32,7 @@ public class LeagueParser {
 		getLeagueDetails(false);
 
 		  this.leagueName = (String) leagueData.get("leagueName"); 
-		  this.sport =(String) leagueData.get("sport"); 
+		  this.sport = (String) leagueData.get("sport"); 
 		  this.description = (String) leagueData.get("description");
 		  
 		  this.casterIDs = (ArrayList<String>) leagueData.get("casterIDs");
@@ -85,15 +84,25 @@ public class LeagueParser {
 	{
 		return leagueID;
 	}
-
-	String getLeagueDescription() 
+	
+	String getLeagueName() 
 	{
-		return description;
+		return leagueName;
 	}
 
+	String getSport() 
+	{
+		return sport;
+	}
+	
 	String getOwnerID() 
 	{
 		return ownerID;
+	}
+	
+	String getLeagueDescription() 
+	{
+		return description;
 	}
 
 	ArrayList<String> getTeamIDs() 
@@ -110,7 +119,9 @@ public class LeagueParser {
 	{
 		return casterIDs;
 	}
-
+	
+	/*
+	// Creating team code, removed due to class turning into a Parser.
 	String createTeam(String teamName, String zipcode) 
 	{
 		if (dbHelper.getTeamIDByTeamName(leagueID, teamName) == "")
@@ -142,6 +153,10 @@ public class LeagueParser {
 		}
 	}
 	
+	*/
+	
+	/*
+	// Creating match code, removed due to class turning into a Parser.
 	String createMatch(String homeTeamID, String awayTeamID, String date) 
 	{
 		String matchID = dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date);
@@ -162,6 +177,8 @@ public class LeagueParser {
 			return; // not in database.
 		}
 	}
+	
+	*/
 
 	void setDescription(String description) 
 	{

@@ -11,7 +11,7 @@ class TeamParserTester {
 	@BeforeAll
 	static void populateTeam()
 	{
-		team = new TeamParser("5e59763368ec36619a66bfdc", "Boxer Bruisers");
+		team = new TeamParser("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f");
 		team.getTeamDetails(true);
 	}
 	
@@ -19,7 +19,7 @@ class TeamParserTester {
 	void teamPopulatedSuccessfully() {
 		assertTrue(team.getZipcode().contains("41015"), "Team data populated successfully");
 	}
-	
+	/*
 	@Test
 	void createPlayerInTeam() {
 		String testAddPlayerID = team.createPlayer("Add", "Me");
@@ -40,6 +40,7 @@ class TeamParserTester {
 
 		assertFalse(team.getPlayerIDs().contains(testRemovePlayerID), "testRemovePlayerID is no longer present in team array");
 	}
+	*/
 
 	@AfterAll
 	static void cleanUpAndClose()

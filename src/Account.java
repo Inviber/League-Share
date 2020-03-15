@@ -9,6 +9,11 @@ class Account {
 	private String username;
 	private String firstName;
 	private String lastName;
+	
+	private String passedPassword;
+	private Boolean successfullyLoggedIn = false;
+	
+	// Database variables
 	private JSONParser parser = new JSONParser();
 	private DatabaseHelper dbHelper = 
 			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
@@ -21,9 +26,10 @@ class Account {
 	private ArrayList<String> managedTeamIDs = new ArrayList<String>();
 	private ArrayList<String> followedTeamIDs = new ArrayList<String>();
 	
-	Account(String username)
+	Account(String username, String password)
 	{
 		this.username = username;
+		passedPassword = password;
 		this._ID = dbHelper.getUserIDByUsername(username);
 		populateAccountDetails();
 	}
@@ -32,15 +38,20 @@ class Account {
 	{
 		getAccountDetails(false);
 		
-		this.firstName = (String) accountData.get("firstName");
-		this.lastName = (String) accountData.get("lastName");
-		
-		this.ownedLeagueIDs = (ArrayList<String>) accountData.get("ownedLeagueIDs");
-		this.leagueCastedIDs = (ArrayList<String>) accountData.get("leagueCastedIDs");
-		this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
-		this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
-		this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
-		this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
+		if (passedPassword.compareTo((String) accountData.get("password")) == 0)
+		{
+			this.firstName = (String) accountData.get("firstName");
+			this.lastName = (String) accountData.get("lastName");
+			
+			this.ownedLeagueIDs = (ArrayList<String>) accountData.get("ownedLeagueIDs");
+			this.leagueCastedIDs = (ArrayList<String>) accountData.get("leagueCastedIDs");
+			this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
+			this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
+			this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
+			this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
+			
+			successfullyLoggedIn = true;
+		}
 	}
 	
 	void getAccountDetails(boolean print)
@@ -109,6 +120,12 @@ class Account {
 	ArrayList<String> getFollowedTeamIDs() 
 	{
 		return followedTeamIDs;
+	}
+	
+	
+	Boolean getSuccessfullyLoggedIn() 
+	{
+		return successfullyLoggedIn;
 	}
 
 	void createLeague(String leagueName, String sport, String leagueDescription)
