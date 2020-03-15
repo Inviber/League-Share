@@ -61,6 +61,13 @@ public class LandingComposite extends Composite {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				System.out.println(list.getSelection()[0] + " selected...");
+//				System.out.println(list.getSelectionIndex());
+				
+				ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
+				LeagueParser parser = new LeagueParser(followedLeagueIDs.get(list.getSelectionIndex()), dbHelper);
+				
+				ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, shell, dbHelper, parser);
+				shell.setDisplayedComposite(scheduleComposite);
 			}
 		});
 		list.setBounds(178, 167, 350, 200);

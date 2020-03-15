@@ -100,6 +100,7 @@ public class GUIShell extends Shell {
 		
 	public void setDisplayedComposite(Composite currentComposite)
 	{
+		this.displayedComposite.dispose();
 		this.displayedComposite = currentComposite;
 		displayedComposite.setSize(1280, 720);
 	}
