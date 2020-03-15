@@ -7,6 +7,8 @@ public class GUIShell extends Shell {
 	
 	private DatabaseHelper dbHelper;
 	private Composite shell = this;
+	private Composite displayedComposite = null;
+	
 	private Composite loginComposite = null;
 	private Composite landingComposite = null;
 	private Composite scheduleComposite = null;
@@ -15,7 +17,6 @@ public class GUIShell extends Shell {
 	private Composite adminComposite = null;
 	
 	private Account currentUser;
-	boolean successfulLogin = false;
 	
 	
 	/**
@@ -28,14 +29,7 @@ public class GUIShell extends Shell {
 			GUIShell shell = new GUIShell(display);
 			shell.open();
 			shell.layout();
-			while (!shell.isDisposed()) {
-				
-				if(shell.getSuccessfulLogin() == true)
-				{
-//					shell.setText(shell.getAccount().getFirstName());
-					System.out.println(shell.getAccount().getFirstName());
-				}
-				
+			while (!shell.isDisposed()) {			
 				if (!display.readAndDispatch()) {
 					display.sleep();
 				}
@@ -75,6 +69,11 @@ public class GUIShell extends Shell {
 		// Disable the check that prevents subclassing of SWT components
 	}
 	
+	public void setDisplayedComposite(Composite currentComposite)
+	{
+		this.displayedComposite = currentComposite;
+	}
+	
 	public void setAccount(Account currentUser)
 	{
 		this.currentUser = currentUser;
@@ -83,16 +82,6 @@ public class GUIShell extends Shell {
 	public Account getAccount()
 	{
 		return this.currentUser;
-	}
-	
-	public void setSuccessfulLogin(boolean success)
-	{
-		this.successfulLogin = success;
-	}
-	
-	public boolean getSuccessfulLogin()
-	{
-		return this.successfulLogin;
 	}
 
 }

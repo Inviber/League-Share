@@ -9,6 +9,7 @@ import org.eclipse.swt.events.MouseEvent;
 public class LoginComposite extends Composite {
 	private Text text_1;
 	private Text text;
+	private Composite loginComposite = this;
 	
 	Account currentUser;
 	
@@ -32,7 +33,7 @@ public class LoginComposite extends Composite {
 				//WILL NEED TO ADD INPUT VALIDATION
 				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
 				shell.setAccount(currentUser);
-				shell.setSuccessfulLogin(true);
+//				shell.setDisplayedComposite(loginComposite);
 				
 				text.setText("");
 				text_1.setText("");
