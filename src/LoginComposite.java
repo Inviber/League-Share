@@ -29,14 +29,18 @@ public class LoginComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				
 				System.out.println("Username: " + text.getText() + " Password: " + text_1.getText());
+			
 
 				//WILL NEED TO ADD INPUT VALIDATION
 				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
+				currentUser.getAccountDetails(true);
 				shell.setAccount(currentUser);
-//				shell.setDisplayedComposite(loginComposite);
-				
+
 				text.setText("");
 				text_1.setText("");
+				
+				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell, dbHelper);
+				shell.setDisplayedComposite(landingComposite);
 			}
 		});
 		btnNewButton.setBounds(590, 380, 93, 29);

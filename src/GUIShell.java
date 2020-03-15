@@ -59,9 +59,10 @@ public class GUIShell extends Shell {
 		setSize(1280, 720);
 		
 		loginComposite = new LoginComposite(shell, SWT.NONE, this, dbHelper);
-		loginComposite.setSize(1280, 720);
-		loginComposite.setParent(shell);
-
+		
+		displayedComposite = loginComposite;
+		displayedComposite.setSize(1280, 720);
+		displayedComposite.setParent(shell);
 	}
 
 	@Override
