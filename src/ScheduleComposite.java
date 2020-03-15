@@ -19,7 +19,7 @@ public class ScheduleComposite extends Composite {
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setAlignment(SWT.CENTER);
-		lblNewLabel.setBounds(10, 60, 1260, 37);
+		lblNewLabel.setBounds(10, 60, 1260, 17);
 		lblNewLabel.setText(leagueParser.getLeagueName());
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
@@ -33,6 +33,11 @@ public class ScheduleComposite extends Composite {
 		});
 		btnNewButton.setBounds(10, 10, 68, 40);
 		btnNewButton.setText("Back");
+		
+		Label lblSchedule = new Label(this, SWT.NONE);
+		lblSchedule.setText("Schedule");
+		lblSchedule.setAlignment(SWT.CENTER);
+		lblSchedule.setBounds(10, 83, 1260, 17);
 		
 		
 

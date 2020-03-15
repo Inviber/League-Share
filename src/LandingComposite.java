@@ -110,22 +110,49 @@ public class LandingComposite extends Composite {
 		
 		
 		
-		
-		for(int i = 0; i < followedLeagueIDs.size(); i++)
+		if(followedLeagueIDs.size() != 0)
 		{
-			LeagueParser parser = new LeagueParser(followedLeagueIDs.get(i), dbHelper);
-//			System.out.println(parser.getLeagueName());
-			list.add(parser.getLeagueName());
-			
-			
+			for(int i = 0; i < followedLeagueIDs.size(); i++)
+			{
+				LeagueParser parser = new LeagueParser(followedLeagueIDs.get(i), dbHelper);
+//				System.out.println(parser.getLeagueName());
+				list.add(parser.getLeagueName());	
+			}
+		}
+		else
+		{
+			list.add("no followed leagues");
 		}
 		
-		for(int i = 0; i < ownedLeagueIDs.size(); i++)
+		if(ownedLeagueIDs.size() != 0)
 		{
-			LeagueParser parser = new LeagueParser(ownedLeagueIDs.get(i), dbHelper);
-//			System.out.println(parser.getLeagueName());
-			list_1.add(parser.getLeagueName());
+			for(int i = 0; i < ownedLeagueIDs.size(); i++)
+			{
+				LeagueParser parser = new LeagueParser(ownedLeagueIDs.get(i), dbHelper);
+//				System.out.println(parser.getLeagueName());
+				list_1.add(parser.getLeagueName());
+			}
 		}
+		else
+		{
+			list_1.add("no owned leagues");
+		}
+		
+		if(managedLeaguesIDs.size() != 0)
+		{
+			//need to rename 'leagues casted' to 'managed leagues'
+			for(int i = 0; i < managedLeaguesIDs.size(); i++)
+			{
+				LeagueParser parser = new LeagueParser(managedLeaguesIDs.get(i), dbHelper);
+//				System.out.println(parser.getLeagueName());
+				list_2.add(parser.getLeagueName());
+			}
+		}
+		else
+		{
+			list_2.add("no managed leagues");
+		}
+		
 		
 		//store league id associated with managed team id.. else unnecessary loops will be used
 		list_2_1.add("under construction...");
@@ -140,14 +167,6 @@ public class LandingComposite extends Composite {
 		btnLogout.setText("Logout");
 		btnLogout.setBounds(1175, 10, 95, 40);
 		
-		//need to rename 'leagues casted' to 'managed leagues'
-		for(int i = 0; i < managedLeaguesIDs.size(); i++)
-		{
-			LeagueParser parser = new LeagueParser(managedLeaguesIDs.get(i), dbHelper);
-//			System.out.println(parser.getLeagueName());
-			list_2.add(parser.getLeagueName());
-		}
-
 	}
 
 	@Override
