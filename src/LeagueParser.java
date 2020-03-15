@@ -16,13 +16,15 @@ public class LeagueParser {
 
 	// Database related variables
 	private JSONParser parser = new JSONParser();
-	private DatabaseHelper dbHelper = new DatabaseHelper(
-			"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
-			"LeagueShare");
+	private DatabaseHelper dbHelper;
+//	private DatabaseHelper dbHelper = new DatabaseHelper(
+//			"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
+//			"LeagueShare");
 	private JSONObject leagueData;
 
-	LeagueParser(String leagueID)  // will change once we determine how to get the unique identifier for this document.
+	LeagueParser(String leagueID, DatabaseHelper dbHelper)  // will change once we determine how to get the unique identifier for this document.
 	{
+		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
 		populateLeagueDetails();
 	}
