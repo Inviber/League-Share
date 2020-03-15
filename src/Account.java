@@ -56,7 +56,7 @@ class Account {
 		}
 	}
 	
-	void getAccountDetails(boolean print)
+	String getAccountDetails(boolean print)
 	{
 		Document accountDocument = dbHelper.getDocument("Users", _ID); 	
 				
@@ -74,6 +74,8 @@ class Account {
 		{
 			System.out.println(accountData.toString());
 		}
+		
+		return accountData.toString();
 	}
 	
 	String getID()

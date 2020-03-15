@@ -14,9 +14,13 @@ public class LandingComposite extends Composite {
 	public LandingComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper) {
 		super(parent, style);
 		
-		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setBounds(429, 255, 152, 63);
-		lblNewLabel.setText("LANDING COMPOSITE");
+		Label lblNewLabel = new Label(this, SWT.WRAP);
+		lblNewLabel.setBounds(405, 69, 425, 63);
+		lblNewLabel.setText("Welcome " + shell.getAccount().getFirstName());
+		
+		Label lblNewLabel_1 = new Label(this, SWT.WRAP);
+		lblNewLabel_1.setBounds(405, 169, 425, 312);
+		lblNewLabel_1.setText(shell.getAccount().getAccountDetails(true));
 
 	}
 
