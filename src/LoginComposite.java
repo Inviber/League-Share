@@ -28,9 +28,9 @@ public class LoginComposite extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				
-				System.out.println("Username: " + text.getText() + " Password: " + text_1.getText());
+//				System.out.println("Username: " + text.getText() + " Password: " + text_1.getText());
 			
-
+				
 				//WILL NEED TO ADD INPUT VALIDATION
 				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
 				currentUser.getAccountDetails(true);
@@ -39,6 +39,7 @@ public class LoginComposite extends Composite {
 				text.setText("");
 				text_1.setText("");
 				
+				shell.disposeDisplayedComposite();
 				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell, dbHelper);
 				shell.setDisplayedComposite(landingComposite);
 			}

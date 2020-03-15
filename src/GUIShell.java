@@ -10,11 +10,11 @@ public class GUIShell extends Shell {
 	private Composite displayedComposite = null;
 	
 	private Composite loginComposite = null;
-	private Composite landingComposite = null;
-	private Composite scheduleComposite = null;
-	private Composite spectatorComposite = null;
-	private Composite casterComposite = null;
-	private Composite adminComposite = null;
+//	private Composite landingComposite = null;
+//	private Composite scheduleComposite = null;
+//	private Composite spectatorComposite = null;
+//	private Composite casterComposite = null;
+//	private Composite adminComposite = null;
 	
 	private Account currentUser;
 	
@@ -70,9 +70,15 @@ public class GUIShell extends Shell {
 		// Disable the check that prevents subclassing of SWT components
 	}
 	
+	public void disposeDisplayedComposite()
+	{
+		displayedComposite.dispose();
+	}
+		
 	public void setDisplayedComposite(Composite currentComposite)
 	{
 		this.displayedComposite = currentComposite;
+		displayedComposite.setSize(1280, 720);
 	}
 	
 	public void setAccount(Account currentUser)
