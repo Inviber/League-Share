@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 public class LandingComposite extends Composite {
 	private Text text;
@@ -47,7 +49,7 @@ public class LandingComposite extends Composite {
 				System.out.println("creating new league...");
 			}
 		});
-		btnNewButton_1.setBounds(1116, 10, 154, 40);
+		btnNewButton_1.setBounds(10, 10, 154, 40);
 		btnNewButton_1.setText("Create New League");
 		
 		List list = new List(this, SWT.BORDER | SWT.V_SCROLL);
@@ -120,6 +122,16 @@ public class LandingComposite extends Composite {
 		
 		//store league id associated with managed team id.. else unnecessary loops will be used
 		list_2_1.add("under construction...");
+		
+		Button btnLogout = new Button(this, SWT.NONE);
+		btnLogout.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				shell.logout();
+			}
+		});
+		btnLogout.setText("Logout");
+		btnLogout.setBounds(1175, 10, 95, 40);
 		
 		//need to rename 'leagues casted' to 'managed leagues'
 		for(int i = 0; i < managedLeaguesIDs.size(); i++)

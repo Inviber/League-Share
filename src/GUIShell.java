@@ -83,6 +83,16 @@ public class GUIShell extends Shell {
 		// Disable the check that prevents subclassing of SWT components
 	}
 	
+	public void logout()
+	{
+		disposeDisplayedComposite();
+		loginComposite = new LoginComposite(shell, SWT.NONE, this, dbHelper);
+		
+		displayedComposite = loginComposite;
+		displayedComposite.setSize(1280, 720);
+		displayedComposite.setParent(shell);
+	}
+	
 	public void disposeDisplayedComposite()
 	{
 		displayedComposite.dispose();
