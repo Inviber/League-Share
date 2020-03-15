@@ -27,6 +27,12 @@ public class LandingComposite extends Composite {
 		text.setBounds(528, 83, 214, 40);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				System.out.println("search button pressed...");
+			}
+		});
 		btnNewButton.setBounds(748, 83, 49, 40);
 		btnNewButton.setText("Go!");
 		
@@ -35,6 +41,12 @@ public class LandingComposite extends Composite {
 		lblNewLabel_2.setBounds(528, 60, 214, 17);
 		
 		Button btnNewButton_1 = new Button(this, SWT.NONE);
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				System.out.println("creating new league...");
+			}
+		});
 		btnNewButton_1.setBounds(1116, 10, 154, 40);
 		btnNewButton_1.setText("Create New League");
 		
@@ -83,12 +95,38 @@ public class LandingComposite extends Composite {
 		
 		
 		ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
+		ArrayList<String> ownedLeagueIDs = shell.getAccount().getOwnedLeagueIDs();
+		ArrayList<String> managedLeaguesIDs = shell.getAccount().getLeagueCastedIDs();
+		ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
+		
+		
+		
 		
 		for(int i = 0; i < followedLeagueIDs.size(); i++)
 		{
 			LeagueParser parser = new LeagueParser(followedLeagueIDs.get(i), dbHelper);
-			System.out.println(parser.getLeagueName());
+//			System.out.println(parser.getLeagueName());
 			list.add(parser.getLeagueName());
+			
+			
+		}
+		
+		for(int i = 0; i < ownedLeagueIDs.size(); i++)
+		{
+			LeagueParser parser = new LeagueParser(ownedLeagueIDs.get(i), dbHelper);
+//			System.out.println(parser.getLeagueName());
+			list_1.add(parser.getLeagueName());
+		}
+		
+		//store league id associated with managed team id.. else unnecessary loops will be used
+		list_2_1.add("under construction...");
+		
+		//need to rename 'leagues casted' to 'managed leagues'
+		for(int i = 0; i < managedLeaguesIDs.size(); i++)
+		{
+			LeagueParser parser = new LeagueParser(managedLeaguesIDs.get(i), dbHelper);
+//			System.out.println(parser.getLeagueName());
+			list_2.add(parser.getLeagueName());
 		}
 
 	}
