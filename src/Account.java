@@ -136,7 +136,7 @@ class Account {
 	{
 		// access db, this call will likely return an ID from the db.
 		String leage_ID = dbHelper.createLeague(leagueName, this._ID, sport, leagueDescription); 
-		new LeagueParser(leagueName);
+		new LeagueParser(leagueName, dbHelper);
 		addLeague(leage_ID, true, false);
 	}
 	

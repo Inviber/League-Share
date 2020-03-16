@@ -7,11 +7,14 @@ import org.junit.jupiter.api.Test;
 class LeagueParserTester {
 	
 	private static LeagueParser league;
+	private static DatabaseHelper dbHelper = new DatabaseHelper(
+	"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
+	"LeagueShare");
 
 	@BeforeAll
 	static void populateLeague()
 	{
-		league = new LeagueParser("5e59763368ec36619a66bfdc");
+		league = new LeagueParser("5e59763368ec36619a66bfdc", dbHelper);
 	}
 	
 	/*

@@ -25,13 +25,15 @@ public class TeamParser {
 	
 	// Database related variables
 	private JSONParser parser = new JSONParser();
-	private DatabaseHelper dbHelper = new DatabaseHelper(
-			"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
-			"LeagueShare");
+	private DatabaseHelper dbHelper;
+//	private DatabaseHelper dbHelper = new DatabaseHelper(
+//			"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
+//			"LeagueShare");
 	private JSONObject teamData;
 	
-	TeamParser(String leagueID, String teamID)
+	TeamParser(String leagueID, String teamID, DatabaseHelper dbHelper)
 	{
+		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
 		this.teamID = teamID;
 		populateTeamDetails();
