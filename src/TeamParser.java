@@ -39,12 +39,12 @@ public class TeamParser {
 		populateTeamDetails();
 	}
 	
-	TeamParser(String teamID, DatabaseHelper dbHelper)
-	{
-		this.dbHelper = dbHelper;
-		this.teamID = teamID;
-		populateTeamDetails();
-	}
+//	TeamParser(String teamID, DatabaseHelper dbHelper)
+//	{
+//		this.dbHelper = dbHelper;
+//		this.teamID = teamID;
+//		populateTeamDetails();
+//	}
 	
 	void populateTeamDetails() 
 	{
@@ -71,6 +71,7 @@ public class TeamParser {
 	void getTeamDetails(boolean print) 
 	{
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
+		//Document teamDocument = dbHelper.getTeamDocumentByID(teamID);
 
 		try 
 		{

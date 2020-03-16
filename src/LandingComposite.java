@@ -107,6 +107,7 @@ public class LandingComposite extends Composite {
 		ArrayList<String> ownedLeagueIDs = shell.getAccount().getOwnedLeagueIDs();
 		ArrayList<String> managedLeaguesIDs = shell.getAccount().getLeagueCastedIDs();
 		ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
+		ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
 		
 		
 		
@@ -154,12 +155,17 @@ public class LandingComposite extends Composite {
 		}
 		
 		
+		
 		if(managedTeamIDs.size() != 0)
 		{
 			for(int i = 0; i < managedTeamIDs.size(); i++)
 			{
-				TeamParser parser = new TeamParser(managedTeamIDs.get(i), dbHelper);
+				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(i), managedTeamIDs.get(i), dbHelper);
 				
+				System.out.println(parser.getTeamID());
+				System.out.println(parser.getTeamName());
+				System.out.println(parser.getLeagueID());
+				System.out.println(i);
 				list_2_1.add(parser.getTeamName());
 			}
 		}
@@ -167,6 +173,9 @@ public class LandingComposite extends Composite {
 		{
 			list_2_1.add("no managed teams");
 		}
+		
+//		System.out.println(managedTeamIDs.toString());
+//		System.out.println(managedTeamLeagueIDs.toString());
 
 		
 		Button btnLogout = new Button(this, SWT.NONE);

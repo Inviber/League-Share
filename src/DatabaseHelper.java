@@ -102,6 +102,7 @@ public class DatabaseHelper {
 		ArrayList<String> ownedLeagueIDs = new ArrayList<String>();
 		ArrayList<String> ownedTeamIDs = new ArrayList<String>();
 		ArrayList<String> managedTeamIDs = new ArrayList<String>();
+		ArrayList<String> managedTeamLeagueIDs = new ArrayList<String>();
 		ArrayList<String> leagueCastedIDs = new ArrayList<String>();
 				
 		newUserDocument.put("followedLeagueIDs", followedLeagueIDs);
@@ -109,6 +110,7 @@ public class DatabaseHelper {
 		newUserDocument.put("ownedLeagueIDs", ownedLeagueIDs);
 		newUserDocument.put("ownedTeamIDs", ownedTeamIDs);
 		newUserDocument.put("managedTeamIDs", managedTeamIDs);
+		newUserDocument.put("managedTeamLeagueIDs", managedTeamLeagueIDs);
 		newUserDocument.put("leagueCastedIDs", leagueCastedIDs);
 		
 		//adding new user to Users collection
@@ -175,6 +177,11 @@ public class DatabaseHelper {
 		this.database.getCollection(USERS).updateOne(eq("_id", new ObjectId(userID)), Updates.addToSet("managedTeamIDs", managedTeamID));
 	}
 	
+	public void addManagedTeamLeagueID(String userID, String managedTeamLeagueID)
+	{
+		this.database.getCollection(USERS).updateOne(eq("_id", new ObjectId(userID)), Updates.push("managedTeamLeagueIDs", managedTeamLeagueID));
+	}
+	
 	public void addLeagueCastedID(String userID, String leagueCastedID)
 	{
 		this.database.getCollection(USERS).updateOne(eq("_id", new ObjectId(userID)), Updates.addToSet("leagueCastedIDs", leagueCastedID));
@@ -203,6 +210,11 @@ public class DatabaseHelper {
 	public void removeManagedTeamID(String userID, String managedTeamID)
 	{
 		this.database.getCollection(USERS).updateOne(eq("_id", new ObjectId(userID)), Updates.pull("managedTeamIDs", managedTeamID));
+	}
+	
+	public void removeManagedLeagueTeamID(String userID, String managedTeamLeagueID)
+	{
+		this.database.getCollection(USERS).updateOne(eq("_id", new ObjectId(userID)), Updates.pull("managedTeamLeagueIDs", managedTeamLeagueID));
 	}
 	
 	public void removeLeagueCastedID(String userID, String leagueCastedID)
@@ -344,13 +356,14 @@ public class DatabaseHelper {
 		}
 	}
 	
+	
 	public Document getTeamDocumentByID(String leagueID, String teamID)
 	{
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
 
 		return this.database.getCollection(LEAGUES).find(where).first();
 	}
-	
+		
 	public String createTeam(String leagueID, String teamName, String zipcode) 
 	{
 		Document newTeamDocument = new Document();
@@ -545,6 +558,8 @@ public class DatabaseHelper {
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
 		
+		String newUserID = dbHelper.createUser("aa", "aa", "Aristotle", "Totsworth");
+		
 		String newLeagueID = dbHelper.createLeague("Speed Finger Painting League", "5e55dcdf8fe1f34ed9f230ed", "finger painting", "timed painting for quick artists");
 		
 		String newTeamID1 = dbHelper.createTeam(newLeagueID, "Dashing Dali Doodlers", "32501");
@@ -586,14 +601,46 @@ public class DatabaseHelper {
 		String newStatistic3 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Fastest Painting (seconds)", "0");
 		
 		dbHelper.printLeague(newLeagueID.toString());
-
 		
+		
+		
+		dbHelper.addFollowedLeagueID(newUserID, newLeagueID);
+		dbHelper.addOwnedLeagueID(newUserID, newLeagueID);
+		
+		//adding connect team/league pair
+		dbHelper.addManagedTeamID(newUserID, newTeamID1);
+		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
+		
+		dbHelper.addManagedTeamID(newUserID, newTeamID2);
+		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
+			
+		
+		
+		
+		// ---- TO DO ----
 		
 		//CREATE PLAYER - does not create a player for a specific team but instead creates a player that is added to every team in the league
 		//UPDATE MATCH SCORE - does not behave as expected and couldnt get it to work.. it may be easier to refactor and pass in each value at the same time to update
 		//CREATE STATISTIC - only creates the statistic for 1 team, not all teams in the league
 		
 		//UPDATE STATISTIC - (needs to be created) .. pass in the player id, the stat string to update, and the new value of the stat
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
