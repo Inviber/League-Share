@@ -39,12 +39,20 @@ public class TeamParser {
 		populateTeamDetails();
 	}
 	
+	TeamParser(String teamID, DatabaseHelper dbHelper)
+	{
+		this.dbHelper = dbHelper;
+		this.teamID = teamID;
+		populateTeamDetails();
+	}
+	
 	void populateTeamDetails() 
 	{
 		getTeamDetails(false);
 		  
 		this.teamName = (String) teamData.get("teamName"); 
 		this.zipcode = (String) teamData.get("zipcode"); 
+		this.leagueID = (String) teamData.get("leagueID");
 		  
 		JSONArray players = (JSONArray) teamData.get("players");
 		  		  

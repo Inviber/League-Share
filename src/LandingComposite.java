@@ -154,8 +154,20 @@ public class LandingComposite extends Composite {
 		}
 		
 		
-		//store league id associated with managed team id.. else unnecessary loops will be used
-		list_2_1.add("under construction...");
+		if(managedTeamIDs.size() != 0)
+		{
+			for(int i = 0; i < managedTeamIDs.size(); i++)
+			{
+				TeamParser parser = new TeamParser(managedTeamIDs.get(i), dbHelper);
+				
+				list_2_1.add(parser.getTeamName());
+			}
+		}
+		else
+		{
+			list_2_1.add("no managed teams");
+		}
+
 		
 		Button btnLogout = new Button(this, SWT.NONE);
 		btnLogout.addSelectionListener(new SelectionAdapter() {

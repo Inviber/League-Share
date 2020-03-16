@@ -358,6 +358,7 @@ public class DatabaseHelper {
 		newTeamDocument.put("_id", new ObjectId());
 		newTeamDocument.put("teamName", teamName);
 		newTeamDocument.put("zipcode", zipcode);
+		newTeamDocument.put("leagueID", leagueID);
 		
 		ArrayList<Document> players = new ArrayList<Document>();
 		
@@ -543,9 +544,76 @@ public class DatabaseHelper {
 		// -- ESTABLISHING CONNECTION TO DATABASE --
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
+		
+		String newLeagueID = dbHelper.createLeague("Speed Finger Painting League", "5e55dcdf8fe1f34ed9f230ed", "finger painting", "timed painting for quick artists");
+		
+		String newTeamID1 = dbHelper.createTeam(newLeagueID, "Dashing Dali Doodlers", "32501");
+		String newTeamID2 = dbHelper.createTeam(newLeagueID, "Running Rembrandts", "32502");
+		String newTeamID3 = dbHelper.createTeam(newLeagueID, "Fast Finger Gang", "32503");
+		String newTeamID4 = dbHelper.createTeam(newLeagueID, "Paceful Picassos", "32504");
+		String newTeamID5 = dbHelper.createTeam(newLeagueID, "Slippery Sliders", "32505");
+		
+		//NEW TEAM DOES RETURN NEW VALUES SO THE PROBLEM IS DEFINITELY IN CREATE PLAYER
+//		System.out.println(newTeamID1);
+//		System.out.println(newTeamID2);
+//		System.out.println(newTeamID3);
+//		System.out.println(newTeamID4);
+//		System.out.println(newTeamID5);
+		
+		//THIS DOES NOT CREATE A PLAYER FOR A SPECIFIC TEAM BUT INSTEAD CREATES A PLAYER THAT IS ADDED TO EVERY TEAM IN THE LEAGUE
+		String newPlayer1 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Jasper", "Jellington");
+		String newPlayer2 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Rosie", "Husker");
+		String newPlayer3 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Naomi", "Meeow");
+			
+		String newPlayer4 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Rodger", "Dodger");
+		String newPlayer5 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Eugene", "Euler");
+		String newPlayer6 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Vincent", "Gogh");
+		
+		String newMatch1 = dbHelper.createMatch(newLeagueID, newTeamID1, newTeamID2, "3/9/20");
+		String newMatch2 = dbHelper.createMatch(newLeagueID, newTeamID4, newTeamID3, "3/20/20");
+		String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID2, "3/24/20");
+		String newMatch4 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/30/20");
+		String newMatch5 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID4, "4/2/20");
+		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/9/20");
+		
+		//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
+//		dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
+//		dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
+		
+		//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
+		String newStatistic1 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Portraits Completed", "0");
+		String newStatistic2 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Most Colors Used", "0");
+		String newStatistic3 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Fastest Painting (seconds)", "0");
+		
+		dbHelper.printLeague(newLeagueID.toString());
+
+		
+		
+		//CREATE PLAYER - does not create a player for a specific team but instead creates a player that is added to every team in the league
+		//UPDATE MATCH SCORE - does not behave as expected and couldnt get it to work.. it may be easier to refactor and pass in each value at the same time to update
+		//CREATE STATISTIC - only creates the statistic for 1 team, not all teams in the league
+		
+		//UPDATE STATISTIC - (needs to be created) .. pass in the player id, the stat string to update, and the new value of the stat
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 //		dbHelper.printAllUsers();
 		
-		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
@@ -557,8 +625,6 @@ public class DatabaseHelper {
 //		System.out.println(newUserID);
 //		dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
 //		System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
-
-		
 		
 		// -- CREATING NEW LEAGUE -- 
 //		String newLeagueID = dbHelper.createLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
@@ -588,7 +654,7 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 //		dbHelper.printAllLeagues();
 
