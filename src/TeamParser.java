@@ -51,6 +51,7 @@ public class TeamParser {
 		getTeamDetails(false);
 		  
 		this.teamName = (String) teamData.get("teamName"); 
+//		System.out.println(teamName);
 		this.zipcode = (String) teamData.get("zipcode"); 
 		this.leagueID = (String) teamData.get("leagueID");
 		  

@@ -88,6 +88,19 @@ public class LandingComposite extends Composite {
 		list_2.setBounds(742, 167, 350, 200);
 		
 		List list_2_1 = new List(this, SWT.BORDER | SWT.V_SCROLL);
+		list_2_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				
+				ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
+				ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
+				
+				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(list_2_1.getSelectionIndex()), managedTeamIDs.get(list_2_1.getSelectionIndex()), dbHelper);
+				
+				System.out.println(parser.getTeamID());
+				
+			}
+		});
 		list_2_1.setBounds(742, 430, 350, 200);
 		
 		Label lblManagedTeams = new Label(this, SWT.NONE);
