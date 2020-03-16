@@ -360,6 +360,8 @@ public class DatabaseHelper {
 	public Document getTeamDocumentByID(String leagueID, String teamID)
 	{
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
+		
+		System.out.println(where);
 
 		return this.database.getCollection(LEAGUES).find(where).first();
 	}
@@ -558,61 +560,61 @@ public class DatabaseHelper {
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
 		
-		String newUserID = dbHelper.createUser("aa", "aa", "Aristotle", "Totsworth");
-		
-		String newLeagueID = dbHelper.createLeague("Speed Finger Painting League", "5e55dcdf8fe1f34ed9f230ed", "finger painting", "timed painting for quick artists");
-		
-		String newTeamID1 = dbHelper.createTeam(newLeagueID, "Dashing Dali Doodlers", "32501");
-		String newTeamID2 = dbHelper.createTeam(newLeagueID, "Running Rembrandts", "32502");
-		String newTeamID3 = dbHelper.createTeam(newLeagueID, "Fast Finger Gang", "32503");
-		String newTeamID4 = dbHelper.createTeam(newLeagueID, "Paceful Picassos", "32504");
-		String newTeamID5 = dbHelper.createTeam(newLeagueID, "Slippery Sliders", "32505");
-		
-		//NEW TEAM DOES RETURN NEW VALUES SO THE PROBLEM IS DEFINITELY IN CREATE PLAYER
-//		System.out.println(newTeamID1);
-//		System.out.println(newTeamID2);
-//		System.out.println(newTeamID3);
-//		System.out.println(newTeamID4);
-//		System.out.println(newTeamID5);
-		
-		//THIS DOES NOT CREATE A PLAYER FOR A SPECIFIC TEAM BUT INSTEAD CREATES A PLAYER THAT IS ADDED TO EVERY TEAM IN THE LEAGUE
-		String newPlayer1 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Jasper", "Jellington");
-		String newPlayer2 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Rosie", "Husker");
-		String newPlayer3 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Naomi", "Meeow");
-			
-		String newPlayer4 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Rodger", "Dodger");
-		String newPlayer5 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Eugene", "Euler");
-		String newPlayer6 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Vincent", "Gogh");
-		
-		String newMatch1 = dbHelper.createMatch(newLeagueID, newTeamID1, newTeamID2, "3/9/20");
-		String newMatch2 = dbHelper.createMatch(newLeagueID, newTeamID4, newTeamID3, "3/20/20");
-		String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID2, "3/24/20");
-		String newMatch4 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/30/20");
-		String newMatch5 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID4, "4/2/20");
-		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/9/20");
-		
-		//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
-//		dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
-//		dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
-		
-		//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
-		String newStatistic1 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Portraits Completed", "0");
-		String newStatistic2 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Most Colors Used", "0");
-		String newStatistic3 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Fastest Painting (seconds)", "0");
-		
-		dbHelper.printLeague(newLeagueID.toString());
-		
-		
-		
-		dbHelper.addFollowedLeagueID(newUserID, newLeagueID);
-		dbHelper.addOwnedLeagueID(newUserID, newLeagueID);
-		
-		//adding connect team/league pair
-		dbHelper.addManagedTeamID(newUserID, newTeamID1);
-		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
-		
-		dbHelper.addManagedTeamID(newUserID, newTeamID2);
-		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
+//		String newUserID = dbHelper.createUser("aa", "aa", "Aristotle", "Totsworth");
+//		
+//		String newLeagueID = dbHelper.createLeague("Speed Finger Painting League", "5e55dcdf8fe1f34ed9f230ed", "finger painting", "timed painting for quick artists");
+//		
+//		String newTeamID1 = dbHelper.createTeam(newLeagueID, "Dashing Dali Doodlers", "32501");
+//		String newTeamID2 = dbHelper.createTeam(newLeagueID, "Running Rembrandts", "32502");
+//		String newTeamID3 = dbHelper.createTeam(newLeagueID, "Fast Finger Gang", "32503");
+//		String newTeamID4 = dbHelper.createTeam(newLeagueID, "Paceful Picassos", "32504");
+//		String newTeamID5 = dbHelper.createTeam(newLeagueID, "Slippery Sliders", "32505");
+//		
+//		//NEW TEAM DOES RETURN NEW VALUES SO THE PROBLEM IS DEFINITELY IN CREATE PLAYER
+////		System.out.println(newTeamID1);
+////		System.out.println(newTeamID2);
+////		System.out.println(newTeamID3);
+////		System.out.println(newTeamID4);
+////		System.out.println(newTeamID5);
+//		
+//		//THIS DOES NOT CREATE A PLAYER FOR A SPECIFIC TEAM BUT INSTEAD CREATES A PLAYER THAT IS ADDED TO EVERY TEAM IN THE LEAGUE
+//		String newPlayer1 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Jasper", "Jellington");
+//		String newPlayer2 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Rosie", "Husker");
+//		String newPlayer3 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Naomi", "Meeow");
+//			
+//		String newPlayer4 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Rodger", "Dodger");
+//		String newPlayer5 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Eugene", "Euler");
+//		String newPlayer6 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Vincent", "Gogh");
+//		
+//		String newMatch1 = dbHelper.createMatch(newLeagueID, newTeamID1, newTeamID2, "3/9/20");
+//		String newMatch2 = dbHelper.createMatch(newLeagueID, newTeamID4, newTeamID3, "3/20/20");
+//		String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID2, "3/24/20");
+//		String newMatch4 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/30/20");
+//		String newMatch5 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID4, "4/2/20");
+//		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/9/20");
+//		
+//		//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
+////		dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
+////		dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
+//		
+//		//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
+//		String newStatistic1 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Portraits Completed", "0");
+//		String newStatistic2 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Most Colors Used", "0");
+//		String newStatistic3 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Fastest Painting (seconds)", "0");
+//		
+//		dbHelper.printLeague(newLeagueID.toString());
+//		
+//		
+//		
+//		dbHelper.addFollowedLeagueID(newUserID, newLeagueID);
+//		dbHelper.addOwnedLeagueID(newUserID, newLeagueID);
+//		
+//		//adding connect team/league pair
+//		dbHelper.addManagedTeamID(newUserID, newTeamID1);
+//		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
+//		
+//		dbHelper.addManagedTeamID(newUserID, newTeamID2);
+//		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
 			
 		
 		
@@ -629,14 +631,22 @@ public class DatabaseHelper {
 		
 		
 		
+		/*
+		 * getTeamDetails gets teamDataArray at index 0 (line 84)
+		 * -- this would work if getTeamDocumentByID worked correctly and only returned a single object 
+		 * 
+		 * basically either dbHelper.getTeamDocumentByID needs to be fixed or TeamParser.getTeamDetails() needs to be fixed
+		 * 
+		 * 
+		 */
 		
 		
 		
+		Document team1Document = dbHelper.getTeamDocumentByID("5e6fe3aa7672237d32691e49", "5e6fe3ab7672237d32691e4a"); //Dashing Dali Doodlers
+		Document team2Document = dbHelper.getTeamDocumentByID("5e6fe3aa7672237d32691e49", "5e6fe3ab7672237d32691e4b"); //Running Rembrandts
 		
-		
-		
-		
-		
+		System.out.println(team1Document);
+		System.out.println(team2Document);
 		
 		
 		

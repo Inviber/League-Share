@@ -98,6 +98,7 @@ public class LandingComposite extends Composite {
 				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(list_2_1.getSelectionIndex()), managedTeamIDs.get(list_2_1.getSelectionIndex()), dbHelper);
 				
 				System.out.println(parser.getTeamID());
+				System.out.println(parser.getZipcode());
 				
 			}
 		});

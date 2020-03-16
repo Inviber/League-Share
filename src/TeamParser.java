@@ -82,6 +82,7 @@ public class TeamParser {
 			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
 						
 			teamData = (JSONObject) teamDataArray.get(0);
+
 		} 
 		catch (Exception e) 
 		{
