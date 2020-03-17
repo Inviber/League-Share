@@ -15,12 +15,14 @@ public class MatchParser {
 	private String date;
 	
 	private JSONParser parser = new JSONParser();
-	private DatabaseHelper dbHelper = 
-			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
+	private DatabaseHelper dbHelper;
+//	private DatabaseHelper dbHelper = 
+//			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 	private JSONObject matchData;
 	
-	MatchParser(String leagueID, String matchID)
+	MatchParser(String leagueID, String matchID, DatabaseHelper dbHelper)
 	{
+		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
 		this.matchID = matchID;
 		
