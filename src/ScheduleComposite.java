@@ -3,14 +3,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,6 +27,9 @@ public class ScheduleComposite extends Composite {
 	 */
 	public ScheduleComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, LeagueParser leagueParser) {
 		super(parent, style);
+		
+		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
+//		Date today = new Date();
 		
 		System.out.println("schedule made");
 		setLayout(new FormLayout());
@@ -67,6 +73,7 @@ public class ScheduleComposite extends Composite {
 		
 		Group grpMatches = new Group(this, SWT.NONE);
 		grpMatches.setLayout(new GridLayout(3, false));
+		grpMatches.setBackground(dark_gray);
 		FormData fd_grpMatches = new FormData();
 		fd_grpMatches.bottom = new FormAttachment(0, 710);
 		fd_grpMatches.right = new FormAttachment(0, 1270);
@@ -83,79 +90,35 @@ public class ScheduleComposite extends Composite {
 			TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
 			TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
 			
-			// This dynamically creates the component and populates it with match data to be added to the grpMatches
-			Composite matchComp = new Composite(grpMatches, SWT.NONE);
-			
-			Label newLabel = new Label(matchComp, SWT.NONE);
-			newLabel.setText(team1.getTeamName() + " vs " + team2.getTeamName());
-			newLabel.setAlignment(SWT.CENTER);
-			
-			Button btnSpectateMatch = new Button(matchComp, SWT.NONE);
-			btnSpectateMatch.setBounds(966, 416, 93, 29);
-			btnSpectateMatch.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseDown(MouseEvent e) {
-					
-					System.out.println("called spectate");
-					
-//					shell.disposeDisplayedComposite();
-					SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
-					shell.setDisplayedComposite(spectatorComposite);
-	
-				}
-			});
-			btnSpectateMatch.setText("Spectate");
-			
-			System.out.println(match1.getDate());
-			System.out.println(team1.getTeamName());
-			System.out.println(team2.getTeamName() + "\n");
-		}
-		
-//		Button btnNewButton_1 = new Button(grpMatches, SWT.NONE);
-//		btnNewButton_1.setBounds(966, 416, 93, 29);
-//		btnNewButton_1.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseDown(MouseEvent e) {
-//				
-//				System.out.println("called spectate");
-//				
-////				shell.disposeDisplayedComposite();
-//				SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
-//				shell.setDisplayedComposite(spectatorComposite);
-//
-//			}
-//		});
-//		btnNewButton_1.setText("Spectate");
-//		
-//		Button btnNewButton_2 = new Button(grpMatches, SWT.NONE);
-//		btnNewButton_2.setBounds(916, 463, 252, 72);
-//		btnNewButton_2.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseDown(MouseEvent e) {
-//				
-//					
-//				System.out.println(leagueParser.getMatchIDs().toString());
-//				
-//				ArrayList<String> matchIDs = leagueParser.getMatchIDs();
-//				
-//				for(int i = 0; i < matchIDs.size(); i++)
-//				{
-//					MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(i), dbHelper);
-//					TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
-//					TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
-//					
-//					System.out.println(match1.getDate());
-//					System.out.println(team1.getTeamName());
-//					System.out.println(team2.getTeamName() + "\n");
-//				}
-//				
-//				
-//			}
-//		});
-//		btnNewButton_2.setText("Print Match Data");
-		
-		
+			Composite composite = new Composite(grpMatches, SWT.NONE);
+			GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+			gd_composite.widthHint = 305;
+			gd_composite.heightHint = 201;
+			composite.setLayoutData(gd_composite);
 
+			Label lblMatchDate = new Label(composite, SWT.NONE);
+			lblMatchDate.setBounds(10, 23, 248, 15);
+			lblMatchDate.setText(match1.getDate());
+			lblMatchDate.setAlignment(SWT.CENTER);
+
+			Label lblTeam1 = new Label(composite, SWT.NONE);
+			lblTeam1.setText(team1.getTeamName());
+			lblTeam1.setAlignment(SWT.CENTER);
+			lblTeam1.setBounds(10, 60, 248, 15);
+
+			Label lblTeam2 = new Label(composite, SWT.NONE);
+			lblTeam2.setText(team2.getTeamName());
+			lblTeam2.setAlignment(SWT.CENTER);
+			lblTeam2.setBounds(10, 153, 248, 15);
+
+			Label lblVs = new Label(composite, SWT.NONE);
+			lblVs.setText("V.S.");
+			lblVs.setAlignment(SWT.CENTER);
+			lblVs.setBounds(102, 104, 55, 15);
+			
+			
+
+		}
 	}
 
 	@Override
