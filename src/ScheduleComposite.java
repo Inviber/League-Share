@@ -5,12 +5,15 @@ import org.eclipse.swt.widgets.Label;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.GridLayout;
 
 public class ScheduleComposite extends Composite {
 
@@ -63,6 +66,7 @@ public class ScheduleComposite extends Composite {
 		lblSchedule.setAlignment(SWT.CENTER);
 		
 		Group grpMatches = new Group(this, SWT.NONE);
+		grpMatches.setLayout(new GridLayout(3, false));
 		FormData fd_grpMatches = new FormData();
 		fd_grpMatches.bottom = new FormAttachment(0, 710);
 		fd_grpMatches.right = new FormAttachment(0, 1270);
@@ -70,7 +74,6 @@ public class ScheduleComposite extends Composite {
 		fd_grpMatches.left = new FormAttachment(0, 10);
 		grpMatches.setLayoutData(fd_grpMatches);
 		grpMatches.setText("MATCHES");
-		grpMatches.setLayout(new FormLayout());
 		
 		ArrayList<String> matchIDs = leagueParser.getMatchIDs();
 		
@@ -80,9 +83,28 @@ public class ScheduleComposite extends Composite {
 			TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
 			TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
 			
-			Label newLabel = new Label(grpMatches, SWT.NONE);
+			// This dynamically creates the component and populates it with match data to be added to the grpMatches
+			Composite matchComp = new Composite(grpMatches, SWT.NONE);
+			
+			Label newLabel = new Label(matchComp, SWT.NONE);
 			newLabel.setText(team1.getTeamName() + " vs " + team2.getTeamName());
 			newLabel.setAlignment(SWT.CENTER);
+			
+			Button btnSpectateMatch = new Button(matchComp, SWT.NONE);
+			btnSpectateMatch.setBounds(966, 416, 93, 29);
+			btnSpectateMatch.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					
+					System.out.println("called spectate");
+					
+//					shell.disposeDisplayedComposite();
+					SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
+					shell.setDisplayedComposite(spectatorComposite);
+	
+				}
+			});
+			btnSpectateMatch.setText("Spectate");
 			
 			System.out.println(match1.getDate());
 			System.out.println(team1.getTeamName());
