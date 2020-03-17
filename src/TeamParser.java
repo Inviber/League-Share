@@ -80,8 +80,6 @@ public class TeamParser {
 			
 			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
 						
-			
-			
 			for (int i = 0; i < teamDataArray.size(); i++)
 			{
 				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
