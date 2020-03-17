@@ -1,9 +1,14 @@
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class ScheduleComposite extends Composite {
 
@@ -26,7 +31,7 @@ public class ScheduleComposite extends Composite {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				shell.disposeDisplayedComposite();
+//				shell.disposeDisplayedComposite();
 				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell, dbHelper);
 				shell.setDisplayedComposite(landingComposite);
 			}
@@ -39,6 +44,53 @@ public class ScheduleComposite extends Composite {
 		lblSchedule.setAlignment(SWT.CENTER);
 		lblSchedule.setBounds(10, 83, 1260, 17);
 		
+		Button btnNewButton_1 = new Button(this, SWT.NONE);
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+				System.out.println("called spectate");
+				
+//				shell.disposeDisplayedComposite();
+				SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
+				shell.setDisplayedComposite(spectatorComposite);
+				
+				
+				
+				
+				
+			}
+		});
+		btnNewButton_1.setBounds(319, 296, 93, 29);
+		btnNewButton_1.setText("Spectate");
+		
+		Button btnNewButton_2 = new Button(this, SWT.NONE);
+		btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+					
+				System.out.println(leagueParser.getMatchIDs().toString());
+				
+				ArrayList<String> matchIDs = leagueParser.getMatchIDs();
+				
+				for(int i = 0; i < matchIDs.size(); i++)
+				{
+					MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(i), dbHelper);
+					TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
+					TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
+					
+					System.out.println(match1.getDate());
+					System.out.println(team1.getTeamName());
+					System.out.println(team2.getTeamName() + "\n");
+				}
+				
+				
+			}
+		});
+		btnNewButton_2.setText("Print Match Data");
+		btnNewButton_2.setBounds(495, 174, 252, 72);
+		
 		
 
 	}
@@ -47,5 +99,4 @@ public class ScheduleComposite extends Composite {
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
-
 }
