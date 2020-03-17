@@ -437,7 +437,7 @@ public class DatabaseHelper {
 	}
 	
 	
-	public String createStatistic(String leagueID, String teamID, String playerID, String statisticName, String statistic)
+	public String createStatistic(String leagueID, String statisticName, String statistic)
 	{
 		
 		Document newStatisticDocument = new Document();
@@ -446,9 +446,9 @@ public class DatabaseHelper {
 		newStatisticDocument.put("statName", statisticName);
 		newStatisticDocument.put("statValue", statistic);
 		
-		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID));
+		Bson where = new Document().append("_id", new ObjectId(leagueID));
 				
-		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$.players.$[].statistics", newStatisticDocument));
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$[].players.$[].statistics", newStatisticDocument));
 
 		return newStatisticDocument.get("_id").toString();
 	}
@@ -621,9 +621,10 @@ public class DatabaseHelper {
 		
 		// ---- TO DO ----
 		
-		//CREATE PLAYER - does not create a player for a specific team but instead creates a player that is added to every team in the league
+// DONE	//CREATE PLAYER - does not create a player for a specific team but instead creates a player that is added to every team in the league
 		//UPDATE MATCH SCORE - does not behave as expected and couldnt get it to work.. it may be easier to refactor and pass in each value at the same time to update
 		//CREATE STATISTIC - only creates the statistic for 1 team, not all teams in the league
+		// -- RAN INTO ISSUE - Newly created players will not have theses stats automatically.
 		
 		//UPDATE STATISTIC - (needs to be created) .. pass in the player id, the stat string to update, and the new value of the stat
 		
@@ -680,6 +681,7 @@ public class DatabaseHelper {
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "Primp", "Doge");
+//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "Fur", "Boye");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 
@@ -687,7 +689,7 @@ public class DatabaseHelper {
 		
 		
 		// -- CREATING AND DELETING NEW PLAYER STATSTICS --
-//		dbHelper.createStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "Times pwnd", "-2");
+//		dbHelper.createStatistic("5e59763368ec36619a66bfdc", "Farts borked", "0");
 
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
