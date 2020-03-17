@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 
 public class ScheduleComposite extends Composite {
 
@@ -72,6 +73,7 @@ public class ScheduleComposite extends Composite {
 		lblSchedule.setAlignment(SWT.CENTER);
 		
 		Group grpMatches = new Group(this, SWT.NONE);
+		grpMatches.setLayout(new GridLayout(1, false));
 		grpMatches.setLayout(new GridLayout(3, false));
 		grpMatches.setBackground(dark_gray);
 		FormData fd_grpMatches = new FormData();
@@ -81,6 +83,29 @@ public class ScheduleComposite extends Composite {
 		fd_grpMatches.left = new FormAttachment(0, 10);
 		grpMatches.setLayoutData(fd_grpMatches);
 		grpMatches.setText("MATCHES");
+		new Label(grpMatches, SWT.NONE);
+		
+		Composite composite = new Composite(grpMatches, SWT.NONE);
+		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_composite.widthHint = 305;
+		gd_composite.heightHint = 201;
+		composite.setLayoutData(gd_composite);
+		
+		Label lblMatchDate = new Label(composite, SWT.NONE);
+		lblMatchDate.setBounds(10, 23, 248, 15);
+		lblMatchDate.setText("Match Date");
+		
+		Label label_1 = new Label(composite, SWT.NONE);
+		label_1.setText("<Home Team>");
+		label_1.setBounds(10, 60, 248, 15);
+		
+		Label label_1_1 = new Label(composite, SWT.NONE);
+		label_1_1.setText("<Away Team>");
+		label_1_1.setBounds(10, 153, 248, 15);
+		
+		Label lblVs = new Label(composite, SWT.NONE);
+		lblVs.setBounds(102, 104, 55, 15);
+		lblVs.setText("V.S.");
 		
 		ArrayList<String> matchIDs = leagueParser.getMatchIDs();
 		
