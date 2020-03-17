@@ -636,11 +636,8 @@ public class DatabaseHelper {
 		 * -- this would work if getTeamDocumentByID worked correctly and only returned a single object 
 		 * 
 		 * basically either dbHelper.getTeamDocumentByID needs to be fixed or TeamParser.getTeamDetails() needs to be fixed
-		 * 
-		 * 
+		 *
 		 */
-		
-		
 		
 		Document team1Document = dbHelper.getTeamDocumentByID("5e6fe3aa7672237d32691e49", "5e6fe3ab7672237d32691e4a"); //Dashing Dali Doodlers
 		Document team2Document = dbHelper.getTeamDocumentByID("5e6fe3aa7672237d32691e49", "5e6fe3ab7672237d32691e4b"); //Running Rembrandts
