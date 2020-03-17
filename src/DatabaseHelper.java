@@ -420,7 +420,7 @@ public class DatabaseHelper {
 		
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
 				
-		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$[].players", newPlayerDocument));
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$.players", newPlayerDocument));
 
 		return newPlayerDocument.get("_id").toString();
 	}
@@ -429,7 +429,7 @@ public class DatabaseHelper {
 	{	
 		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID));
 
-		Bson update = new Document().append("teams.$[].players", new BasicDBObject("_id", new ObjectId(playerID)));
+		Bson update = new Document().append("teams.$.players", new BasicDBObject("_id", new ObjectId(playerID)));
 		
 		Bson set = new Document().append("$pull", update);
 		
@@ -646,7 +646,7 @@ public class DatabaseHelper {
 		
 		
 		
-		
+		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 //		dbHelper.printAllUsers();
 		
@@ -681,9 +681,10 @@ public class DatabaseHelper {
 		// -- CREATING AND DELETING NEW PLAYERS -- 
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "Primp", "Doge");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
+//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 
 //		dbHelper.deletePlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e600d8688302978a1ed1e52");
-
+		
 		
 		// -- CREATING AND DELETING NEW PLAYER STATSTICS --
 //		dbHelper.createStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "Times pwnd", "-2");
@@ -691,7 +692,7 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 //		dbHelper.printAllLeagues();
 
