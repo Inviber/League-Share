@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Group;
 
 public class ScheduleComposite extends Composite {
@@ -49,52 +47,65 @@ public class ScheduleComposite extends Composite {
 		grpMatches.setText("MATCHES");
 		grpMatches.setBounds(10, 106, 1260, 604);
 		
-		Button btnNewButton_1 = new Button(grpMatches, SWT.NONE);
-		btnNewButton_1.setBounds(966, 416, 93, 29);
-		btnNewButton_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				
-				System.out.println("called spectate");
-				
-//				shell.disposeDisplayedComposite();
-				SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
-				shell.setDisplayedComposite(spectatorComposite);
-				
-				
-				
-				
-				
-			}
-		});
-		btnNewButton_1.setText("Spectate");
+		ArrayList<String> matchIDs = leagueParser.getMatchIDs();
 		
-		Button btnNewButton_2 = new Button(grpMatches, SWT.NONE);
-		btnNewButton_2.setBounds(916, 463, 252, 72);
-		btnNewButton_2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				
-					
-				System.out.println(leagueParser.getMatchIDs().toString());
-				
-				ArrayList<String> matchIDs = leagueParser.getMatchIDs();
-				
-				for(int i = 0; i < matchIDs.size(); i++)
-				{
-					MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(i), dbHelper);
-					TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
-					TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
-					
-					System.out.println(match1.getDate());
-					System.out.println(team1.getTeamName());
-					System.out.println(team2.getTeamName() + "\n");
-				}
-				
-				
-			}
-		});
-		btnNewButton_2.setText("Print Match Data");
+		for(int i = 0; i < matchIDs.size(); i++)
+		{
+			MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(i), dbHelper);
+			TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
+			TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
+			
+			Label newLabel = new Label(grpMatches, SWT.NONE);
+			newLabel.setText(team1 + " vs " + team2);
+			newLabel.setAlignment(SWT.CENTER);
+			
+			System.out.println(match1.getDate());
+			System.out.println(team1.getTeamName());
+			System.out.println(team2.getTeamName() + "\n");
+		}
+		
+//		Button btnNewButton_1 = new Button(grpMatches, SWT.NONE);
+//		btnNewButton_1.setBounds(966, 416, 93, 29);
+//		btnNewButton_1.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseDown(MouseEvent e) {
+//				
+//				System.out.println("called spectate");
+//				
+////				shell.disposeDisplayedComposite();
+//				SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
+//				shell.setDisplayedComposite(spectatorComposite);
+//
+//			}
+//		});
+//		btnNewButton_1.setText("Spectate");
+//		
+//		Button btnNewButton_2 = new Button(grpMatches, SWT.NONE);
+//		btnNewButton_2.setBounds(916, 463, 252, 72);
+//		btnNewButton_2.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseDown(MouseEvent e) {
+//				
+//					
+//				System.out.println(leagueParser.getMatchIDs().toString());
+//				
+//				ArrayList<String> matchIDs = leagueParser.getMatchIDs();
+//				
+//				for(int i = 0; i < matchIDs.size(); i++)
+//				{
+//					MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(i), dbHelper);
+//					TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
+//					TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
+//					
+//					System.out.println(match1.getDate());
+//					System.out.println(team1.getTeamName());
+//					System.out.println(team2.getTeamName() + "\n");
+//				}
+//				
+//				
+//			}
+//		});
+//		btnNewButton_2.setText("Print Match Data");
 		
 		
 
