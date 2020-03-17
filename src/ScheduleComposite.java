@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Group;
 
 public class ScheduleComposite extends Composite {
 
@@ -44,7 +45,12 @@ public class ScheduleComposite extends Composite {
 		lblSchedule.setAlignment(SWT.CENTER);
 		lblSchedule.setBounds(10, 83, 1260, 17);
 		
-		Button btnNewButton_1 = new Button(this, SWT.NONE);
+		Group grpMatches = new Group(this, SWT.NONE);
+		grpMatches.setText("MATCHES");
+		grpMatches.setBounds(10, 106, 1260, 604);
+		
+		Button btnNewButton_1 = new Button(grpMatches, SWT.NONE);
+		btnNewButton_1.setBounds(966, 416, 93, 29);
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -61,10 +67,10 @@ public class ScheduleComposite extends Composite {
 				
 			}
 		});
-		btnNewButton_1.setBounds(319, 296, 93, 29);
 		btnNewButton_1.setText("Spectate");
 		
-		Button btnNewButton_2 = new Button(this, SWT.NONE);
+		Button btnNewButton_2 = new Button(grpMatches, SWT.NONE);
+		btnNewButton_2.setBounds(916, 463, 252, 72);
 		btnNewButton_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -89,7 +95,6 @@ public class ScheduleComposite extends Composite {
 			}
 		});
 		btnNewButton_2.setText("Print Match Data");
-		btnNewButton_2.setBounds(495, 174, 252, 72);
 		
 		
 
