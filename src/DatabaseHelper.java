@@ -498,17 +498,28 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
 	
-	public void updateMatchScore(String leagueID, String matchID, String newScore, boolean awayScore)
+	public void updateMatchScore(String leagueID, String matchID, String homeScore, String awayScore)
 	{
 		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID));
-
-		Bson update = new Document().append("matches", new BasicDBObject("homeScore", newScore));
-
-		if (!awayScore)
-		{
-			update = new Document().append("matches", new BasicDBObject("awayScore", newScore));
-		}
 		
+		Bson update;
+		
+		if (homeScore.equals("") || awayScore.equals("")) // update one score
+		{			
+			if (awayScore.equals("")) // update home score.
+			{
+				update = new Document().append("matches.$[].homeScore", homeScore);
+			}
+			else // update away score
+			{
+				update = new Document().append("matches.$[].awayScore", awayScore);
+			}
+		}
+		else // update both scores
+		{
+			update = new Document().append("matches.$[].homeScore", homeScore).append("matches.$[].awayScore", awayScore);
+		}
+				
 		Bson set = new Document().append("$set", update);
 		
 		this.database.getCollection(LEAGUES).updateOne(where, set);
@@ -623,27 +634,11 @@ public class DatabaseHelper {
 		
 // DONE	//CREATE PLAYER - does not create a player for a specific team but instead creates a player that is added to every team in the league
 		//UPDATE MATCH SCORE - does not behave as expected and couldnt get it to work.. it may be easier to refactor and pass in each value at the same time to update
-		//CREATE STATISTIC - only creates the statistic for 1 team, not all teams in the league
-		// -- RAN INTO ISSUE - Newly created players will not have theses stats automatically.
+
+// DONE //CREATE STATISTIC - only creates the statistic for 1 team, not all teams in the league
+		  // -- RAN INTO ISSUE - Newly created players will not have theses stats automatically. Need something to add it to them.
 		
 		//UPDATE STATISTIC - (needs to be created) .. pass in the player id, the stat string to update, and the new value of the stat
-		
-		
-		
-		
-				
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		
@@ -671,7 +666,7 @@ public class DatabaseHelper {
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
 //		dbHelper.createMatch("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e6ba620833bc36df92f85b9", "03/01/2020");
 		
-//		dbHelper.updateMatchScore("5e59763368ec36619a66bfdc", "5e6ba71a070fcb289c53a0a9", "0", true);
+		dbHelper.updateMatchScore("5e59763368ec36619a66bfdc", "5e711dbce02480209283e43d", "5", "10");
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 		
