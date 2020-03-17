@@ -87,7 +87,6 @@ public class TeamParser {
 				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
 				String oid = currentTeamData.get("_id").toString(); 
 				String[] id = oid.split("\""); // removing oid from string.
-				System.out.println(id[3] + " " + teamID);
 				if (id[3].equals(teamID)) // if this is the id searched for...
 				{
 					teamData = currentTeamData; // save this data.
