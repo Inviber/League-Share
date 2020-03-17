@@ -31,7 +31,7 @@ public class MatchParser {
 	
 	private void populateMatchDetails()
 	{
-		getMatchDetails(false);
+		getMatchDetails();
 		
 		this.homeTeamID = (String) matchData.get("homeTeamID");
 		this.awayTeamID = (String) matchData.get("awayTeamID");
@@ -41,7 +41,7 @@ public class MatchParser {
 
 	}
 	
-	void getMatchDetails(boolean print) 
+	void getMatchDetails() 
 	{
 		Document teamDocument = dbHelper.getMatchDocumentByID(leagueID, matchID);
 
@@ -51,18 +51,28 @@ public class MatchParser {
 			JSONObject leagueData = (JSONObject) obj;
 			
 			JSONArray matchDataArray = (JSONArray) leagueData.get("matches");
-						
-			matchData = (JSONObject) matchDataArray.get(0);
+									
+			for (int i = 0; i < matchDataArray.size(); i++)
+			{
+				JSONObject currentMatchData = (JSONObject) matchDataArray.get(i);
+				String oid = currentMatchData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(matchID)) // if this is the id searched for...
+				{
+					matchData = currentMatchData; // save this data.
+					break;
+				}
+			}
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
-		
-		if (print)
-		{
-			System.out.println(matchData.toString());
-		}
+	}
+	
+	void printMatchData()
+	{
+		System.out.println(matchData.toString());
 	}
 
 	String getMatchID() 
