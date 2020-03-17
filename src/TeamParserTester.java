@@ -15,7 +15,7 @@ class TeamParserTester {
 	static void populateTeam()
 	{
 		team = new TeamParser("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", dbHelper);
-		team.getTeamDetails(true);
+		team.printTeamData();
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ class TeamParserTester {
 	@AfterAll
 	static void cleanUpAndClose()
 	{
-		team.getTeamDetails(true);
+		team.printTeamData();
 		
 		team.closeDatabase();
 	}

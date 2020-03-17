@@ -48,7 +48,7 @@ public class TeamParser {
 	
 	void populateTeamDetails() 
 	{
-		getTeamDetails(false);
+		getTeamDetails();
 		  
 		this.teamName = (String) teamData.get("teamName"); 
 //		System.out.println(teamName);
@@ -69,10 +69,9 @@ public class TeamParser {
 		  
 	}
 
-	void getTeamDetails(boolean print) 
-	{
+	void getTeamDetails() 
+	{		
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
-		//Document teamDocument = dbHelper.getTeamDocumentByID(teamID);
 
 		try 
 		{
@@ -81,18 +80,31 @@ public class TeamParser {
 			
 			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
 						
-			teamData = (JSONObject) teamDataArray.get(0);
-
+			
+			
+			for (int i = 0; i < teamDataArray.size(); i++)
+			{
+				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
+				String oid = currentTeamData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				System.out.println(id[3] + " " + teamID);
+				if (id[3].equals(teamID)) // if this is the id searched for...
+				{
+					teamData = currentTeamData; // save this data.
+					break;
+				}
+			}
 		} 
 		catch (Exception e) 
 		{
+			System.out.println(e);
 			e.printStackTrace();
 		}
-		
-		if (print)
-		{
-			System.out.println(teamData.toString());
-		}
+	}
+	
+	void printTeamData()
+	{
+		System.out.println(teamData.toString());
 	}
 	
 	String getLeagueID() 
