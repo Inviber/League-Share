@@ -88,6 +88,20 @@ public class LandingComposite extends Composite {
 		list_2.setBounds(742, 167, 350, 200);
 		
 		List list_2_1 = new List(this, SWT.BORDER | SWT.V_SCROLL);
+		list_2_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				
+				ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
+				ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
+				
+				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(list_2_1.getSelectionIndex()), managedTeamIDs.get(list_2_1.getSelectionIndex()), dbHelper);
+				
+				System.out.println(parser.getTeamID());
+				System.out.println(parser.getZipcode());
+				
+			}
+		});
 		list_2_1.setBounds(742, 430, 350, 200);
 		
 		Label lblManagedTeams = new Label(this, SWT.NONE);
@@ -107,6 +121,7 @@ public class LandingComposite extends Composite {
 		ArrayList<String> ownedLeagueIDs = shell.getAccount().getOwnedLeagueIDs();
 		ArrayList<String> managedLeaguesIDs = shell.getAccount().getLeagueCastedIDs();
 		ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
+		ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
 		
 		
 		
@@ -154,8 +169,28 @@ public class LandingComposite extends Composite {
 		}
 		
 		
-		//store league id associated with managed team id.. else unnecessary loops will be used
-		list_2_1.add("under construction...");
+		
+		if(managedTeamIDs.size() != 0)
+		{
+			for(int i = 0; i < managedTeamIDs.size(); i++)
+			{
+				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(i), managedTeamIDs.get(i), dbHelper);
+				
+				System.out.println(parser.getTeamID());
+				System.out.println(parser.getTeamName());
+				System.out.println(parser.getLeagueID());
+				System.out.println(i);
+				list_2_1.add(parser.getTeamName());
+			}
+		}
+		else
+		{
+			list_2_1.add("no managed teams");
+		}
+		
+//		System.out.println(managedTeamIDs.toString());
+//		System.out.println(managedTeamLeagueIDs.toString());
+
 		
 		Button btnLogout = new Button(this, SWT.NONE);
 		btnLogout.addSelectionListener(new SelectionAdapter() {

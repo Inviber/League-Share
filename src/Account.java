@@ -25,6 +25,7 @@ class Account {
 	private ArrayList<String> followedLeagueIDs = new ArrayList<String>();
 	private ArrayList<String> ownedTeamIDs = new ArrayList<String>();
 	private ArrayList<String> managedTeamIDs = new ArrayList<String>();
+	private ArrayList<String> managedTeamLeagueIDs = new ArrayList<String>();
 	private ArrayList<String> followedTeamIDs = new ArrayList<String>();
 	
 	Account(String username, String password, DatabaseHelper dbHelper)
@@ -50,6 +51,10 @@ class Account {
 			this.followedLeagueIDs = (ArrayList<String>) accountData.get("followedLeagueIDs");
 			this.ownedTeamIDs = (ArrayList<String>) accountData.get("ownedTeamIDs");
 			this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
+			
+			this.managedTeamLeagueIDs = (ArrayList<String>) accountData.get("managedTeamLeagueIDs");
+//			System.out.println(this.managedTeamLeagueIDs.toString());
+			
 			this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
 			
 			successfullyLoggedIn = true;
@@ -119,6 +124,11 @@ class Account {
 	ArrayList<String> getManagedTeamIDs() 
 	{
 		return managedTeamIDs;
+	}
+	
+	ArrayList<String> getManagedTeamLeagueIDs() 
+	{
+		return managedTeamLeagueIDs;
 	}
 
 	ArrayList<String> getFollowedTeamIDs() 

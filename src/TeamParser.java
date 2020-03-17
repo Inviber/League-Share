@@ -39,12 +39,21 @@ public class TeamParser {
 		populateTeamDetails();
 	}
 	
+//	TeamParser(String teamID, DatabaseHelper dbHelper)
+//	{
+//		this.dbHelper = dbHelper;
+//		this.teamID = teamID;
+//		populateTeamDetails();
+//	}
+	
 	void populateTeamDetails() 
 	{
-		getTeamDetails(false);
+		getTeamDetails();
 		  
 		this.teamName = (String) teamData.get("teamName"); 
+//		System.out.println(teamName);
 		this.zipcode = (String) teamData.get("zipcode"); 
+		this.leagueID = (String) teamData.get("leagueID");
 		  
 		JSONArray players = (JSONArray) teamData.get("players");
 		  		  
@@ -60,8 +69,8 @@ public class TeamParser {
 		  
 	}
 
-	void getTeamDetails(boolean print) 
-	{
+	void getTeamDetails() 
+	{		
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
 
 		try 
@@ -71,17 +80,30 @@ public class TeamParser {
 			
 			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
 						
-			teamData = (JSONObject) teamDataArray.get(0);
+			
+			
+			for (int i = 0; i < teamDataArray.size(); i++)
+			{
+				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
+				String oid = currentTeamData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(teamID)) // if this is the id searched for...
+				{
+					teamData = currentTeamData; // save this data.
+					break;
+				}
+			}
 		} 
 		catch (Exception e) 
 		{
+			System.out.println(e);
 			e.printStackTrace();
 		}
-		
-		if (print)
-		{
-			System.out.println(teamData.toString());
-		}
+	}
+	
+	void printTeamData()
+	{
+		System.out.println(teamData.toString());
 	}
 	
 	String getLeagueID() 
