@@ -60,7 +60,7 @@ public class LandingComposite extends Composite {
 //			}
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				System.out.println(list.getSelection()[0] + " selected...");
+				//System.out.println(list.getSelection()[0] + " selected...");
 //				System.out.println(list.getSelectionIndex());
 				
 				ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
@@ -97,8 +97,9 @@ public class LandingComposite extends Composite {
 				
 				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(list_2_1.getSelectionIndex()), managedTeamIDs.get(list_2_1.getSelectionIndex()), dbHelper);
 				
-				System.out.println(parser.getTeamID());
-				System.out.println(parser.getZipcode());
+				//System.out.println(parser.getTeamID());
+				System.out.println(parser.getTeamName() + " selected");
+				//System.out.println(parser.getZipcode());
 				
 			}
 		});
@@ -176,10 +177,10 @@ public class LandingComposite extends Composite {
 			{
 				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(i), managedTeamIDs.get(i), dbHelper);
 				
-				System.out.println(parser.getTeamID());
-				System.out.println(parser.getTeamName());
-				System.out.println(parser.getLeagueID());
-				System.out.println(i);
+//				System.out.println(parser.getTeamID());
+//				System.out.println(parser.getTeamName());
+//				System.out.println(parser.getLeagueID());
+//				System.out.println(i);
 				list_2_1.add(parser.getTeamName());
 			}
 		}

@@ -361,7 +361,7 @@ public class DatabaseHelper {
 	{
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
 		
-		System.out.println(where);
+//		System.out.println(where);
 
 		return this.database.getCollection(LEAGUES).find(where).first();
 	}

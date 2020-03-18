@@ -39,7 +39,7 @@ public class ScheduleComposite extends Composite {
 		Date matchDate = new Date();
 		
 		
-		System.out.println("schedule made");
+		//System.out.println("schedule made");
 		setLayout(new FormLayout());
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
@@ -143,7 +143,7 @@ public class ScheduleComposite extends Composite {
 				Color green = getDisplay().getSystemColor(SWT.COLOR_GREEN);
 				Color red = getDisplay().getSystemColor(SWT.COLOR_RED);
 				
-				System.out.println( "Team1 score: " + match1.getHomeScore() + "\nTeam2 score: " + match1.getAwayScore() );
+				//System.out.println( "Team1 score: " + match1.getHomeScore() + "\nTeam2 score: " + match1.getAwayScore() );
 				try {
 					homeScore = Integer.parseInt( match1.getHomeScore() );
 					awayScore = Integer.parseInt( match1.getAwayScore() );
