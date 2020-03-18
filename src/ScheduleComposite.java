@@ -34,8 +34,11 @@ public class ScheduleComposite extends Composite {
 		
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		Calendar today = Calendar.getInstance();
+		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
+		int month = today.get(Calendar.MONTH);
 		Calendar matchCal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+//		sdf.setTimeZone( today.getTimeZone() );
 		Date matchDate = new Date();
 		
 		
@@ -124,6 +127,11 @@ public class ScheduleComposite extends Composite {
 			lblTeam2.setAlignment(SWT.CENTER);
 			lblTeam2.setBounds(10, 132, 390, 30);
 			
+			
+			
+			int matchDayofMonth;
+			int monthofMatch;
+			
 			try {
 				matchDate = sdf.parse( match1.getDate() );
 			} catch (ParseException e1) {
@@ -132,8 +140,12 @@ public class ScheduleComposite extends Composite {
 			}
 //			System.out.println(matchDate);
 			matchCal.setTime(matchDate);
+			matchDayofMonth = matchCal.get(Calendar.DAY_OF_MONTH);
+			monthofMatch = matchCal.get(Calendar.MONTH);
 	        
-	        if( matchCal.before(today) ) {
+			
+			
+	        if( dayOfMonth < matchDayofMonth || month < monthofMatch ) {
 	        	// Print final match score to matchComp
 //	        	System.out.println("Before Today.");
 				lblTeam1.setText( team1.getTeamName() + " | " + match1.getHomeScore() );
@@ -162,7 +174,7 @@ public class ScheduleComposite extends Composite {
 				}
 	        	
 	        } 
-	        else if( matchCal.equals(today) ) {
+	        else if( dayOfMonth == matchDayofMonth && month == monthofMatch) {
 	        	// Present 'Spectate' button on matchComp
 //	        	System.out.println("Today.");
 				
@@ -171,6 +183,7 @@ public class ScheduleComposite extends Composite {
 				spectateMatch.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
+						System.out.println("SPECTATING");
 //						shell.disposeDisplayedComposite();
 //						SpectateComposite spectateComposite = new SpectateComposite(shell, SWT.NONE, shell, dbHelper, match1);
 //						shell.setDisplayedComposite(spectateComposite);
