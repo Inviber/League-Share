@@ -184,9 +184,9 @@ public class ScheduleComposite extends Composite {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
-//						shell.disposeDisplayedComposite();
-//						SpectateComposite spectateComposite = new SpectateComposite(shell, SWT.NONE, shell, dbHelper, match1);
-//						shell.setDisplayedComposite(spectateComposite);
+						shell.disposeDisplayedComposite();
+						SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
+						shell.setDisplayedComposite(spectatorComposite);
 					}
 				});
 				spectateMatch.setText("SPECTATE");
