@@ -145,7 +145,7 @@ public class ScheduleComposite extends Composite {
 	        
 			
 			
-	        if( dayOfMonth < matchDayofMonth || month < monthofMatch ) {
+	        if( dayOfMonth > matchDayofMonth && month >= monthofMatch ) {
 	        	// Print final match score to matchComp
 //	        	System.out.println("Before Today.");
 				lblTeam1.setText( team1.getTeamName() + " | " + match1.getHomeScore() );
