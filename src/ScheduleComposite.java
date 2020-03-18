@@ -45,7 +45,7 @@ public class ScheduleComposite extends Composite {
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		FormData fd_lblNewLabel = new FormData();
 		fd_lblNewLabel.bottom = new FormAttachment(0, 77);
-		fd_lblNewLabel.right = new FormAttachment(0, 1270);
+		fd_lblNewLabel.right = new FormAttachment(0, 1260);
 		fd_lblNewLabel.top = new FormAttachment(0, 60);
 		fd_lblNewLabel.left = new FormAttachment(0, 10);
 		lblNewLabel.setLayoutData(fd_lblNewLabel);
@@ -55,7 +55,7 @@ public class ScheduleComposite extends Composite {
 		Button btnNewButton = new Button(this, SWT.NONE);
 		FormData fd_btnNewButton = new FormData();
 		fd_btnNewButton.bottom = new FormAttachment(0, 50);
-		fd_btnNewButton.right = new FormAttachment(0, 78);
+		fd_btnNewButton.right = new FormAttachment(0, 100);
 		fd_btnNewButton.top = new FormAttachment(0, 10);
 		fd_btnNewButton.left = new FormAttachment(0, 10);
 		btnNewButton.setLayoutData(fd_btnNewButton);
@@ -80,11 +80,11 @@ public class ScheduleComposite extends Composite {
 		lblSchedule.setAlignment(SWT.CENTER);
 		
 		Group grpMatches = new Group(this, SWT.NONE);
-		grpMatches.setLayout(new GridLayout(3, false));
+		grpMatches.setLayout(new GridLayout(3, true));
 		grpMatches.setBackground(dark_gray);
 		FormData fd_grpMatches = new FormData();
-		fd_grpMatches.bottom = new FormAttachment(0, 710);
-		fd_grpMatches.right = new FormAttachment(0, 1270);
+		fd_grpMatches.bottom = new FormAttachment(0, 680);
+		fd_grpMatches.right = new FormAttachment(0, 1260);
 		fd_grpMatches.top = new FormAttachment(0, 106);
 		fd_grpMatches.left = new FormAttachment(0, 10);
 		grpMatches.setLayoutData(fd_grpMatches);
@@ -100,29 +100,29 @@ public class ScheduleComposite extends Composite {
 			
 			Composite matchComp = new Composite(grpMatches, SWT.NONE);
 			GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-			gd_composite.widthHint = 305;
-			gd_composite.heightHint = 201;
+			gd_composite.widthHint = 405;
+			gd_composite.heightHint = 270;
 			matchComp.setLayoutData(gd_composite);
 
 			Label lblMatchDate = new Label(matchComp, SWT.NONE);
-			lblMatchDate.setBounds(10, 23, 248, 15);
+			lblMatchDate.setBounds(10, 10, 390, 30);
 			lblMatchDate.setText(match1.getDate());
 			lblMatchDate.setAlignment(SWT.CENTER);
 
 			Label lblTeam1 = new Label(matchComp, SWT.NONE);
 			lblTeam1.setText(team1.getTeamName());
 			lblTeam1.setAlignment(SWT.CENTER);
-			lblTeam1.setBounds(10, 60, 248, 15);
+			lblTeam1.setBounds(10, 60, 390, 30);
+			
+			Label lblVs = new Label(matchComp, SWT.NONE);
+			lblVs.setText("V.S.");
+			lblVs.setAlignment(SWT.CENTER);
+			lblVs.setBounds(10, 96, 390, 30);
 
 			Label lblTeam2 = new Label(matchComp, SWT.NONE);
 			lblTeam2.setText(team2.getTeamName());
 			lblTeam2.setAlignment(SWT.CENTER);
-			lblTeam2.setBounds(10, 153, 248, 15);
-
-			Label lblVs = new Label(matchComp, SWT.NONE);
-			lblVs.setText("V.S.");
-			lblVs.setAlignment(SWT.CENTER);
-			lblVs.setBounds(102, 104, 55, 15);
+			lblTeam2.setBounds(10, 132, 390, 30);
 			
 			try {
 				matchDate = sdf.parse( match1.getDate() );
@@ -138,21 +138,45 @@ public class ScheduleComposite extends Composite {
 //	        	System.out.println("Before Today.");
 				lblTeam1.setText( team1.getTeamName() + " | " + match1.getHomeScore() );
 				lblTeam2.setText( team2.getTeamName() + " | " + match1.getAwayScore() );
+				
+				int homeScore, awayScore;
+				Color green = getDisplay().getSystemColor(SWT.COLOR_GREEN);
+				Color red = getDisplay().getSystemColor(SWT.COLOR_RED);
+				
+				System.out.println( "Team1 score: " + match1.getHomeScore() + "\nTeam2 score: " + match1.getAwayScore() );
+				try {
+					homeScore = Integer.parseInt( match1.getHomeScore() );
+					awayScore = Integer.parseInt( match1.getAwayScore() );
+				} catch (NumberFormatException nfe) {
+					nfe.printStackTrace();
+					homeScore = 0;
+					awayScore = 0;
+				}
+				
+				if ( homeScore > awayScore ) {
+					lblTeam1.setBackground(green);
+					lblTeam2.setBackground(red);
+				} else if ( awayScore > homeScore ) {
+					lblTeam2.setBackground(green);
+					lblTeam1.setBackground(red);
+				}
 	        	
-	        } else if( matchCal.equals(today) ) {
+	        } 
+	        else if( matchCal.equals(today) ) {
 	        	// Present 'Spectate' button on matchComp
 //	        	System.out.println("Today.");
 				
-//				Button spectateMatch = new Button(matchComp, SWT.NONE);
-//				spectateMatch.addSelectionListener(new SelectionAdapter() {
-//					@Override
-//					public void widgetSelected(SelectionEvent e) {
-////						shell.disposeDisplayedComposite();
+				Button spectateMatch = new Button(matchComp, SWT.NONE);
+				spectateMatch.setBounds(150, 200, 100, 50);
+				spectateMatch.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+//						shell.disposeDisplayedComposite();
 //						SpectateComposite spectateComposite = new SpectateComposite(shell, SWT.NONE, shell, dbHelper, match1);
 //						shell.setDisplayedComposite(spectateComposite);
-//					}
-//				});
-//				spectateMatch.setText("SPECTATE");
+					}
+				});
+				spectateMatch.setText("SPECTATE");
 	        	
 	        }
 
