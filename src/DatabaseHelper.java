@@ -646,7 +646,7 @@ public class DatabaseHelper {
 		
 //		dbHelper.printAllUsers();
 		
-		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
+//		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
 		
 		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
@@ -689,7 +689,7 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
+//		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
 		
 //		dbHelper.printAllLeagues();
 
