@@ -361,7 +361,7 @@ public class DatabaseHelper {
 	{
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
 		
-		System.out.println(where);
+//		System.out.println(where);
 
 		return this.database.getCollection(LEAGUES).find(where).first();
 	}
@@ -508,16 +508,16 @@ public class DatabaseHelper {
 		{			
 			if (awayScore.equals("")) // update home score.
 			{
-				update = new Document().append("matches.$[].homeScore", homeScore);
+				update = new Document().append("matches.$.homeScore", homeScore);
 			}
 			else // update away score
 			{
-				update = new Document().append("matches.$[].awayScore", awayScore);
+				update = new Document().append("matches.$.awayScore", awayScore);
 			}
 		}
 		else // update both scores
 		{
-			update = new Document().append("matches.$[].homeScore", homeScore).append("matches.$[].awayScore", awayScore);
+			update = new Document().append("matches.$.homeScore", homeScore).append("matches.$.awayScore", awayScore);
 		}
 				
 		Bson set = new Document().append("$set", update);
@@ -646,7 +646,7 @@ public class DatabaseHelper {
 		
 //		dbHelper.printAllUsers();
 		
-//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+//		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
 		
 		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
@@ -664,9 +664,9 @@ public class DatabaseHelper {
 //		System.out.println(newLeagueID);
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
-//		dbHelper.createMatch("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e6ba620833bc36df92f85b9", "03/01/2020");
+//		dbHelper.createMatch("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "5e7129f4b0f12336fb6ad64c", "03/01/2020");
 		
-//		dbHelper.updateMatchScore("5e59763368ec36619a66bfdc", "5e711dbce02480209283e43d", "5", "10");
+//		dbHelper.updateMatchScore("5e7129f4b0f12336fb6ad648", "5e7247b449419c7c70020ed5", "5", "5");
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 		
@@ -689,7 +689,7 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+//		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
 		
 //		dbHelper.printAllLeagues();
 
