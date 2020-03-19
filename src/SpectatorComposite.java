@@ -18,7 +18,7 @@ public class SpectatorComposite extends Composite {
 	 * @param awayTeamParser
 	 * Home Team Parser must be passed first
 	 */
-	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, TeamParser homeTeamParser, TeamParser awayTeamParser, MatchParser mParser) {
+	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, MatchParser mParser, TeamParser homeTeamParser, TeamParser awayTeamParser) {
 		super(parent, style);
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
