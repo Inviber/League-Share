@@ -185,7 +185,12 @@ public class ScheduleComposite extends Composite {
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
 						shell.disposeDisplayedComposite();
-						SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper);
+						
+						MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(0), dbHelper);
+						TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
+						TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
+						
+						SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper, match1, team1, team2);
 						shell.setDisplayedComposite(spectatorComposite);
 					}
 				});

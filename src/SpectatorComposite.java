@@ -9,7 +9,7 @@ public class SpectatorComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper) {
+	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, MatchParser match1, TeamParser team1, TeamParser team2) {
 		super(parent, style);
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
