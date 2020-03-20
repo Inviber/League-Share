@@ -1,5 +1,8 @@
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Group;
@@ -8,6 +11,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.FillLayout;
 
 public class SpectatorComposite extends Composite {
 	private Text text;
@@ -46,39 +54,89 @@ public class SpectatorComposite extends Composite {
 		Label lblNewLabel_3 = new Label(this, SWT.NONE);
 		lblNewLabel_3.setAlignment(SWT.CENTER);
 		lblNewLabel_3.setBounds(427, 125, 431, 20);
-		lblNewLabel_3.setText(mParser.getHomeScore() + " " + mParser.getAwayScore());
+		lblNewLabel_3.setText(mParser.getHomeScore() + "   -   " + mParser.getAwayScore());
 		
 		Group grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat to be completed");
 		grpChatToBe.setBounds(10, 470, 1260, 240);
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setBounds(0, 22, 1260, 197);
+		scrolledComposite.setBounds(0, 22, 1260, 187);
 		scrolledComposite.setExpandVertical(true);
 		
 		text = new Text(grpChatToBe, SWT.BORDER);
+		text.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				//Need to actually send message here using the text field contents
+			}
+		});
 		text.setBounds(0, 216, 434, 24);
 		
 		Button btnSubmit = new Button(grpChatToBe, SWT.NONE);
+
 		btnSubmit.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.keyCode == SWT.CR){
 					System.out.println("Message Sent");
-					//Need to actually send message here using the text field contents
+					//Need to actually send message here using the text field contents [Should be the same as above]
 				}
 			}
 		});
-		btnSubmit.setBounds(432, 214, 90, 26);
+		btnSubmit.setBounds(434, 215, 90, 26);
 		btnSubmit.setText("Submit");
 		
 		Group grpHomeTeamInfo = new Group(this, SWT.NONE);
 		grpHomeTeamInfo.setText("Home Team Info");
 		grpHomeTeamInfo.setBounds(20, 151, 606, 313);
 		
+		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(grpHomeTeamInfo, SWT.BORDER | SWT.V_SCROLL);
+		scrolledComposite_1.setAlwaysShowScrollBars(true);
+		scrolledComposite_1.setExpandHorizontal(true);
+		scrolledComposite_1.setExpandVertical(true);
+		scrolledComposite_1.setBounds(0, 0, 606, 313);
+		
+		Composite composite = new Composite(scrolledComposite_1, SWT.NONE);
+		FillLayout fl_composite = new FillLayout(SWT.VERTICAL);
+		fl_composite.spacing = 10;
+		composite.setLayout(fl_composite);
+		
+		//Getting the list of player IDs
+		ArrayList<String> players = homeTeamParser.getPlayerIDs();
+		//Generating the list of team mates
+		while(!players.isEmpty()) {
+			Composite playerInfo = new Composite(composite, SWT.NONE);
+			FillLayout fill = new FillLayout(SWT.VERTICAL);
+			playerInfo.setLayout(fill);
+		
+			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
+			lblNewLabel_4.setBounds(10, 10, 295, 20);
+			lblNewLabel_4.setText(players.get(0));
+			players.remove(0);
+		}
+		scrolledComposite_1.setContent(composite);
+		scrolledComposite_1.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
 		Group grpAwayTeamInfo = new Group(this, SWT.NONE);
 		grpAwayTeamInfo.setText("Away Team Info");
-		grpAwayTeamInfo.setBounds(674, 151, 606, 313);
+		grpAwayTeamInfo.setBounds(654, 151, 606, 313);
+		
+		ScrolledComposite scrolledComposite_1_1 = new ScrolledComposite(grpAwayTeamInfo, SWT.BORDER | SWT.V_SCROLL);
+		scrolledComposite_1_1.setExpandVertical(true);
+		scrolledComposite_1_1.setExpandHorizontal(true);
+		scrolledComposite_1_1.setAlwaysShowScrollBars(true);
+		scrolledComposite_1_1.setBounds(0, 0, 606, 313);
+		
+		Button btnNewButton = new Button(this, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//Go to caster Composite
+			}
+		});
+		btnNewButton.setBounds(1136, 55, 134, 45);
+		btnNewButton.setText("Caster View");
 
 	}
 
