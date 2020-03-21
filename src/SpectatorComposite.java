@@ -13,12 +13,10 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.FillLayout;
 
 public class SpectatorComposite extends Composite {
-	private Text text;
+	private Text txtEnterAMessage;
 
 	/**
 	 * Create the composite.
@@ -28,7 +26,7 @@ public class SpectatorComposite extends Composite {
 	 */
 	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, MatchParser mParser, TeamParser homeTeamParser, TeamParser awayTeamParser) {
 		super(parent, style);
-		
+
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
 		lblNewLabel.setAlignment(SWT.CENTER);
@@ -58,22 +56,18 @@ public class SpectatorComposite extends Composite {
 		
 		Group grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat to be completed");
-		grpChatToBe.setBounds(10, 470, 1260, 240);
+		grpChatToBe.setBounds(10, 466, 1260, 219);
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setBounds(0, 22, 1260, 187);
+		scrolledComposite.setBounds(0, 21, 1260, 163);
 		scrolledComposite.setExpandVertical(true);
 		
-		text = new Text(grpChatToBe, SWT.BORDER);
-		text.addKeyListener(new KeyAdapter() {
+		Button btnSubmit = new Button(grpChatToBe, SWT.NONE);
+		btnSubmit.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
-				//Need to actually send message here using the text field contents
+			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-		text.setBounds(0, 216, 434, 24);
-		
-		Button btnSubmit = new Button(grpChatToBe, SWT.NONE);
 
 		btnSubmit.addKeyListener(new KeyAdapter() {
 			@Override
@@ -84,9 +78,19 @@ public class SpectatorComposite extends Composite {
 				}
 			}
 		});
-		btnSubmit.setBounds(434, 215, 90, 26);
+		btnSubmit.setBounds(428, 183, 90, 26);
 		btnSubmit.setText("Submit");
 		
+		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
+		txtEnterAMessage.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				txtEnterAMessage.setText("");
+			}
+	});
+		txtEnterAMessage.setBounds(0, 184, 428, 25);
+		txtEnterAMessage.setText("Enter a message");
+
 		Group grpHomeTeamInfo = new Group(this, SWT.NONE);
 		grpHomeTeamInfo.setText("Home Team Info");
 		grpHomeTeamInfo.setBounds(20, 151, 606, 313);
@@ -99,21 +103,21 @@ public class SpectatorComposite extends Composite {
 		
 		Composite composite = new Composite(scrolledComposite_1, SWT.NONE);
 		FillLayout fl_composite = new FillLayout(SWT.VERTICAL);
-		fl_composite.spacing = 10;
+		fl_composite.spacing = 5;
 		composite.setLayout(fl_composite);
 		
 		//Getting the list of player IDs
 		ArrayList<String> players = homeTeamParser.getPlayerIDs();
 		//Generating the list of team mates
-		while(!players.isEmpty()) {
+		while(!players.isEmpty()) { ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			Composite playerInfo = new Composite(composite, SWT.NONE);
 			FillLayout fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
-		
+			//making a player parser to access the players names
+			PlayerParser playerParser = new PlayerParser(homeTeamParser.getLeagueID(), homeTeamParser.getTeamID(), players.remove(0));
 			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
-			lblNewLabel_4.setBounds(10, 10, 295, 20);
-			lblNewLabel_4.setText(players.get(0));
-			players.remove(0);
+			//lblNewLabel_4.setBounds(10, 10, 295, 20);
+			lblNewLabel_4.setText(playerParser.getFirstName() + " " + playerParser.getLastName());
 		}
 		scrolledComposite_1.setContent(composite);
 		scrolledComposite_1.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
