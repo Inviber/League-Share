@@ -56,6 +56,7 @@ public class PlayerParser {
 		{
 			statistics.put(statisticNames.get(i), statisticValues.get(i)); // append each statisitic to the hash map
 		}
+		
 		  
 		System.out.println(firstName + " " + lastName  + " " + statisticNames.toString() + " " + statistics.toString());
 		  
@@ -75,8 +76,19 @@ public class PlayerParser {
 			JSONObject teamData = (JSONObject) teamDataArray.get(0);
 			
 			JSONArray playerDataArray = (JSONArray) teamData.get("players");
+						
+			for (int i = 0; i < playerDataArray.size(); i++)
+			{
+				JSONObject currentPlayerData = (JSONObject) playerDataArray.get(i);
+				String oid = currentPlayerData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(playerID)) // if this is the id searched for...
+				{
+					playerData = currentPlayerData; // save this data.
+					break;
+				}
+			}
 			
-			playerData = (JSONObject) playerDataArray.get(0);
 		} 
 		catch (Exception e) 
 		{
