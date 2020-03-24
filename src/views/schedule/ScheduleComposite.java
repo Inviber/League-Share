@@ -118,7 +118,7 @@ public class ScheduleComposite extends Composite {
 
 			Label lblMatchDate = new Label(matchComp, SWT.NONE);
 			lblMatchDate.setBounds(10, 10, 390, 30);
-			lblMatchDate.setText(match1.getDate());
+//			lblMatchDate.setText(match1.getDate());
 			lblMatchDate.setAlignment(SWT.CENTER);
 
 			Label lblTeam1 = new Label(matchComp, SWT.NONE);
@@ -141,12 +141,11 @@ public class ScheduleComposite extends Composite {
 			int matchDayofMonth;
 			int monthofMatch;
 			
-			try {
-				matchDate = sdf.parse( match1.getDate() );
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				matchDate = sdf.parse( match1.getDate() );
+//			} catch (ParseException e1) {
+//				e1.printStackTrace();
+//			}
 //			System.out.println(matchDate);
 			matchCal.setTime(matchDate);
 			matchDayofMonth = matchCal.get(Calendar.DAY_OF_MONTH);
@@ -166,21 +165,21 @@ public class ScheduleComposite extends Composite {
 				
 				//System.out.println( "Team1 score: " + match1.getHomeScore() + "\nTeam2 score: " + match1.getAwayScore() );
 				try {
-					homeScore = Integer.parseInt( match1.getHomeScore() );
-					awayScore = Integer.parseInt( match1.getAwayScore() );
+//					homeScore = Integer.parseInt( match1.getHomeScore() );
+//					awayScore = Integer.parseInt( match1.getAwayScore() );
 				} catch (NumberFormatException nfe) {
 					nfe.printStackTrace();
 					homeScore = 0;
 					awayScore = 0;
 				}
 				
-				if ( homeScore > awayScore ) {
-					lblTeam1.setBackground(green);
-					lblTeam2.setBackground(red);
-				} else if ( awayScore > homeScore ) {
-					lblTeam2.setBackground(green);
-					lblTeam1.setBackground(red);
-				}
+//				if ( homeScore > awayScore ) {
+//					lblTeam1.setBackground(green);
+//					lblTeam2.setBackground(red);
+//				} else if ( awayScore > homeScore ) {
+//					lblTeam2.setBackground(green);
+//					lblTeam1.setBackground(red);
+//				}
 	        	
 	        } 
 	        else if( dayOfMonth == matchDayofMonth && month == monthofMatch) {
