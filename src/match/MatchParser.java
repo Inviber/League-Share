@@ -1,5 +1,8 @@
 package match;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.bson.Document;
 import org.json.simple.JSONArray;
@@ -11,12 +14,7 @@ import database.DatabaseHelper;
 public class MatchParser {
 	private String leagueID;
 	private String matchID;
-	private String homeTeamID;
-	private String awayTeamID;
-	private String homeScore;
-	private String awayScore;
-	private String date;
-	
+
 	private JSONParser parser = new JSONParser();
 	private DatabaseHelper dbHelper;
 //	private DatabaseHelper dbHelper = 
@@ -28,23 +26,11 @@ public class MatchParser {
 		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
 		this.matchID = matchID;
-		
-		populateMatchDetails();
-	}
-	
-	private void populateMatchDetails()
-	{
-		getMatchDetails();
-		
-		this.homeTeamID = (String) matchData.get("homeTeamID");
-		this.awayTeamID = (String) matchData.get("awayTeamID");
-		this.homeScore = (String) matchData.get("homeScore");
-		this.awayScore = (String) matchData.get("awayScore");
-		this.date = (String) matchData.get("date");
 
+		getMatchDetails();
 	}
 	
-	void getMatchDetails() 
+	public void getMatchDetails() 
 	{
 		Document teamDocument = dbHelper.getMatchDocumentByID(leagueID, matchID);
 
@@ -73,74 +59,59 @@ public class MatchParser {
 		}
 	}
 	
-	void printMatchData()
+	public void printMatchData()
 	{
 		System.out.println(matchData.toString());
 	}
 
-	String getMatchID() 
+	public String getMatchID() 
 	{
 		return matchID;
 	}
 
 	public String getHomeTeamID() 
 	{
-		return homeTeamID;
+		return (String) matchData.get("homeTeamID");
 	}
 
 	public String getAwayTeamID() 
 	{
-		return awayTeamID;
+		return (String) matchData.get("awayTeamID");
 	}
 
-	public String getDate() 
+	public Calendar getDate() 
 	{
-		return date;
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		Date matchDate = new Date();
+		Calendar matchCalendar = Calendar.getInstance();
+
+		try {
+			matchDate = sdf.parse( (String) matchData.get("date") );
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+
+		matchCalendar.setTime(matchDate);
+		return matchCalendar;
 	}
 
-	public String getHomeScore() 
+	public int getHomeScore() 
 	{
-		return homeScore;
+		try {
+			return Integer.parseInt( (String) matchData.get("homeScore") );
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+			return -1;
+		}
 	}
 
-	void setHomeScore(String homeScore) 
+	public int getAwayScore() 
 	{
-		this.homeScore = homeScore;
+		try {
+			return Integer.parseInt( (String) matchData.get("awayScore") );
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+			return -1;
+		}
 	}
-
-	public String getAwayScore() 
-	{
-		return awayScore;
-	}
-
-	void setAwayScore(String awayScore) 
-	{
-		this.awayScore = awayScore;
-	}
-	
-	
-	/*
-	@Test
-	void createMatchInTeam() {
-		String testAddMatchID = team.createMatch("homeTeamAdd", "awayTeam", "date", "finalScore");
-				
-		assertTrue(team.getMatchIDs().contains(testAddMatchID), "testAddMatchID is pressent in team array");
-	
-		team.deleteMatch(testAddMatchID);
-	}
-	
-	@Test
-	void deleteMatchFromLeague()
-	{
-		String testRemoveMatchID = team.createMatch("homeTeamRemove", "awayTeam", "date", "finalScore");
-		
-		assertTrue(team.getMatchIDs().contains(testRemoveMatchID), "testRemoveMatchID is pressent in team array");
-
-		team.deleteMatch(testRemoveMatchID);
-
-		assertFalse(team.getMatchIDs().contains(testRemoveMatchID), "testRemoveMatchID is no longer present in team array");
-	}
-	 */
-	
-	
 }
