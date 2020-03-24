@@ -1,7 +1,10 @@
+package league;
 import java.util.ArrayList;
 import org.bson.Document;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
+
+import database.DatabaseHelper;
 
 public class LeagueParser {
 	private String leagueID;
@@ -22,7 +25,7 @@ public class LeagueParser {
 //			"LeagueShare");
 	private JSONObject leagueData;
 
-	LeagueParser(String leagueID, DatabaseHelper dbHelper)  // will change once we determine how to get the unique identifier for this document.
+	public LeagueParser(String leagueID, DatabaseHelper dbHelper)  // will change once we determine how to get the unique identifier for this document.
 	{
 		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
@@ -82,12 +85,12 @@ public class LeagueParser {
 		}
 	}
 
-	String getLeagueID() 
+	public String getLeagueID() 
 	{
 		return leagueID;
 	}
 	
-	String getLeagueName() 
+	public String getLeagueName() 
 	{
 		return leagueName;
 	}
@@ -112,7 +115,7 @@ public class LeagueParser {
 		return teamIDs;
 	}
 	
-	ArrayList<String> getMatchIDs() 
+	public ArrayList<String> getMatchIDs() 
 	{
 		return matchIDs;
 	}

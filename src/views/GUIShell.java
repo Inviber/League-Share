@@ -1,3 +1,4 @@
+package views;
 
 
 import org.eclipse.swt.SWT;
@@ -6,6 +7,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
+
+import database.DatabaseHelper;
+import user.Account;
+import views.login.LoginComposite;
 
 public class GUIShell extends Shell {
 	

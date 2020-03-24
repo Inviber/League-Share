@@ -1,3 +1,4 @@
+package views.spectator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -5,6 +6,13 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import database.DatabaseHelper;
+import match.MatchParser;
+import player.PlayerParser;
+import team.TeamParser;
+import views.GUIShell;
+
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Text;

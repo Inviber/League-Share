@@ -1,9 +1,12 @@
+package team;
 import java.util.ArrayList;
 
 import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import database.DatabaseHelper;
 
 /*
  * 		- teams[]				createTeam(String leagueID, String teamName, String zipcode)
@@ -31,7 +34,7 @@ public class TeamParser {
 //			"LeagueShare");
 	private JSONObject teamData;
 	
-	TeamParser(String leagueID, String teamID, DatabaseHelper dbHelper)
+	public TeamParser(String leagueID, String teamID, DatabaseHelper dbHelper)
 	{
 		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
@@ -104,12 +107,12 @@ public class TeamParser {
 		System.out.println(teamData.toString());
 	}
 	
-	String getLeagueID() 
+	public String getLeagueID() 
 	{
 		return leagueID;
 	}
 
-	String getTeamName() 
+	public String getTeamName() 
 	{
 		return teamName;
 	}
@@ -119,12 +122,12 @@ public class TeamParser {
 		return zipcode;
 	}
 
-	ArrayList<String> getPlayerIDs()
+	public ArrayList<String> getPlayerIDs()
 	{
 		return playerIDs;
 	}
 	
-	String getTeamID()
+	public String getTeamID()
 	{
 		return teamID;
 	}

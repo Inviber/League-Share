@@ -1,9 +1,12 @@
+package match;
 import java.util.ArrayList;
 
 import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import database.DatabaseHelper;
 
 public class MatchParser {
 	private String leagueID;
@@ -20,7 +23,7 @@ public class MatchParser {
 //			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 	private JSONObject matchData;
 	
-	MatchParser(String leagueID, String matchID, DatabaseHelper dbHelper)
+	public MatchParser(String leagueID, String matchID, DatabaseHelper dbHelper)
 	{
 		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
@@ -80,22 +83,22 @@ public class MatchParser {
 		return matchID;
 	}
 
-	String getHomeTeamID() 
+	public String getHomeTeamID() 
 	{
 		return homeTeamID;
 	}
 
-	String getAwayTeamID() 
+	public String getAwayTeamID() 
 	{
 		return awayTeamID;
 	}
 
-	String getDate() 
+	public String getDate() 
 	{
 		return date;
 	}
 
-	String getHomeScore() 
+	public String getHomeScore() 
 	{
 		return homeScore;
 	}
@@ -105,7 +108,7 @@ public class MatchParser {
 		this.homeScore = homeScore;
 	}
 
-	String getAwayScore() 
+	public String getAwayScore() 
 	{
 		return awayScore;
 	}

@@ -1,6 +1,15 @@
+package views.schedule;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+
+import database.DatabaseHelper;
+import league.LeagueParser;
+import match.MatchParser;
+import team.TeamParser;
+import views.GUIShell;
+import views.landing.LandingComposite;
+import views.spectator.SpectatorComposite;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

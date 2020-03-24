@@ -1,10 +1,14 @@
+package user;
 import java.util.ArrayList;
 
 import org.bson.Document;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-class Account {
+import league.LeagueParser;
+import database.DatabaseHelper;
+
+public class Account {
 	private String _ID;		// _ID is the naming used by MongoDB's unique ID system.
 	private String username;
 	private String firstName;
@@ -28,7 +32,7 @@ class Account {
 	private ArrayList<String> managedTeamLeagueIDs = new ArrayList<String>();
 	private ArrayList<String> followedTeamIDs = new ArrayList<String>();
 	
-	Account(String username, String password, DatabaseHelper dbHelper)
+	public Account(String username, String password, DatabaseHelper dbHelper)
 	{
 		this.dbHelper = dbHelper;
 		this.username = username;
@@ -61,7 +65,7 @@ class Account {
 		}
 	}
 	
-	String getAccountDetails(boolean print)
+	public String getAccountDetails(boolean print)
 	{
 		Document accountDocument = dbHelper.getDocument("Users", _ID); 	
 				
@@ -101,17 +105,17 @@ class Account {
 		return lastName;
 	}
 	
-	ArrayList<String> getOwnedLeagueIDs() 
+	public ArrayList<String> getOwnedLeagueIDs() 
 	{
 		return ownedLeagueIDs;
 	}
 
-	ArrayList<String> getLeagueCastedIDs() 
+	public ArrayList<String> getLeagueCastedIDs() 
 	{
 		return leagueCastedIDs;
 	}
 
-	ArrayList<String> getFollowedLeagueIDs() 
+	public ArrayList<String> getFollowedLeagueIDs() 
 	{
 		return followedLeagueIDs;
 	}
@@ -121,12 +125,12 @@ class Account {
 		return ownedTeamIDs;
 	}
 
-	ArrayList<String> getManagedTeamIDs() 
+	public ArrayList<String> getManagedTeamIDs() 
 	{
 		return managedTeamIDs;
 	}
 	
-	ArrayList<String> getManagedTeamLeagueIDs() 
+	public ArrayList<String> getManagedTeamLeagueIDs() 
 	{
 		return managedTeamLeagueIDs;
 	}

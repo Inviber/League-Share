@@ -1,3 +1,4 @@
+package views.landing;
 
 
 import org.eclipse.swt.widgets.Composite;
@@ -7,6 +8,14 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Text;
+
+import user.Account;
+import database.DatabaseHelper;
+import league.LeagueParser;
+import team.TeamParser;
+import views.GUIShell;
+import views.schedule.ScheduleComposite;
+
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.events.MouseAdapter;

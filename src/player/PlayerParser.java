@@ -1,3 +1,4 @@
+package player;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -5,6 +6,8 @@ import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import database.DatabaseHelper;
 
 public class PlayerParser {
 	private String leagueID;
@@ -22,7 +25,7 @@ public class PlayerParser {
 			"LeagueShare");
 	private JSONObject playerData;
 	
-	PlayerParser(String leagueID, String teamID, String playerID)
+	public PlayerParser(String leagueID, String teamID, String playerID)
 	{
 		this.leagueID = leagueID;
 		this.teamID = teamID;
@@ -106,12 +109,12 @@ public class PlayerParser {
 		return playerID;
 	}
 
-	String getFirstName() 
+	public String getFirstName() 
 	{
 		return firstName;
 	}
 
-	String getLastName() 
+	public String getLastName() 
 	{
 		return lastName;
 	}

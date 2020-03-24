@@ -1,7 +1,14 @@
+package views.login;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
+
+import database.DatabaseHelper;
+import user.Account;
+import views.GUIShell;
+import views.landing.LandingComposite;
+
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
