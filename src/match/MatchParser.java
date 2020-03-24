@@ -14,7 +14,6 @@ import database.DatabaseHelper;
 public class MatchParser {
 	private String leagueID;
 	private String matchID;
-
 	private JSONParser parser = new JSONParser();
 	private DatabaseHelper dbHelper;
 //	private DatabaseHelper dbHelper = 
