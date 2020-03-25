@@ -7,7 +7,7 @@ public class LeagueGenerator {
 	private LeagueParser leagueParser;
 	private LeagueUpdater leagueUpdater;
 	
-	public LeagueGenerator(DatabaseHelper dbHelper, LeagueUpdater leagueUpdater)
+	public LeagueGenerator(DatabaseHelper dbHelper)
 	{
 		this.leagueParser = new LeagueParser(dbHelper, leagueUpdater);
 		this.leagueUpdater = new LeagueUpdater(dbHelper);
