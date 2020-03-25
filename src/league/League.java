@@ -2,8 +2,6 @@ package league;
 
 import java.util.ArrayList;
 
-import database.DatabaseHelper;
-
 public class League {
 
 	private String leagueID;

@@ -1,10 +1,6 @@
 package player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import database.DatabaseHelper;
-import league.League;
 
 public class PlayerGenerator {
 

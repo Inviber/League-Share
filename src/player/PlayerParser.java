@@ -1,17 +1,11 @@
 package player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import database.DatabaseHelper;
 
 public class PlayerParser {
-	private String leagueID;
-	private String teamID;
 	private String playerID;
 	private String firstName;
 	private String lastName;
