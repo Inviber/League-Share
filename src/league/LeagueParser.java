@@ -16,17 +16,17 @@ public class LeagueParser {
 	private ArrayList<String> matchIDs = new ArrayList<String>();
 	
 	// Database related variables
-	private LeagueDBInterator leagueUpdater;
+	private LeagueDBInterator leagueDBInterator;
 	private JSONObject leagueData;
 
-	public LeagueParser(LeagueDBInterator leagueUpdater)  // will change once we determine how to get the unique identifier for this document.
+	public LeagueParser(LeagueDBInterator leagueDBInterator)  // will change once we determine how to get the unique identifier for this document.
 	{
-		this.leagueUpdater = leagueUpdater;
+		this.leagueDBInterator = leagueDBInterator;
 	}
 
 	public void parseLeague(String leagueID) 
 	{
-		leagueData = leagueUpdater.getLeagueDetails(leagueID, false);
+		leagueData = leagueDBInterator.getLeagueDetails(leagueID, false);
 
 		  leagueName = (String) leagueData.get("leagueName"); 
 		  sport = (String) leagueData.get("sport"); 
@@ -92,11 +92,4 @@ public class LeagueParser {
 	public ArrayList<String> getMatchIDs() {
 		return matchIDs;
 	}
-
-	public JSONObject getLeagueData() {
-		return leagueData;
-	}
-	
-	
-
 }

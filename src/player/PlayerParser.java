@@ -13,17 +13,17 @@ public class PlayerParser {
 	private HashMap<String, String> statistics = new HashMap<String, String>();
 	
 	// Database related variables
-	private PlayerDBInterator playerUpdater;
+	private PlayerDBInterator playerDBInterator;
 	private JSONObject playerData;
 	
-	public PlayerParser(PlayerDBInterator playerUpdater)
+	public PlayerParser(PlayerDBInterator playerDBInterator)
 	{
-		this.playerUpdater = playerUpdater;
+		this.playerDBInterator = playerDBInterator;
 	}
 	
 	public void parsePlayer(String leagueID, String teamID, String playerID) 
 	{
-		playerData = playerUpdater.getPlayerDetails(leagueID, teamID, playerID, false);
+		playerData = playerDBInterator.getPlayerDetails(leagueID, teamID, playerID, false);
 		  
 		this.firstName = (String) playerData.get("firstName"); 
 		this.lastName = (String) playerData.get("lastName"); 

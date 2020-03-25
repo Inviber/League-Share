@@ -5,12 +5,12 @@ import database.DatabaseHelper;
 public class PlayerGenerator {
 
 	private PlayerParser playerParser;
-	private PlayerDBInterator playerUpdater;
+	private PlayerDBInterator playerDBInterator;
 	
 	public PlayerGenerator(DatabaseHelper dbHelper)
 	{
-		this.playerParser = new PlayerParser(playerUpdater);
-		this.playerUpdater = new PlayerDBInterator(dbHelper);
+		this.playerParser = new PlayerParser(playerDBInterator);
+		this.playerDBInterator = new PlayerDBInterator(dbHelper);
 	}
 	
 	public Player generatePlayer(String leagueID, String teamID, String playerID)
@@ -18,7 +18,7 @@ public class PlayerGenerator {
 		playerParser.parsePlayer(leagueID, teamID, playerID);
 		  
 		  Player player = new Player(leagueID, teamID, playerID, playerParser.getFirstName(), playerParser.getLastName(),
-				  playerParser.getStatisticNames(), playerParser.getStatistics(), playerUpdater);
+				  playerParser.getStatisticNames(), playerParser.getStatistics(), playerDBInterator);
 		  
 		  return player;
 	}

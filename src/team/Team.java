@@ -9,15 +9,15 @@ public class Team {
 	private String teamName;
 	private String zipcode;
 	private ArrayList<String> playerIDs = new ArrayList<String>();
-	private TeamDBInterator teamUpdater;
+	private TeamDBInterator teamDBInterator;
 	
-	public Team(String leagueID, String teamID, String teamName, String zipcode, ArrayList<String> playerIDs, TeamDBInterator teamUpdater) {
+	public Team(String leagueID, String teamID, String teamName, String zipcode, ArrayList<String> playerIDs, TeamDBInterator teamDBInterator) {
 		this.leagueID = leagueID;
 		this.teamID = teamID;
 		this.teamName = teamName;
 		this.zipcode = zipcode;
 		this.playerIDs = playerIDs;
-		this.teamUpdater = teamUpdater;
+		this.teamDBInterator = teamDBInterator;
 	}
 	
 	public String getLeagueID() 

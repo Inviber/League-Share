@@ -23,17 +23,17 @@ public class TeamParser {
 	private ArrayList<String> playerIDs = new ArrayList<String>();
 	
 	// Database related variables
-	private TeamDBInterator teamUpdater;
+	private TeamDBInterator teamDBInterator;
 	private JSONObject teamData;
 	
-	public TeamParser(TeamDBInterator teamUpdater)
+	public TeamParser(TeamDBInterator teamDBInterator)
 	{
-		this.teamUpdater = teamUpdater;
+		this.teamDBInterator = teamDBInterator;
 	}
 	
 	public void parseTeam(String leagueID, String teamID) 
 	{
-		teamUpdater.getTeamDetails(leagueID, teamID);
+		teamDBInterator.getTeamDetails(leagueID, teamID);
 		  
 		this.teamName = (String) teamData.get("teamName"); 
 
