@@ -11,8 +11,8 @@ import database.DatabaseHelper;
 class MatchGeneratorTest {
 	
 	private static MatchGenerator matchGenerator;
-	private static String leagueID = "";
-	private static String matchID = "";
+	private static String leagueID = "5e7129f4b0f12336fb6ad648"; // Speed Finger Painting League
+	private static String matchID = "5e7129f4b0f12336fb6ad654"; // first match
 
 	@BeforeAll
 	static void createMatchGenerator() {

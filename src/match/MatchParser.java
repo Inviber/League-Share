@@ -80,17 +80,24 @@ public class MatchParser {
 
 	public Calendar getDate() 
 	{
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-		Date matchDate = new Date();
 		Calendar matchCalendar = Calendar.getInstance();
 
+		int month, day, year;
 		try {
-			matchDate = sdf.parse( (String) matchData.get("date") );
-		} catch (ParseException e1) {
-			e1.printStackTrace();
+			String[] intValuesOfDate = ( (String) matchData.get("date") ).split("/");
+			month = Integer.parseInt( intValuesOfDate[0] );
+			day = Integer.parseInt( intValuesOfDate[1] );
+			year = Integer.parseInt( intValuesOfDate[2] );
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+			month = 0;
+			day = 0;
+			year = 0;
 		}
 
-		matchCalendar.setTime(matchDate);
+		matchCalendar.clear();
+		matchCalendar.set(year + 2000, month, day);
+
 		return matchCalendar;
 	}
 

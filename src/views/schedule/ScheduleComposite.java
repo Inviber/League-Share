@@ -47,11 +47,7 @@ public class ScheduleComposite extends Composite {
 		int month = today.get(Calendar.MONTH);
 		Calendar matchCal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-//		sdf.setTimeZone( today.getTimeZone() );
 		Date matchDate = new Date();
-		
-		
-		//System.out.println("schedule made");
 		setLayout(new FormLayout());
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
@@ -74,7 +70,6 @@ public class ScheduleComposite extends Composite {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				shell.disposeDisplayedComposite();
 				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell, dbHelper);
 				shell.setDisplayedComposite(landingComposite);
 			}
@@ -155,7 +150,6 @@ public class ScheduleComposite extends Composite {
 			
 	        if( dayOfMonth > matchDayofMonth && month >= monthofMatch ) {
 	        	// Print final match score to matchComp
-//	        	System.out.println("Before Today.");
 				lblTeam1.setText( team1.getTeamName() + " | " + match1.getHomeScore() );
 				lblTeam2.setText( team2.getTeamName() + " | " + match1.getAwayScore() );
 				
@@ -163,7 +157,6 @@ public class ScheduleComposite extends Composite {
 				Color green = getDisplay().getSystemColor(SWT.COLOR_GREEN);
 				Color red = getDisplay().getSystemColor(SWT.COLOR_RED);
 				
-				//System.out.println( "Team1 score: " + match1.getHomeScore() + "\nTeam2 score: " + match1.getAwayScore() );
 				try {
 //					homeScore = Integer.parseInt( match1.getHomeScore() );
 //					awayScore = Integer.parseInt( match1.getAwayScore() );
@@ -184,8 +177,6 @@ public class ScheduleComposite extends Composite {
 	        } 
 	        else if( dayOfMonth == matchDayofMonth && month == monthofMatch) {
 	        	// Present 'Spectate' button on matchComp
-//	        	System.out.println("Today.");
-				
 				Button spectateMatch = new Button(matchComp, SWT.NONE);
 				spectateMatch.setBounds(150, 200, 100, 50);
 				spectateMatch.addSelectionListener(new SelectionAdapter() {
