@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class LeagueParser {
+public class LeagueParser implements LeagueParserInterface {
 	
 	private String leagueID;
 	private String leagueName;

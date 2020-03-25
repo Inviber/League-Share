@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
  *					- completely unique to the league
  */
 
-public class TeamParser {
+public class TeamParser implements TeamParserInterface {
 	private String leagueID;
 	private String teamID;
 	private String teamName;
@@ -51,8 +51,7 @@ public class TeamParser {
 			playerIDs.add(id[3]); // id is stored in element 3.
 		}
 		  
-		//System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString());
-		  
+		//System.out.println(teamName + " " + zipcode  + " " + playerIDs.toString());	  
 	}
 	
 	public void printTeamData()
@@ -83,10 +82,5 @@ public class TeamParser {
 	public String getTeamID()
 	{
 		return teamID;
-	}
-	
-	public void setTeamID(String teamID)
-	{
-		this.teamID = teamID;
 	}
 }

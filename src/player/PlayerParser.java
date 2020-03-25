@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class PlayerParser {
+public class PlayerParser implements PlayerParserInterface {
 	private String playerID;
 	private String firstName;
 	private String lastName;
@@ -53,7 +53,7 @@ public class PlayerParser {
 	}
 
 	
-	String getPlayerID() 
+	public String getPlayerID() 
 	{
 		return playerID;
 	}
@@ -68,17 +68,17 @@ public class PlayerParser {
 		return lastName;
 	}
 
-	ArrayList<String> getStatisticNames() 
+	public ArrayList<String> getStatisticNames() 
 	{
 		return statisticNames;
 	}
 
-	HashMap<String, String> getStatistics() 
+	public HashMap<String, String> getStatistics() 
 	{
 		return statistics;
 	}
 	
-	String getStatstic(String statisticName)
+	public String getStatstic(String statisticName)
 	{
 		return statistics.get(statisticName);
 	}
