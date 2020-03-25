@@ -22,7 +22,7 @@ public class LeagueParser {
 	private LeagueUpdater leagueUpdater;
 	private JSONObject leagueData;
 
-	public LeagueParser(DatabaseHelper dbHelper, LeagueUpdater leagueUpdater)  // will change once we determine how to get the unique identifier for this document.
+	public LeagueParser(LeagueUpdater leagueUpdater)  // will change once we determine how to get the unique identifier for this document.
 	{
 		this.leagueUpdater = leagueUpdater;
 	}

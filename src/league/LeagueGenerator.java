@@ -9,7 +9,7 @@ public class LeagueGenerator {
 	
 	public LeagueGenerator(DatabaseHelper dbHelper)
 	{
-		this.leagueParser = new LeagueParser(dbHelper, leagueUpdater);
+		this.leagueParser = new LeagueParser(leagueUpdater);
 		this.leagueUpdater = new LeagueUpdater(dbHelper);
 	}
 	
@@ -20,7 +20,6 @@ public class LeagueGenerator {
 		  League league = new League(leagueID, leagueParser.getLeagueName(), leagueParser.getSport(), leagueParser.getOwnerID(), 
 				  	leagueParser.getDescription(), leagueParser.getCasterIDs(), leagueParser.getTeamIDs(), leagueParser.getMatchIDs(), leagueUpdater);
 		  
-		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs + " " + matchIDs);
 		  return league;
 	}
 }

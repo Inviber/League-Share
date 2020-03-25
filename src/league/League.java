@@ -14,10 +14,10 @@ public class League {
 	private ArrayList<String> casterIDs = new ArrayList<String>();
 	private ArrayList<String> teamIDs = new ArrayList<String>();
 	private ArrayList<String> matchIDs = new ArrayList<String>();
-	LeagueUpdater updater;
+	LeagueUpdater leagueUpdater;
 	
 	public League(String leagueID, String leagueName, String ownerID, String sport, String description, 
-			ArrayList<String> casterIDs, ArrayList<String> teamIDs, ArrayList<String> matchIDs, LeagueUpdater updater) 
+			ArrayList<String> casterIDs, ArrayList<String> teamIDs, ArrayList<String> matchIDs, LeagueUpdater leagueUpdater) 
 	{
 		this.leagueID = leagueID;
 		this.leagueName = leagueName;
@@ -27,7 +27,7 @@ public class League {
 		this.casterIDs = casterIDs;
 		this.teamIDs = teamIDs;
 		this.matchIDs = matchIDs;
-		this.updater = updater;
+		this.leagueUpdater = leagueUpdater;
 	}
 	
 	public String getLeagueID() 
@@ -86,7 +86,7 @@ public class League {
 		if (!this.casterIDs.contains(casterID)) 
 		{
 			this.casterIDs.add(casterID);
-			updater.addCasterIDs(this.leagueID, casterID);
+			leagueUpdater.addCasterIDs(this.leagueID, casterID);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class League {
 		if (this.casterIDs.contains(casterID)) 
 		{
 			this.casterIDs.remove(casterID);
-			updater.removeCasterIDs(this.leagueID, casterID);
+			leagueUpdater.removeCasterIDs(this.leagueID, casterID);
 		} 
 	}
 	
