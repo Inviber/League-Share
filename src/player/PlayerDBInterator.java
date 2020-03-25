@@ -7,12 +7,12 @@ import org.json.simple.parser.JSONParser;
 
 import database.DatabaseHelper;
 
-public class PlayerUpdater implements PlayerUpdaterInterface {
+public class PlayerDBInterator implements PlayerDBInteratorInterface {
 
 	private DatabaseHelper dbHelper;
 	private JSONParser parser = new JSONParser();
 	
-	public PlayerUpdater(DatabaseHelper dbHelper)
+	public PlayerDBInterator(DatabaseHelper dbHelper)
 	{
 		this.dbHelper = dbHelper;
 	}

@@ -2,7 +2,7 @@ package league;
 
 import org.json.simple.JSONObject;
 
-public interface LeagueUpdaterInterface {
+public interface LeagueDBInteratorInterface {
 	
 	public JSONObject getLeagueDetails(String leagueID, boolean print);
 	public void addCasterIDs(String leagueID, String casterID);

@@ -7,12 +7,12 @@ import org.json.simple.parser.JSONParser;
 
 import database.DatabaseHelper;
 
-public class TeamUpdater implements TeamUpdaterInterface {
+public class TeamDBInterator implements TeamDBInteratorInterface {
 
 	private DatabaseHelper dbHelper;
 	private JSONParser parser = new JSONParser();
 	
-	public TeamUpdater(DatabaseHelper dbHelper)
+	public TeamDBInterator(DatabaseHelper dbHelper)
 	{
 		this.dbHelper = dbHelper;
 	}

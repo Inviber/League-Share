@@ -1,18 +1,16 @@
 package team;
 
-import java.util.ArrayList;
-
 import database.DatabaseHelper;
 
 public class TeamGenerator {
 	
 	private TeamParser teamParser;
-	private TeamUpdater teamUpdater;
+	private TeamDBInterator teamUpdater;
 	
 	public TeamGenerator(DatabaseHelper dbHelper)
 	{
 		this.teamParser = new TeamParser(teamUpdater);
-		this.teamUpdater = new TeamUpdater(dbHelper);
+		this.teamUpdater = new TeamDBInterator(dbHelper);
 	}
 	
 	public Team generateLeague(String leagueID, String teamID)

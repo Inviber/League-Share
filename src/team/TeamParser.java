@@ -23,10 +23,10 @@ public class TeamParser {
 	private ArrayList<String> playerIDs = new ArrayList<String>();
 	
 	// Database related variables
-	private TeamUpdater teamUpdater;
+	private TeamDBInterator teamUpdater;
 	private JSONObject teamData;
 	
-	public TeamParser(TeamUpdater teamUpdater)
+	public TeamParser(TeamDBInterator teamUpdater)
 	{
 		this.teamUpdater = teamUpdater;
 	}

@@ -12,10 +12,10 @@ public class League {
 	private ArrayList<String> casterIDs = new ArrayList<String>();
 	private ArrayList<String> teamIDs = new ArrayList<String>();
 	private ArrayList<String> matchIDs = new ArrayList<String>();
-	private LeagueUpdater leagueUpdater;
+	private LeagueDBInterator leagueUpdater;
 	
 	public League(String leagueID, String leagueName, String ownerID, String sport, String description, 
-			ArrayList<String> casterIDs, ArrayList<String> teamIDs, ArrayList<String> matchIDs, LeagueUpdater leagueUpdater) 
+			ArrayList<String> casterIDs, ArrayList<String> teamIDs, ArrayList<String> matchIDs, LeagueDBInterator leagueUpdater) 
 	{
 		this.leagueID = leagueID;
 		this.leagueName = leagueName;

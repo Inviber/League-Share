@@ -16,10 +16,10 @@ public class LeagueParser {
 	private ArrayList<String> matchIDs = new ArrayList<String>();
 	
 	// Database related variables
-	private LeagueUpdater leagueUpdater;
+	private LeagueDBInterator leagueUpdater;
 	private JSONObject leagueData;
 
-	public LeagueParser(LeagueUpdater leagueUpdater)  // will change once we determine how to get the unique identifier for this document.
+	public LeagueParser(LeagueDBInterator leagueUpdater)  // will change once we determine how to get the unique identifier for this document.
 	{
 		this.leagueUpdater = leagueUpdater;
 	}

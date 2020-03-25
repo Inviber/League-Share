@@ -6,13 +6,13 @@ import org.json.simple.parser.JSONParser;
 
 import database.DatabaseHelper;
 
-public class LeagueUpdater implements LeagueUpdaterInterface  {
+public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 	
 	private DatabaseHelper dbHelper;
 	private JSONParser parser = new JSONParser();
 
 	
-	public LeagueUpdater(DatabaseHelper dbHelper)
+	public LeagueDBInterator(DatabaseHelper dbHelper)
 	{
 		this.dbHelper = dbHelper;
 	}

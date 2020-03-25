@@ -9,9 +9,9 @@ public class Team {
 	private String teamName;
 	private String zipcode;
 	private ArrayList<String> playerIDs = new ArrayList<String>();
-	private TeamUpdater teamUpdater;
+	private TeamDBInterator teamUpdater;
 	
-	public Team(String leagueID, String teamID, String teamName, String zipcode, ArrayList<String> playerIDs, TeamUpdater teamUpdater) {
+	public Team(String leagueID, String teamID, String teamName, String zipcode, ArrayList<String> playerIDs, TeamDBInterator teamUpdater) {
 		this.leagueID = leagueID;
 		this.teamID = teamID;
 		this.teamName = teamName;

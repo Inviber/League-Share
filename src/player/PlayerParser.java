@@ -13,10 +13,10 @@ public class PlayerParser {
 	private HashMap<String, String> statistics = new HashMap<String, String>();
 	
 	// Database related variables
-	private PlayerUpdater playerUpdater;
+	private PlayerDBInterator playerUpdater;
 	private JSONObject playerData;
 	
-	public PlayerParser(PlayerUpdater playerUpdater)
+	public PlayerParser(PlayerDBInterator playerUpdater)
 	{
 		this.playerUpdater = playerUpdater;
 	}

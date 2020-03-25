@@ -5,12 +5,12 @@ import database.DatabaseHelper;
 public class LeagueGenerator {
 	
 	private LeagueParser leagueParser;
-	private LeagueUpdater leagueUpdater;
+	private LeagueDBInterator leagueUpdater;
 	
 	public LeagueGenerator(DatabaseHelper dbHelper)
 	{
 		this.leagueParser = new LeagueParser(leagueUpdater);
-		this.leagueUpdater = new LeagueUpdater(dbHelper);
+		this.leagueUpdater = new LeagueDBInterator(dbHelper);
 	}
 	
 	public League generateLeague(String leagueID)

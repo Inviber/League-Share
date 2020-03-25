@@ -12,9 +12,9 @@ public class Player {
 	private String lastName;
 	private ArrayList<String> statisticNames = new ArrayList<String>();
 	private HashMap<String, String> statistics = new HashMap<String, String>();
-	private PlayerUpdater playerUpdater;
+	private PlayerDBInterator playerUpdater;
 	public Player(String leagueID, String teamID, String playerID, String firstName, String lastName,
-			ArrayList<String> statisticNames, HashMap<String, String> statistics, PlayerUpdater playerUpdater) 
+			ArrayList<String> statisticNames, HashMap<String, String> statistics, PlayerDBInterator playerUpdater) 
 	{
 		this.leagueID = leagueID;
 		this.teamID = teamID;
