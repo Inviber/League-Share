@@ -525,6 +525,17 @@ public class DatabaseHelper {
 		
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
+	
+	public void updateMatchDate(String leagueID, String matchID, String date)
+	{
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID));
+		
+		Bson update = new Document().append("matches.$.date", date);
+				
+		Bson set = new Document().append("$set", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
 	 
 	
 	void printAllUsers()
@@ -668,6 +679,7 @@ public class DatabaseHelper {
 //		dbHelper.createMatch("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "5e7129f4b0f12336fb6ad64c", "03/01/2020");
 		
 //		dbHelper.updateMatchScore("5e7129f4b0f12336fb6ad648", "5e7247b449419c7c70020ed5", "5", "5");
+//		dbHelper.updateMatchDate("5e59763368ec36619a66bfdc", "5e72424369db37222c784f01", "3/25/2020");
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 		
@@ -690,7 +702,7 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-//		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
+//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
 //		dbHelper.printAllLeagues();
 

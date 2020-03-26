@@ -1,17 +1,11 @@
 package player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import database.DatabaseHelper;
-
-public class PlayerParser {
-	private String leagueID;
-	private String teamID;
+public class PlayerParser implements PlayerParserInterface {
 	private String playerID;
 	private String firstName;
 	private String lastName;
@@ -19,23 +13,17 @@ public class PlayerParser {
 	private HashMap<String, String> statistics = new HashMap<String, String>();
 	
 	// Database related variables
-	private JSONParser parser = new JSONParser();
-	private DatabaseHelper dbHelper = new DatabaseHelper(
-			"mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority",
-			"LeagueShare");
+	private PlayerDBInterator playerDBInterator;
 	private JSONObject playerData;
 	
-	public PlayerParser(String leagueID, String teamID, String playerID)
+	public PlayerParser(PlayerDBInterator playerDBInterator)
 	{
-		this.leagueID = leagueID;
-		this.teamID = teamID;
-		this.playerID = playerID;
-		populateTeamDetails();
+		this.playerDBInterator = playerDBInterator;
 	}
 	
-	void populateTeamDetails() 
+	public void parsePlayer(String leagueID, String teamID, String playerID) 
 	{
-		getPlayerDetails(false);
+		playerData = playerDBInterator.getPlayerDetails(leagueID, teamID, playerID, false);
 		  
 		this.firstName = (String) playerData.get("firstName"); 
 		this.lastName = (String) playerData.get("lastName"); 
@@ -44,6 +32,7 @@ public class PlayerParser {
 		
 		ArrayList<String> statisticValues = new ArrayList<String>();
 
+		// separating stat name from value for hashmap
 		for (int i = 0; i < matchStatistics.size(); i++)
 		{
 			JSONObject stat = (JSONObject) matchStatistics.get(i);
@@ -53,58 +42,18 @@ public class PlayerParser {
 			String statValue = stat.get("statValue").toString(); 
 			statisticValues.add(statValue.split("\"")[0]); //  go to the next ", value is stored in element 1.
 		}
-
 		
+		// adding values to hashmap.
 		for (int i = 0; i < statisticValues.size(); i++)
 		{
 			statistics.put(statisticNames.get(i), statisticValues.get(i)); // append each statisitic to the hash map
 		}
 		
-		  
-		System.out.println(firstName + " " + lastName  + " " + statisticNames.toString() + " " + statistics.toString());
-		  
+		//System.out.println(firstName + " " + lastName  + " " + statisticNames.toString() + " " + statistics.toString());
 	}
 
-	void getPlayerDetails(boolean print) 
-	{
-		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
-
-		try 
-		{
-			Object obj = parser.parse(teamDocument.toJson());
-			JSONObject leagueData = (JSONObject) obj;
-			
-			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
-						
-			JSONObject teamData = (JSONObject) teamDataArray.get(0);
-			
-			JSONArray playerDataArray = (JSONArray) teamData.get("players");
-						
-			for (int i = 0; i < playerDataArray.size(); i++)
-			{
-				JSONObject currentPlayerData = (JSONObject) playerDataArray.get(i);
-				String oid = currentPlayerData.get("_id").toString(); 
-				String[] id = oid.split("\""); // removing oid from string.
-				if (id[3].equals(playerID)) // if this is the id searched for...
-				{
-					playerData = currentPlayerData; // save this data.
-					break;
-				}
-			}
-			
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		
-		if (print)
-		{
-			System.out.println(playerData.toString());
-		}
-	}
-
-	String getPlayerID() 
+	
+	public String getPlayerID() 
 	{
 		return playerID;
 	}
@@ -119,23 +68,18 @@ public class PlayerParser {
 		return lastName;
 	}
 
-	ArrayList<String> getStatisticNames() 
+	public ArrayList<String> getStatisticNames() 
 	{
 		return statisticNames;
 	}
 
-	HashMap<String, String> getStatistics() 
+	public HashMap<String, String> getStatistics() 
 	{
 		return statistics;
 	}
 	
-	String getStatstic(String statisticName)
+	public String getStatstic(String statisticName)
 	{
 		return statistics.get(statisticName);
-	}
-	
-	void closeDatabase() 
-	{
-		dbHelper.getClient().close();
 	}
 }
