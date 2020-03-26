@@ -11,13 +11,15 @@ import database.DatabaseHelper;
 
 class MatchParserTest {
 	
+	private static MatchDBInterator matchDBInterator;
 	private static MatchParser matchParser;
 	private static String leagueID = "5e7129f4b0f12336fb6ad648"; // Speed Finger Painting League
 	private static String matchID = "5e7129f4b0f12336fb6ad654"; // first match
 
 	@BeforeAll
 	static void createMatchParser() {
-		matchParser = new MatchParser( leagueID, matchID, new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare") );
+		matchDBInterator = new MatchDBInterator( new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare") );
+		matchParser = new MatchParser( leagueID, matchID, matchDBInterator);
 	}
 
 	@Test

@@ -6,10 +6,12 @@ import database.DatabaseHelper;
 
 public class MatchGenerator {
 	private MatchParser matchParser;
+	private MatchDBInterator matchDBInterator;
 	private Match match;
 	
 	public MatchGenerator(String leagueID, String matchID, DatabaseHelper dbHelper) {
-		matchParser = new MatchParser(leagueID, matchID, dbHelper);
+		matchDBInterator = new MatchDBInterator(dbHelper);
+		matchParser = new MatchParser(leagueID, matchID, matchDBInterator);
 		setMatch( matchParser.getHomeTeamID(), matchParser.getAwayTeamID(), matchParser.getHomeScore(), matchParser.getAwayScore(), matchParser.getDate() );
 	}
 	
