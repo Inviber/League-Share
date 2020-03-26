@@ -10,48 +10,21 @@ import database.DatabaseHelper;
 public class MatchParser implements MatchParserInterface{
 	private String leagueID;
 	private String matchID;
-	private JSONParser parser = new JSONParser();
-	private DatabaseHelper dbHelper;
-//	private DatabaseHelper dbHelper = 
-//			new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 	private JSONObject matchData;
+	private MatchDBInterator matchDBInterator;
 	
-	public MatchParser(String leagueID, String matchID, DatabaseHelper dbHelper)
+	public MatchParser(String leagueID, String matchID, MatchDBInterator matchDBInterator)
 	{
-		this.dbHelper = dbHelper;
 		this.leagueID = leagueID;
 		this.matchID = matchID;
+		this.matchDBInterator = matchDBInterator;
 
 		getMatchDetails();
 	}
 	
 	public void getMatchDetails() 
 	{
-		Document teamDocument = dbHelper.getMatchDocumentByID(leagueID, matchID);
-
-		try 
-		{
-			Object obj = parser.parse(teamDocument.toJson());
-			JSONObject leagueData = (JSONObject) obj;
-			
-			JSONArray matchDataArray = (JSONArray) leagueData.get("matches");
-									
-			for (int i = 0; i < matchDataArray.size(); i++)
-			{
-				JSONObject currentMatchData = (JSONObject) matchDataArray.get(i);
-				String oid = currentMatchData.get("_id").toString(); 
-				String[] id = oid.split("\""); // removing oid from string.
-				if (id[3].equals(matchID)) // if this is the id searched for...
-				{
-					matchData = currentMatchData; // save this data.
-					break;
-				}
-			}
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
+		matchData = matchDBInterator.getMatchDetails(leagueID, matchID);
 	}
 	
 	public void printMatchData()
