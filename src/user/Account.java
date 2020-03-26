@@ -149,9 +149,10 @@ public class Account {
 	void createLeague(String leagueName, String sport, String leagueDescription)
 	{
 		// access db, this call will likely return an ID from the db.
-		String leage_ID = dbHelper.createLeague(leagueName, this._ID, sport, leagueDescription); 
-		new LeagueParser(leagueName, dbHelper);
-		addLeague(leage_ID, true, false);
+		//String leage_ID = dbHelper.createLeague(leagueName, this._ID, sport, leagueDescription); 
+		//new LeagueParser(leagueName, dbHelper); awaiting actual use of this within GUI for refactor.
+		//addLeague(leage_ID, true, false);
+		System.out.println("Doing nothing currently.");
 	}
 	
 	boolean updateLeague(String _ID, String leagueName, String leagueDescription) // returns boolean for if update was successful
