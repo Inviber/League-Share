@@ -1,9 +1,5 @@
 package match;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 import org.bson.Document;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,7 +7,7 @@ import org.json.simple.parser.JSONParser;
 
 import database.DatabaseHelper;
 
-public class MatchParser {
+public class MatchParser implements MatchParserInterface{
 	private String leagueID;
 	private String matchID;
 	private JSONParser parser = new JSONParser();
