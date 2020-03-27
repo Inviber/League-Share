@@ -7,7 +7,7 @@ import org.json.simple.parser.JSONParser;
 
 import database.DatabaseHelper;
 
-public class MatchDBInterator {
+public class MatchDBInterator implements MatchDBInteratorInterface {
 	
 	private JSONObject matchData;
 	private JSONParser parser = new JSONParser();
