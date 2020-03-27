@@ -13,7 +13,7 @@ public class TeamGenerator {
 		this.teamDBInterator = new TeamDBInterator(dbHelper);
 	}
 	
-	public Team generateLeague(String leagueID, String teamID)
+	public Team generateTeam(String leagueID, String teamID)
 	{
 		teamParser.parseTeam(leagueID, teamID);
 		  
