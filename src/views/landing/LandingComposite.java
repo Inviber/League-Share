@@ -11,6 +11,8 @@ import org.eclipse.swt.widgets.Text;
 
 import user.Account;
 import database.DatabaseHelper;
+import league.League;
+import league.LeagueDBInterator;
 import league.LeagueParser;
 import team.TeamParser;
 import views.GUIShell;
@@ -73,9 +75,10 @@ public class LandingComposite extends Composite {
 //				System.out.println(list.getSelectionIndex());
 				
 				ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
-				LeagueParser parser = new LeagueParser(followedLeagueIDs.get(list.getSelectionIndex()), dbHelper);
+//				LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
+//				LeagueParser parser = new LeagueParser(leagueDBInterator);
 				
-				ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, shell, dbHelper, parser);
+				ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
 				shell.setDisplayedComposite(scheduleComposite);
 			}
 		});
@@ -101,13 +104,13 @@ public class LandingComposite extends Composite {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				
-				ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
-				ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
+//				ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
+//				ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
 				
-				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(list_2_1.getSelectionIndex()), managedTeamIDs.get(list_2_1.getSelectionIndex()), dbHelper);
+//				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(list_2_1.getSelectionIndex()), managedTeamIDs.get(list_2_1.getSelectionIndex()), dbHelper);
 				
 				//System.out.println(parser.getTeamID());
-				System.out.println(parser.getTeamName() + " selected");
+//				System.out.println(parser.getTeamName() + " selected");
 				//System.out.println(parser.getZipcode());
 				
 			}
@@ -131,7 +134,7 @@ public class LandingComposite extends Composite {
 		ArrayList<String> ownedLeagueIDs = shell.getAccount().getOwnedLeagueIDs();
 		ArrayList<String> managedLeaguesIDs = shell.getAccount().getLeagueCastedIDs();
 		ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
-		ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
+//		ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
 		
 		
 		
@@ -139,9 +142,9 @@ public class LandingComposite extends Composite {
 		{
 			for(int i = 0; i < followedLeagueIDs.size(); i++)
 			{
-				LeagueParser parser = new LeagueParser(followedLeagueIDs.get(i), dbHelper);
+				League league = ( shell.getLeagueGenerator() ).generateLeague( followedLeagueIDs.get(i) );
 //				System.out.println(parser.getLeagueName());
-				list.add(parser.getLeagueName());	
+				list.add(league.getLeagueName());	
 			}
 		}
 		else
@@ -153,9 +156,9 @@ public class LandingComposite extends Composite {
 		{
 			for(int i = 0; i < ownedLeagueIDs.size(); i++)
 			{
-				LeagueParser parser = new LeagueParser(ownedLeagueIDs.get(i), dbHelper);
+				League league = shell.getLeagueGenerator().generateLeague(ownedLeagueIDs.get(i));
 //				System.out.println(parser.getLeagueName());
-				list_1.add(parser.getLeagueName());
+				list_1.add(league.getLeagueName());
 			}
 		}
 		else
@@ -168,9 +171,9 @@ public class LandingComposite extends Composite {
 			//need to rename 'leagues casted' to 'managed leagues'
 			for(int i = 0; i < managedLeaguesIDs.size(); i++)
 			{
-				LeagueParser parser = new LeagueParser(managedLeaguesIDs.get(i), dbHelper);
+				League league = shell.getLeagueGenerator().generateLeague(managedLeaguesIDs.get(i));
 //				System.out.println(parser.getLeagueName());
-				list_2.add(parser.getLeagueName());
+				list_2.add(league.getLeagueName());
 			}
 		}
 		else
@@ -184,13 +187,13 @@ public class LandingComposite extends Composite {
 		{
 			for(int i = 0; i < managedTeamIDs.size(); i++)
 			{
-				TeamParser parser = new TeamParser(managedTeamLeagueIDs.get(i), managedTeamIDs.get(i), dbHelper);
+//				Team team = shell.getTeamGenerator().generateTeam(managedTeamIDs.get(i));
 				
 //				System.out.println(parser.getTeamID());
 //				System.out.println(parser.getTeamName());
 //				System.out.println(parser.getLeagueID());
 //				System.out.println(i);
-				list_2_1.add(parser.getTeamName());
+//				list_2_1.add(team.getTeamName());
 			}
 		}
 		else
