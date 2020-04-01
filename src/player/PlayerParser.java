@@ -32,6 +32,9 @@ public class PlayerParser implements PlayerParserInterface {
 		
 		ArrayList<String> statisticValues = new ArrayList<String>();
 
+		this.statisticNames = new ArrayList<String>();
+		this.statistics = new HashMap<String, String>();
+		
 		// separating stat name from value for hashmap
 		for (int i = 0; i < matchStatistics.size(); i++)
 		{
