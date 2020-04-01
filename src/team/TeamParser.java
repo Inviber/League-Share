@@ -33,7 +33,7 @@ public class TeamParser implements TeamParserInterface {
 	
 	public void parseTeam(String leagueID, String teamID) 
 	{
-		teamDBInterator.getTeamDetails(leagueID, teamID);
+		teamData = teamDBInterator.getTeamDetails(leagueID, teamID);
 		  
 		this.teamName = (String) teamData.get("teamName"); 
 
