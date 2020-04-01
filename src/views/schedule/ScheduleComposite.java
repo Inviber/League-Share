@@ -4,8 +4,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import database.DatabaseHelper;
+import league.League;
+import league.LeagueGenerator;
 import league.LeagueParser;
+import match.Match;
+import match.MatchGenerator;
 import match.MatchParser;
+import team.Team;
+import team.TeamGenerator;
 import team.TeamParser;
 import views.GUIShell;
 import views.landing.LandingComposite;
@@ -31,6 +37,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.GridLayout;
 
 public class ScheduleComposite extends Composite {
+	private League league;
 
 	/**
 	 * Create the composite.
@@ -38,16 +45,21 @@ public class ScheduleComposite extends Composite {
 	 * @param style
 	 */
 	@SuppressWarnings("deprecation")
-	public ScheduleComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, LeagueParser leagueParser) {
+	public ScheduleComposite(Composite parent, int style, String leagueID, LeagueGenerator leagueGenerator, MatchGenerator matchGenerator, TeamGenerator teamGenerator) {
 		super(parent, style);
+		
+		league = leagueGenerator.generateLeague(leagueID);
 		
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		Calendar today = Calendar.getInstance();
 		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
 		int month = today.get(Calendar.MONTH);
-		Calendar matchCal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-		Date matchDate = new Date();
+		int year = today.get(Calendar.YEAR);
+		today.clear();
+		today.set(year, month, dayOfMonth);
+//		Calendar matchCal = Calendar.getInstance();
+//		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+//		Date matchDate = new Date();
 		setLayout(new FormLayout());
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
@@ -58,7 +70,7 @@ public class ScheduleComposite extends Composite {
 		fd_lblNewLabel.left = new FormAttachment(0, 10);
 		lblNewLabel.setLayoutData(fd_lblNewLabel);
 		lblNewLabel.setAlignment(SWT.CENTER);
-		lblNewLabel.setText(leagueParser.getLeagueName());
+		lblNewLabel.setText(league.getLeagueName());
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
 		FormData fd_btnNewButton = new FormData();
@@ -70,8 +82,9 @@ public class ScheduleComposite extends Composite {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell, dbHelper);
-				shell.setDisplayedComposite(landingComposite);
+//				LandingComposite landingComposite = new LandingComposite(parent, SWT.NONE);
+//				((GUIShell) parent).setDisplayedComposite(landingComposite);
+				System.out.println("Back button pressed.");
 			}
 		});
 		btnNewButton.setText("Back");
@@ -97,13 +110,14 @@ public class ScheduleComposite extends Composite {
 		grpMatches.setLayoutData(fd_grpMatches);
 		grpMatches.setText("MATCHES");
 		
-		ArrayList<String> matchIDs = leagueParser.getMatchIDs();
+		ArrayList<String> matchIDs = league.getMatchIDs();
 		
 		for(int i = 0; i < matchIDs.size(); i++)
 		{
-			MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(i), dbHelper);
-			TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
-			TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
+			matchGenerator.setMatch( leagueID, matchIDs.get(i) );
+			Match match = matchGenerator.getMatch();
+			Team team1 = teamGenerator.generateTeam(leagueID, match.getHomeTeamID());
+			Team team2 = teamGenerator.generateTeam(leagueID, match.getAwayTeamID());
 			
 			Composite matchComp = new Composite(grpMatches, SWT.NONE);
 			GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -131,51 +145,12 @@ public class ScheduleComposite extends Composite {
 			lblTeam2.setAlignment(SWT.CENTER);
 			lblTeam2.setBounds(10, 132, 390, 30);
 			
-			
-			
-			int matchDayofMonth;
-			int monthofMatch;
-			
-//			try {
-//				matchDate = sdf.parse( match1.getDate() );
-//			} catch (ParseException e1) {
-//				e1.printStackTrace();
-//			}
-//			System.out.println(matchDate);
-			matchCal.setTime(matchDate);
-			matchDayofMonth = matchCal.get(Calendar.DAY_OF_MONTH);
-			monthofMatch = matchCal.get(Calendar.MONTH);
-	        
-			
-			
-	        if( dayOfMonth > matchDayofMonth && month >= monthofMatch ) {
+	        if( match.getDate().before(today) ) {
 	        	// Print final match score to matchComp
-				lblTeam1.setText( team1.getTeamName() + " | " + match1.getHomeScore() );
-				lblTeam2.setText( team2.getTeamName() + " | " + match1.getAwayScore() );
-				
-				int homeScore, awayScore;
-				Color green = getDisplay().getSystemColor(SWT.COLOR_GREEN);
-				Color red = getDisplay().getSystemColor(SWT.COLOR_RED);
-				
-				try {
-//					homeScore = Integer.parseInt( match1.getHomeScore() );
-//					awayScore = Integer.parseInt( match1.getAwayScore() );
-				} catch (NumberFormatException nfe) {
-					nfe.printStackTrace();
-					homeScore = 0;
-					awayScore = 0;
-				}
-				
-//				if ( homeScore > awayScore ) {
-//					lblTeam1.setBackground(green);
-//					lblTeam2.setBackground(red);
-//				} else if ( awayScore > homeScore ) {
-//					lblTeam2.setBackground(green);
-//					lblTeam1.setBackground(red);
-//				}
-	        	
+				lblTeam1.setText( team1.getTeamName() + " | " + match.getHomeScore() );
+				lblTeam2.setText( team2.getTeamName() + " | " + match.getAwayScore() );
 	        } 
-	        else if( dayOfMonth == matchDayofMonth && month == monthofMatch) {
+	        else if( match.getDate().equals(today) ) {
 	        	// Present 'Spectate' button on matchComp
 				Button spectateMatch = new Button(matchComp, SWT.NONE);
 				spectateMatch.setBounds(150, 200, 100, 50);
@@ -183,14 +158,9 @@ public class ScheduleComposite extends Composite {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
-						shell.disposeDisplayedComposite();
-						
-						MatchParser match1 = new MatchParser(leagueParser.getLeagueID(), matchIDs.get(0), dbHelper);
-						TeamParser team1 = new TeamParser(leagueParser.getLeagueID(), match1.getHomeTeamID(), dbHelper);
-						TeamParser team2 = new TeamParser(leagueParser.getLeagueID(), match1.getAwayTeamID(), dbHelper);
-						
-						SpectatorComposite spectatorComposite = new SpectatorComposite(shell, SWT.NONE, shell, dbHelper, match1, team1, team2);
-						shell.setDisplayedComposite(spectatorComposite);
+						((GUIShell) parent).disposeDisplayedComposite();
+//						SpectatorComposite spectatorComposite = new SpectatorComposite(parent, SWT.NONE, ((GUIShell) parent), match, team1, team2);
+//						((GUIShell) parent).setDisplayedComposite(spectatorComposite);
 					}
 				});
 				spectateMatch.setText("SPECTATE");

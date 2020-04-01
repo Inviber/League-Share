@@ -27,7 +27,7 @@ public class LeagueParser implements LeagueParserInterface {
 	public void parseLeague(String leagueID) 
 	{
 		leagueData = leagueDBInterator.getLeagueDetails(leagueID, false);
-
+		
 		  leagueName = (String) leagueData.get("leagueName"); 
 		  sport = (String) leagueData.get("sport"); 
 		  ownerID = (String) leagueData.get("ownerID"); 
@@ -36,6 +36,8 @@ public class LeagueParser implements LeagueParserInterface {
 		  casterIDs = (ArrayList<String>) leagueData.get("casterIDs");
 		  
 		  JSONArray teams = (JSONArray) leagueData.get("teams");
+		  
+		  this.teamIDs = new ArrayList<String>();	// needs to be cleared out before filling again.
 		  
 		  // have to do this to get the ID from the team because team is an object, not just a array of strings.
 		  for (int i = 0; i < teams.size(); i++)
@@ -48,6 +50,8 @@ public class LeagueParser implements LeagueParserInterface {
 		  
 		  JSONArray matches = (JSONArray) leagueData.get("matches");
 		  
+		  this.matchIDs = new ArrayList<String>(); 	// needs to be cleared out before filling again.
+		  
 		  // have to do this to get the ID from the match because team is an object, not just a array of strings.
 		  for (int i = 0; i < matches.size(); i++)
 		  {
@@ -56,7 +60,6 @@ public class LeagueParser implements LeagueParserInterface {
 			  String[] id = oid.split("\""); // removing oid from string.
 			  matchIDs.add(id[3]); // id is stored in element 3.
 		  }
-		  
 		  
 		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs + " " + matchIDs);
 	}

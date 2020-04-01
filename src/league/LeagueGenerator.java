@@ -9,8 +9,8 @@ public class LeagueGenerator {
 	
 	public LeagueGenerator(DatabaseHelper dbHelper)
 	{
-		this.leagueParser = new LeagueParser(leagueDBInterator);
 		this.leagueDBInterator = new LeagueDBInterator(dbHelper);
+		this.leagueParser = new LeagueParser(leagueDBInterator);
 	}
 	
 	public League generateLeague(String leagueID)
