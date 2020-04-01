@@ -42,6 +42,8 @@ public class TeamParser implements TeamParserInterface {
 		  
 		JSONArray players = (JSONArray) teamData.get("players");
 		  		  
+		this.playerIDs = new ArrayList<String>();
+		
 		  // have to do this to get the ID from the team because player is an object, not just a array of strings.
 		for (int i = 0; i < players.size(); i++)
 		{
