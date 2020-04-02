@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import database.DatabaseHelper;
+
 import match.Match;
 import player.Player;
-import player.PlayerGenerator;
+
 import team.Team;
 
 import views.GUIShell;
@@ -28,7 +28,6 @@ import org.eclipse.swt.layout.FillLayout;
 
 public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
-	private PlayerGenerator playerGenerator;
 	private Player displayedPlayer;
 
 	/**
@@ -39,10 +38,9 @@ public class SpectatorComposite extends Composite {
 	 * 
 	 * Called using the POJOs from Schedule, can make generators to go back to the schedule
 	 */
-	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, Match match,
-			Team homeTeam, Team awayTeam) {
+	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match,
+			Team homeTeam, Team awayTeam, SpectatorComposite previousWindow) {
 		super(parent, style);
-		playerGenerator = new PlayerGenerator(dbHelper);
 
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
@@ -128,12 +126,12 @@ public class SpectatorComposite extends Composite {
 		// Getting the list of home player IDs
 		ArrayList<String> players = homeTeam.getPlayerIDs();
 		// Generating the list of team mates
-		while (!players.isEmpty()) { ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		while (!players.isEmpty()) {  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			Composite playerInfo = new Composite(composite, SWT.NONE);
 			FillLayout fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
 			// making a player parser to access the players names
-			displayedPlayer = playerGenerator.generatePlayer(homeTeam.getLeagueID(), homeTeam.getTeamID(),
+			displayedPlayer = shell.getPlayerGenerator().generatePlayer(homeTeam.getLeagueID(), homeTeam.getTeamID(),
 					players.remove(0));
 			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
 			// lblNewLabel_4.setBounds(10, 10, 295, 20);
@@ -160,7 +158,7 @@ public class SpectatorComposite extends Composite {
 			FillLayout fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
 			// making a player parser to access the players names
-			displayedPlayer = playerGenerator.generatePlayer(awayTeam.getLeagueID(), awayTeam.getTeamID(),
+			displayedPlayer = shell.getPlayerGenerator().generatePlayer(awayTeam.getLeagueID(), awayTeam.getTeamID(),
 					players.remove(0));
 			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
 			// lblNewLabel_4.setBounds(10, 10, 295, 20);
@@ -177,13 +175,19 @@ public class SpectatorComposite extends Composite {
 				// Go to caster Composite
 			}
 		});
-		btnNewButton.setBounds(1136, 55, 134, 45);
+		btnNewButton.setBounds(10, 61, 134, 45);
 		btnNewButton.setText("Caster View");
+		
+		Button btnBack = new Button(this, SWT.NONE);
+		btnBack.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				((GUIShell) parent).setDisplayedComposite(previousWindow);
+				System.out.println("Back button pressed.");
+			}
+		});
+		btnBack.setText("Back");
+		btnBack.setBounds(10, 10, 134, 45);
 
-	}
-
-	@Override
-	protected void checkSubclass() {
-		// Disable the check that prevents subclassing of SWT components
 	}
 }

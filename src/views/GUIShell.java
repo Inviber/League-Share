@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Shell;
 import database.DatabaseHelper;
 import league.LeagueGenerator;
 import match.MatchGenerator;
+import player.PlayerGenerator;
 import team.TeamGenerator;
 import user.Account;
 import views.login.LoginComposite;
@@ -33,6 +34,7 @@ public class GUIShell extends Shell {
 	private static LeagueGenerator leagueGenerator;
 	private static MatchGenerator matchGenerator;
 	private static TeamGenerator teamGenerator;
+	private static PlayerGenerator playerGenerator;
 	
 	
 	/**
@@ -77,6 +79,7 @@ public class GUIShell extends Shell {
 		leagueGenerator = new LeagueGenerator(dbHelper);
 		matchGenerator = new MatchGenerator(dbHelper);
 		teamGenerator = new TeamGenerator(dbHelper);
+		playerGenerator = new PlayerGenerator(dbHelper);
 		
 		createContents();
 	}
@@ -142,6 +145,9 @@ public class GUIShell extends Shell {
 	
 	public TeamGenerator getTeamGenerator() {
 		return teamGenerator;
+	}
+	public PlayerGenerator getPlayerGenerator() {
+		return playerGenerator;
 	}
 
 }
