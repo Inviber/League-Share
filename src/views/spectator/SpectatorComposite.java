@@ -34,10 +34,10 @@ public class SpectatorComposite extends Composite {
 	/**
 	 * Create the composite.
 	 * 
-	 * @param homeTeamParser
-	 * @param awayTeamParser Home team parameter should be before away team
-	 *                       parameter Called using the POJOs from Schedule, can
-	 *                       make generators to go back to the schedule
+	 * @param homeTeam Home team parameter should be before away team
+	 * @param awayTeam 
+	 * 
+	 * Called using the POJOs from Schedule, can make generators to go back to the schedule
 	 */
 	public SpectatorComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper, Match match,
 			Team homeTeam, Team awayTeam) {
