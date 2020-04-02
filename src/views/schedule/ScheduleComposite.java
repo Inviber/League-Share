@@ -156,6 +156,7 @@ public class ScheduleComposite extends Composite {
 	        	// Present 'Spectate' button on matchComp
 				Button spectateMatch = new Button(matchComp, SWT.NONE);
 				spectateMatch.setBounds(150, 200, 100, 50);
+				//you can't use i for matches.get(i) because it isnt final
 				int x = i;
 				spectateMatch.addSelectionListener(new SelectionAdapter() {
 					@Override
