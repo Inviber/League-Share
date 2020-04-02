@@ -12,7 +12,7 @@ public class SpectatorGenerator {
 	
 	public SpectatorGenerator(Composite parent, int style, GUIShell shell, Match match, Team homeTeam, Team awayTeam, Composite previousWindow)
 	{
-		
+
 		shell.setDisplayedComposite(generateSpectator( parent,  style,  shell,  match,  homeTeam,  awayTeam,  previousWindow));
 	
 	}
@@ -21,6 +21,8 @@ public class SpectatorGenerator {
 	
 	{
 		SpectatorComposite spectatorComposite = new SpectatorComposite(parent, style, shell, match, homeTeam, awayTeam, previousWindow );
-		  return spectatorComposite;
+
+		return spectatorComposite;
+		  
 	}
 }
