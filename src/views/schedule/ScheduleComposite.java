@@ -57,7 +57,7 @@ public class ScheduleComposite extends Composite {
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		Calendar today = Calendar.getInstance();
 		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
-		int month = today.get(Calendar.MONTH) + 1;
+		int month = today.get(Calendar.MONTH);
 		int year = today.get(Calendar.YEAR);
 		today.clear();
 		today.set(year, month, dayOfMonth);
@@ -143,13 +143,12 @@ public class ScheduleComposite extends Composite {
 			lblTeam2.setText(team2List.get(i).getTeamName());
 			lblTeam2.setAlignment(SWT.CENTER);
 			lblTeam2.setBounds(10, 132, 390, 30);
-			
 	        if( matches.get(i).getDate().before(today) ) {
 	        	// Print final match score to matchComp
 				lblTeam1.setText( team1List.get(i).getTeamName() + " | " + matches.get(i).getHomeScore() );
 				lblTeam2.setText( team2List.get(i).getTeamName() + " | " + matches.get(i).getAwayScore() );
-	        } 
-	        else if( matches.get(i).getDate().equals(today) ) {
+	        }
+	        else if(  matches.get(i).getDate().MONTH == today.MONTH && matches.get(i).getDate().DAY_OF_MONTH == today.DAY_OF_MONTH ) {
 	        	// Present 'Spectate' button on matchComp
 				Button spectateMatch = new Button(matchComp, SWT.NONE);
 				spectateMatch.setBounds(150, 200, 100, 50);
