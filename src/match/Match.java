@@ -50,6 +50,7 @@ public class Match {
     }
 
     public void setDate(Calendar date) {
+    	System.out.println(date.toString());
         this.date = date;
     }
 

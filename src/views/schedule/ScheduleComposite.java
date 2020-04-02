@@ -120,7 +120,7 @@ public class ScheduleComposite extends Composite {
 			matchComp.setLayoutData(gd_composite);
 
 			// Format match date into a string for the matchDate label
-			Date date = matches.get(i).getDate().getTime();             
+			Date date = matches.get(i).getDate().getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
 			String dateStr = sdf.format(date);            
 			
