@@ -17,6 +17,7 @@ import league.LeagueParser;
 import team.TeamParser;
 import views.GUIShell;
 import views.schedule.ScheduleComposite;
+import views.schedule.ScheduleGenerator;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
@@ -78,8 +79,9 @@ public class LandingComposite extends Composite {
 //				LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
 //				LeagueParser parser = new LeagueParser(leagueDBInterator);
 				
-				ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-				shell.setDisplayedComposite(scheduleComposite);
+				ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+//				ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+//				shell.setDisplayedComposite(scheduleComposite);
 			}
 		});
 		list.setBounds(178, 167, 350, 200);
