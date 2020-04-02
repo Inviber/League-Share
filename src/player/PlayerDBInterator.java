@@ -21,7 +21,7 @@ public class PlayerDBInterator implements PlayerDBInteratorInterface {
 	{
 		JSONObject playerData = null;
 		Document teamDocument = dbHelper.getTeamDocumentByID(leagueID, teamID);
-
+		
 		try 
 		{
 			Object obj = parser.parse(teamDocument.toJson());
@@ -31,8 +31,21 @@ public class PlayerDBInterator implements PlayerDBInteratorInterface {
 						
 			JSONObject teamData = (JSONObject) teamDataArray.get(0);
 			
+			for (int i = 0; i < teamDataArray.size(); i++)
+			{
+				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
+				String oid = currentTeamData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(teamID)) // if this is the id searched for...
+				{
+					teamData = currentTeamData; // save this data.
+					break;
+				}
+			}
+			
+			
 			JSONArray playerDataArray = (JSONArray) teamData.get("players");
-						
+
 			for (int i = 0; i < playerDataArray.size(); i++)
 			{
 				JSONObject currentPlayerData = (JSONObject) playerDataArray.get(i);
