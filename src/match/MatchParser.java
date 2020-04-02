@@ -65,7 +65,7 @@ public class MatchParser implements MatchParserInterface{
 		}
 
 		matchCalendar.clear();
-		matchCalendar.set(year + 2000, month, day);
+		matchCalendar.set(year + 2000, month - 1, day);
 
 		return matchCalendar;
 	}
