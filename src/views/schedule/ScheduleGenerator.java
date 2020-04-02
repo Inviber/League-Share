@@ -28,7 +28,7 @@ public class ScheduleGenerator {
 		
 		createComposite(parent, style);
 		
-		((GUIShell)parent).setDisplayedComposite(scheduleComposite);
+//		((GUIShell)parent).setDisplayedComposite(scheduleComposite);
 	}
 	
 	private void createComposite(Composite parent, int style)
@@ -64,6 +64,11 @@ public class ScheduleGenerator {
 		scheduleComposite.setTeam1List(team1List);
 		scheduleComposite.setTeam2(team2List);
 		scheduleComposite.fillComposite(parent);
+	}
+	
+	public ScheduleComposite getScheduleComposite()
+	{
+		return scheduleComposite;
 	}
 
 }

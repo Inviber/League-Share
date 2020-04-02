@@ -81,7 +81,7 @@ public class LandingComposite extends Composite {
 				
 				ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
 //				ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-//				shell.setDisplayedComposite(scheduleComposite);
+				shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
 			}
 		});
 		list.setBounds(178, 167, 350, 200);
