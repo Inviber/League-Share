@@ -33,7 +33,7 @@ public class LandingComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public LandingComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper) {
+	public LandingComposite(Composite parent, int style, GUIShell shell) {
 		super(parent, style);
 		
 		text = new Text(this, SWT.BORDER);
