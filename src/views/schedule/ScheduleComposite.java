@@ -82,8 +82,8 @@ public class ScheduleComposite extends Composite {
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				LandingComposite landingComposite = new LandingComposite(parent, SWT.NONE);
-//				((GUIShell) parent).setDisplayedComposite(landingComposite);
+				LandingComposite landingComposite = new LandingComposite(parent, SWT.NONE, ((GUIShell) parent));
+				((GUIShell) parent).setDisplayedComposite(landingComposite);
 				System.out.println("Back button pressed.");
 			}
 		});
