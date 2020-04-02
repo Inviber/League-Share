@@ -41,7 +41,7 @@ public class SpectatorComposite extends Composite {
 	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match,
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 		super(parent, style);
-
+		
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
 		
 	}
@@ -50,11 +50,15 @@ public class SpectatorComposite extends Composite {
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 		//TODO make a caster composite and replace this blank one;
 		Composite temporaryCaster = new Composite(parent, SWT.NONE);
+
 		CreateTopButtons(previousWindow, temporaryCaster, parent);
+
 		CreateChat();
+
 		CreateConstantLabels();
+
 		CreateDynamicDataLabels(match, homeTeam, awayTeam, shell);
-		
+
 	}
 	
 	
@@ -170,8 +174,10 @@ public class SpectatorComposite extends Composite {
 			FillLayout fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
 			// making a player parser to access the players names
+			System.out.println("here2");
 			displayedPlayer = shell.getPlayerGenerator().generatePlayer(awayTeam.getLeagueID(), awayTeam.getTeamID(),
 					players.remove(0));
+			System.out.println("here3");
 			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
 			// lblNewLabel_4.setBounds(10, 10, 295, 20);
 			lblNewLabel_4.setText(displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName());

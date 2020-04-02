@@ -16,6 +16,7 @@ import team.TeamParser;
 import views.GUIShell;
 import views.landing.LandingComposite;
 import views.spectator.SpectatorComposite;
+import views.spectator.SpectatorGenerator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,7 +54,10 @@ public class ScheduleComposite extends Composite {
 	}
 	
 	public void fillComposite(Composite parent)
-	{		
+	{	
+		//For the back button
+		Composite currentComposite = this;
+		
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		Calendar today = Calendar.getInstance();
 		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
@@ -152,13 +156,14 @@ public class ScheduleComposite extends Composite {
 	        	// Present 'Spectate' button on matchComp
 				Button spectateMatch = new Button(matchComp, SWT.NONE);
 				spectateMatch.setBounds(150, 200, 100, 50);
+				int x = i;
 				spectateMatch.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
 						((GUIShell) parent).disposeDisplayedComposite();
-//						SpectatorComposite spectatorComposite = new SpectatorComposite(parent, SWT.NONE, ((GUIShell) parent), match, team1, team2);
-//						((GUIShell) parent).setDisplayedComposite(spectatorComposite);
+						SpectatorGenerator spectator= new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x), currentComposite);
+						//((GUIShell) parent).setDisplayedComposite(spectator);
 					}
 				});
 				spectateMatch.setText("SPECTATE");
