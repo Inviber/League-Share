@@ -47,7 +47,7 @@ public class LoginComposite extends Composite {
 				text_1.setText("");
 				
 				shell.disposeDisplayedComposite();
-				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell, dbHelper);
+				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
 				shell.setDisplayedComposite(landingComposite);
 			}
 		});
