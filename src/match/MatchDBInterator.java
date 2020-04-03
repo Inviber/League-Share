@@ -9,7 +9,6 @@ import database.DatabaseHelper;
 
 public class MatchDBInterator implements MatchDBInteratorInterface {
 	
-	private JSONObject matchData;
 	private JSONParser parser = new JSONParser();
 	private DatabaseHelper dbHelper;
 	
@@ -18,11 +17,13 @@ public class MatchDBInterator implements MatchDBInteratorInterface {
 	}
 	
 	public JSONObject getMatchDetails(String leagueID, String matchID) {
-		Document teamDocument = dbHelper.getMatchDocumentByID(leagueID, matchID);
+		
+		JSONObject matchData = null;
+		Document matchDocument = dbHelper.getMatchDocumentByID(leagueID, matchID);
 
 		try 
 		{
-			Object obj = parser.parse(teamDocument.toJson());
+			Object obj = parser.parse(matchDocument.toJson());
 			JSONObject leagueData = (JSONObject) obj;
 			
 			JSONArray matchDataArray = (JSONArray) leagueData.get("matches");
@@ -42,6 +43,7 @@ public class MatchDBInterator implements MatchDBInteratorInterface {
 		catch (Exception e) 
 		{
 			e.printStackTrace();
+//			matchData = new JSONObject();
 		}
 		
 		return matchData;

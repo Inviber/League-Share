@@ -9,8 +9,8 @@ public class TeamGenerator {
 	
 	public TeamGenerator(DatabaseHelper dbHelper)
 	{
-		this.teamParser = new TeamParser(teamDBInterator);
 		this.teamDBInterator = new TeamDBInterator(dbHelper);
+		this.teamParser = new TeamParser(teamDBInterator);
 	}
 	
 	public Team generateTeam(String leagueID, String teamID)

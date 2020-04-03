@@ -9,8 +9,8 @@ public class PlayerGenerator {
 	
 	public PlayerGenerator(DatabaseHelper dbHelper)
 	{
-		this.playerParser = new PlayerParser(playerDBInterator);
 		this.playerDBInterator = new PlayerDBInterator(dbHelper);
+		this.playerParser = new PlayerParser(playerDBInterator);
 	}
 	
 	public Player generatePlayer(String leagueID, String teamID, String playerID)

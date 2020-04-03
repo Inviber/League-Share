@@ -73,7 +73,7 @@ public class MatchParser implements MatchParserInterface{
 	public int getHomeScore() 
 	{
 		try {
-			return Integer.parseInt( (String) matchData.get("homeScore") );
+			return Integer.parseInt( ((String) matchData.get("homeScore")) );
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
 			return -1;

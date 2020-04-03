@@ -33,7 +33,7 @@ public class TeamParser implements TeamParserInterface {
 	
 	public void parseTeam(String leagueID, String teamID) 
 	{
-		teamDBInterator.getTeamDetails(leagueID, teamID);
+		teamData = teamDBInterator.getTeamDetails(leagueID, teamID);
 		  
 		this.teamName = (String) teamData.get("teamName"); 
 
@@ -42,6 +42,8 @@ public class TeamParser implements TeamParserInterface {
 		  
 		JSONArray players = (JSONArray) teamData.get("players");
 		  		  
+		this.playerIDs = new ArrayList<String>();
+		
 		  // have to do this to get the ID from the team because player is an object, not just a array of strings.
 		for (int i = 0; i < players.size(); i++)
 		{

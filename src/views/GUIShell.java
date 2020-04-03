@@ -9,12 +9,15 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 
 import database.DatabaseHelper;
+import league.LeagueGenerator;
+import match.MatchGenerator;
+import team.TeamGenerator;
 import user.Account;
 import views.login.LoginComposite;
 
 public class GUIShell extends Shell {
 	
-	private DatabaseHelper dbHelper;
+	private static DatabaseHelper dbHelper;
 	private Composite shell = this;
 	private Composite displayedComposite = null;
 	
@@ -26,6 +29,10 @@ public class GUIShell extends Shell {
 //	private Composite adminComposite = null;
 	
 	private Account currentUser;
+	
+	private static LeagueGenerator leagueGenerator;
+	private static MatchGenerator matchGenerator;
+	private static TeamGenerator teamGenerator;
 	
 	
 	/**
@@ -55,6 +62,7 @@ public class GUIShell extends Shell {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**
@@ -66,6 +74,10 @@ public class GUIShell extends Shell {
 		
 		dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 
+		leagueGenerator = new LeagueGenerator(dbHelper);
+		matchGenerator = new MatchGenerator(dbHelper);
+		teamGenerator = new TeamGenerator(dbHelper);
+		
 		createContents();
 	}
 
@@ -118,6 +130,18 @@ public class GUIShell extends Shell {
 	public Account getAccount()
 	{
 		return this.currentUser;
+	}
+	
+	public LeagueGenerator getLeagueGenerator() {
+		return leagueGenerator;
+	}
+	
+	public MatchGenerator getMatchGenerator() {
+		return matchGenerator;
+	}
+	
+	public TeamGenerator getTeamGenerator() {
+		return teamGenerator;
 	}
 
 }
