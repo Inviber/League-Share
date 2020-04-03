@@ -24,7 +24,7 @@ public class PlayerParser implements PlayerParserInterface {
 	public void parsePlayer(String leagueID, String teamID, String playerID) 
 	{
 		playerData = playerDBInterator.getPlayerDetails(leagueID, teamID, playerID, false);
-		  
+		
 		this.firstName = (String) playerData.get("firstName"); 
 		this.lastName = (String) playerData.get("lastName"); 
 		  

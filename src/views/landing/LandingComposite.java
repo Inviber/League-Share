@@ -17,6 +17,7 @@ import league.LeagueParser;
 import team.TeamParser;
 import views.GUIShell;
 import views.schedule.ScheduleComposite;
+import views.schedule.ScheduleGenerator;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
@@ -73,21 +74,22 @@ public class LandingComposite extends Composite {
 			
 			List list = new List(this, SWT.BORDER | SWT.V_SCROLL);
 			list.addMouseListener(new MouseAdapter() {
-	//			@Override
-	//			public void mouseDown(MouseEvent e) {
-	//				System.out.println(list.getSelection()[0] + " selected...");
-	//			}
+//				@Override
+//				public void mouseDown(MouseEvent e) {
+//					System.out.println(list.getSelection()[0] + " selected...");
+//				}
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
 					//System.out.println(list.getSelection()[0] + " selected...");
-	//				System.out.println(list.getSelectionIndex());
+//					System.out.println(list.getSelectionIndex());
 					
 					ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
-	//				LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
-	//				LeagueParser parser = new LeagueParser(leagueDBInterator);
+//					LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
+//					LeagueParser parser = new LeagueParser(leagueDBInterator);
 					
-					ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-					shell.setDisplayedComposite(scheduleComposite);
+					ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+//					ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+					shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
 				}
 			});
 			list.setBounds(178, 167, 350, 200);
@@ -158,8 +160,7 @@ public class LandingComposite extends Composite {
 			else
 			{
 				list.add("no followed leagues");
-			}
-			
+			}	
 			if(ownedLeagueIDs.size() != 0)
 			{
 				for(int i = 0; i < ownedLeagueIDs.size(); i++)

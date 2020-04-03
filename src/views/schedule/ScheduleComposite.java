@@ -16,6 +16,7 @@ import team.TeamParser;
 import views.GUIShell;
 import views.landing.LandingComposite;
 import views.spectator.SpectatorComposite;
+import views.spectator.SpectatorGenerator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,9 @@ import org.eclipse.swt.layout.GridLayout;
 
 public class ScheduleComposite extends Composite {
 	private League league;
+	private ArrayList<Match> matches;
+	private ArrayList<Team> team1List;
+	private ArrayList<Team> team2List;
 
 	/**
 	 * Create the composite.
@@ -45,10 +49,14 @@ public class ScheduleComposite extends Composite {
 	 * @param style
 	 */
 	@SuppressWarnings("deprecation")
-	public ScheduleComposite(Composite parent, int style, String leagueID, LeagueGenerator leagueGenerator, MatchGenerator matchGenerator, TeamGenerator teamGenerator) {
+	public ScheduleComposite(Composite parent, int style) {
 		super(parent, style);
-		
-		league = leagueGenerator.generateLeague(leagueID);
+	}
+	
+	public void fillComposite(Composite parent)
+	{	
+		//For the back button
+		Composite currentComposite = this;
 		
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		Calendar today = Calendar.getInstance();
@@ -57,9 +65,6 @@ public class ScheduleComposite extends Composite {
 		int year = today.get(Calendar.YEAR);
 		today.clear();
 		today.set(year, month, dayOfMonth);
-//		Calendar matchCal = Calendar.getInstance();
-//		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-//		Date matchDate = new Date();
 		setLayout(new FormLayout());
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
@@ -110,28 +115,26 @@ public class ScheduleComposite extends Composite {
 		grpMatches.setLayoutData(fd_grpMatches);
 		grpMatches.setText("MATCHES");
 		
-		ArrayList<String> matchIDs = league.getMatchIDs();
-		
-		for(int i = 0; i < matchIDs.size(); i++)
-		{
-			matchGenerator.setMatch( leagueID, matchIDs.get(i) );
-			Match match = matchGenerator.getMatch();
-			Team team1 = teamGenerator.generateTeam(leagueID, match.getHomeTeamID());
-			Team team2 = teamGenerator.generateTeam(leagueID, match.getAwayTeamID());
-			
+		for(int i = 0; i < matches.size(); i++)
+		{			
 			Composite matchComp = new Composite(grpMatches, SWT.NONE);
 			GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 			gd_composite.widthHint = 405;
 			gd_composite.heightHint = 270;
 			matchComp.setLayoutData(gd_composite);
 
+			// Format match date into a string for the matchDate label
+			Date date = matches.get(i).getDate().getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+			String dateStr = sdf.format(date);            
+			
 			Label lblMatchDate = new Label(matchComp, SWT.NONE);
 			lblMatchDate.setBounds(10, 10, 390, 30);
-//			lblMatchDate.setText(match1.getDate());
+			lblMatchDate.setText(dateStr);
 			lblMatchDate.setAlignment(SWT.CENTER);
 
 			Label lblTeam1 = new Label(matchComp, SWT.NONE);
-			lblTeam1.setText(team1.getTeamName());
+			lblTeam1.setText(team1List.get(i).getTeamName());
 			lblTeam1.setAlignment(SWT.CENTER);
 			lblTeam1.setBounds(10, 60, 390, 30);
 			
@@ -141,26 +144,27 @@ public class ScheduleComposite extends Composite {
 			lblVs.setBounds(10, 96, 390, 30);
 
 			Label lblTeam2 = new Label(matchComp, SWT.NONE);
-			lblTeam2.setText(team2.getTeamName());
+			lblTeam2.setText(team2List.get(i).getTeamName());
 			lblTeam2.setAlignment(SWT.CENTER);
 			lblTeam2.setBounds(10, 132, 390, 30);
-			
-	        if( match.getDate().before(today) ) {
+	        if( matches.get(i).getDate().before(today) ) {
 	        	// Print final match score to matchComp
-				lblTeam1.setText( team1.getTeamName() + " | " + match.getHomeScore() );
-				lblTeam2.setText( team2.getTeamName() + " | " + match.getAwayScore() );
-	        } 
-	        else if( match.getDate().equals(today) ) {
+				lblTeam1.setText( team1List.get(i).getTeamName() + " | " + matches.get(i).getHomeScore() );
+				lblTeam2.setText( team2List.get(i).getTeamName() + " | " + matches.get(i).getAwayScore() );
+	        }
+	        else if(  matches.get(i).getDate().MONTH == today.MONTH && matches.get(i).getDate().DAY_OF_MONTH == today.DAY_OF_MONTH ) {
 	        	// Present 'Spectate' button on matchComp
 				Button spectateMatch = new Button(matchComp, SWT.NONE);
 				spectateMatch.setBounds(150, 200, 100, 50);
+				//you can't use i for matches.get(i) because it isnt final
+				int x = i;
 				spectateMatch.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
 						((GUIShell) parent).disposeDisplayedComposite();
-//						SpectatorComposite spectatorComposite = new SpectatorComposite(parent, SWT.NONE, ((GUIShell) parent), match, team1, team2);
-//						((GUIShell) parent).setDisplayedComposite(spectatorComposite);
+						SpectatorGenerator spectator= new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x), currentComposite);
+						//((GUIShell) parent).setDisplayedComposite(spectator);
 					}
 				});
 				spectateMatch.setText("SPECTATE");
@@ -168,6 +172,26 @@ public class ScheduleComposite extends Composite {
 	        }
 
 		}
+	}
+	
+	public void setLeague(League league)
+	{
+		this.league = league;
+	}
+	
+	public void setMatchList(ArrayList<Match> matches)
+	{
+		this.matches = matches;
+	}
+	
+	public void setTeam1List(ArrayList<Team> team1List)
+	{
+		this.team1List = team1List;
+	}
+	
+	public void setTeam2(ArrayList<Team> team2List)
+	{
+		this.team2List = team2List;
 	}
 
 	@Override

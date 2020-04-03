@@ -15,8 +15,11 @@ public class PlayerGenerator {
 	
 	public Player generatePlayer(String leagueID, String teamID, String playerID)
 	{
+		//System.out.println(leagueID + " " + teamID + " " + playerID);
 		playerParser.parsePlayer(leagueID, teamID, playerID);
-		  
+		
+		
+		
 		  Player player = new Player(leagueID, teamID, playerID, playerParser.getFirstName(), playerParser.getLastName(),
 				  playerParser.getStatisticNames(), playerParser.getStatistics(), playerDBInterator);
 		  
