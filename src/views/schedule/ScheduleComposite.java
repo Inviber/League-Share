@@ -37,14 +37,13 @@ public class ScheduleComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	@SuppressWarnings("deprecation")
 	public ScheduleComposite(Composite parent, int style) {
 		super(parent, style);
 	}
 	
 	public void fillComposite(Composite parent)
 	{	
-		//For the back button
+		//Reference to pass to SpectatorComposite for the back button
 		Composite currentComposite = this;
 		
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
