@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 
 
 public class DatabaseHelper {
@@ -252,6 +256,9 @@ public class DatabaseHelper {
 	 *			- awayTeamID
 	 *			- date
 	 *			- finalScore
+	 *
+	 *		- TrackedStatistics[]	createTrackedStatistic(String leagueID, String StatisticName)
+	 *			- StatisticName
 	 */
 	
 	
@@ -294,9 +301,14 @@ public class DatabaseHelper {
 		//initializing arrays
 		ArrayList<String> casterIDs = new ArrayList<String>();
 		ArrayList<Document> teams = new ArrayList<Document>();
+		ArrayList<Document> matches = new ArrayList<Document>();
+		ArrayList<Document> trackedStatistics = new ArrayList<Document>();
 	
+		
 		newLeagueDocument.put("casterIDs", casterIDs);
 		newLeagueDocument.put("teams", teams);
+		newLeagueDocument.put("matches", matches);
+		newLeagueDocument.put("trackedStatistics", trackedStatistics);
 	
 		//adding new league to leagues collection
 		this.database.getCollection(LEAGUES).insertOne(newLeagueDocument);
@@ -397,9 +409,10 @@ public class DatabaseHelper {
 
 	}
 	
+	
+	
 	public String createPlayer(String leagueID, String teamID, String firstName, String lastName)
 	{
-		
 		Document newPlayerDocument = new Document();
 		
 		newPlayerDocument.put("_id", new ObjectId());
@@ -410,14 +423,12 @@ public class DatabaseHelper {
 			
 		newPlayerDocument.put("statistics", statistics);
 		
-		
-//		Document leagueQuery = new Document();
-//		leagueQuery.append("_id", new ObjectId(leagueID));
-//		System.out.println("League query: " + leagueQuery.toString());
-//		
-//		Document teamQuery = new Document();
-//		teamQuery.append("_id", new ObjectId(teamID));
-//		System.out.println("Team query: " + teamQuery.toString());
+		ArrayList<String> trackedStatistics = getTrackedStatistics(leagueID); // get the tracked stats for this league
+				
+		for (int i = 0; i < trackedStatistics.size(); i++)	// add them.
+		{
+			statistics.add(makeStatisticForPlayer(statistics, trackedStatistics.get(i)));
+		}
 		
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID));
 				
@@ -437,33 +448,17 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
 	
-	
-	public String createStatistic(String leagueID, String statisticName, String statistic)
+	private Document makeStatisticForPlayer(ArrayList<Document> statistics, String statisticName)
 	{
-		
 		Document newStatisticDocument = new Document();
 		
 		newStatisticDocument.put("_id", new ObjectId());
 		newStatisticDocument.put("statName", statisticName);
-		newStatisticDocument.put("statValue", statistic);
+		newStatisticDocument.put("statValue", 0);
 		
-		Bson where = new Document().append("_id", new ObjectId(leagueID));
-				
-		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$[].players.$[].statistics", newStatisticDocument));
-
-		return newStatisticDocument.get("_id").toString();
+		return newStatisticDocument;
 	}
-	
-	public void deleteStatistic(String leagueID, String teamID, String playerID, String statID)
-	{	
-		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID)).append("teams.players.statistics._id", new ObjectId(statID));
-
-		Bson update = new Document().append("teams.$[].players.$[].statistics", new BasicDBObject("_id", new ObjectId(statID)));
 		
-		Bson set = new Document().append("$pull", update);
-		
-		this.database.getCollection(LEAGUES).updateOne(where, set);
-	}
 	
 	public Document getMatchDocumentByID(String leagueID, String matchID)
 	{
@@ -537,6 +532,64 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
 	 
+	
+	public String createTrackedStatistic(String leagueID, String statisticName)
+	{
+		Document newMatchDocument = new Document();
+		
+		newMatchDocument.put("_id", new ObjectId());
+		newMatchDocument.put("statisticName", statisticName);
+	
+		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("trackedStatistics", newMatchDocument));
+		
+		return newMatchDocument.get("_id").toString();
+	}
+	
+	public void deleteTrackedStatistic(String leagueID, String trackedStatisticID)
+	{	
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("trackedStatistics._id",new ObjectId(trackedStatisticID));
+
+		Bson update = new Document().append("trackedStatistics", new BasicDBObject("_id", new ObjectId(trackedStatisticID)));
+		
+		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+
+	private ArrayList<String> getTrackedStatistics(String leagueID)
+	{
+		Bson where = new Document().append("_id", new ObjectId(leagueID));
+
+		Document leagueDocument = this.database.getCollection(LEAGUES).find(where).first();
+				
+		JSONParser parser = new JSONParser();
+		
+		try
+		{
+			Object obj = parser.parse(leagueDocument.toJson());
+			JSONObject leagueData = (JSONObject) obj;
+			
+			JSONArray trackedStatistics = (JSONArray) leagueData.get("trackedStatistics");
+						
+			ArrayList<String> statisticNames = new ArrayList<String>();
+			
+			// separating stat name from value for hashmap
+			for (int i = 0; i < trackedStatistics.size(); i++)
+			{
+				JSONObject stat = (JSONObject) trackedStatistics.get(i);
+				String statName = stat.get("statisticName").toString(); 
+				statisticNames.add(statName.split("\"")[0]); //  go to the next ", name is stored in element 1.
+			}
+			
+			return statisticNames;
+			
+		}
+		catch (Exception e) 
+		{
+			return new ArrayList<String>(); // nothing in array.
+		}
+	}
+
 	
 	void printAllUsers()
 	{		
@@ -654,7 +707,7 @@ public class DatabaseHelper {
 		
 		
 		
-//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllUsers();
 		
@@ -672,8 +725,8 @@ public class DatabaseHelper {
 //		System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 		
 		// -- CREATING NEW LEAGUE -- 
-//		String newLeagueID = dbHelper.createLeague("Major League Doge Dodgeball", id, "Dodgeball", "A league designed with good boyes in mind");
-//		System.out.println(newLeagueID);
+//		String newLeagueID = dbHelper.createLeague("Your mothers favorite league", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
+//		dbHelper.printLeague(newLeagueID);
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
 //		dbHelper.createMatch("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "5e7129f4b0f12336fb6ad64c", "03/01/2020");
@@ -684,12 +737,12 @@ public class DatabaseHelper {
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 		
 		// -- CREATING AND DELETING NEW TEAMS -- 
-//		dbHelper.createTeam("5e59763368ec36619a66bfdc", "Quick Boyes", "12345");
+//		dbHelper.createTeam("5e8cc22649a7ee3fef1299d7", "Cringes Mom", "Her moms house");
 //		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e6ba667266a35632f569097");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "Primp", "Doge");
-//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "Fur", "Boye");
+		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "Brandons", "Mom");
+		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "Cringes", "Mom");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 
@@ -701,6 +754,13 @@ public class DatabaseHelper {
 
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
+		
+		// -- CREATING AND DELETING NEW TRACKED STATSTICS --
+//		dbHelper.createTrackedStatistic("5e8cc22649a7ee3fef1299d7", "Hours crying");
+
+//		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8cc29b9e153c253f41c99d");
+
+		
 		
 //		dbHelper.printLeague("5e59763368ec36619a66bfdc");
 		
