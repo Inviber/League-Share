@@ -54,10 +54,7 @@ public class ScheduleComposite extends Composite {
 	}
 	
 	public void fillComposite(Composite parent)
-	{	
-		//For the back button
-		Composite currentComposite = this;
-		
+	{			
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		Calendar today = Calendar.getInstance();
 		int dayOfMonth = today.get(Calendar.DAY_OF_MONTH);
@@ -162,8 +159,7 @@ public class ScheduleComposite extends Composite {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
-						((GUIShell) parent).disposeDisplayedComposite();
-						SpectatorGenerator spectator= new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x), currentComposite);
+						SpectatorGenerator spectator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x));
 						//((GUIShell) parent).setDisplayedComposite(spectator);
 					}
 				});
