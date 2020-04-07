@@ -150,8 +150,8 @@ public class ScheduleComposite extends Composite {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
-						((GUIShell) parent).disposeDisplayedComposite();
-						SpectatorGenerator spectator= new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x), currentComposite);
+//						((GUIShell) parent).disposeDisplayedComposite();
+						SpectatorGenerator spectator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x), currentComposite);
 						//((GUIShell) parent).setDisplayedComposite(spectator);
 					}
 				});
