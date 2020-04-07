@@ -1,4 +1,4 @@
-package views.castor;
+package views.caster;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -11,9 +11,24 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.ExpandBar;
 
-public class CastorComposite extends Composite {
+import match.Match;
+import team.Team;
+import views.GUIShell;
+import views.schedule.ScheduleGenerator;
+import views.spectator.SpectatorGenerator;
+
+import org.eclipse.swt.widgets.ExpandBar;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+
+public class CasterComposite extends Composite {
+	
+	// Match and Team objects for transitioning back to Spectator view.
+	private Match match;
+	private Team team1;
+	private Team team2;
+	
 	private Text text;
 
 	/**
@@ -21,7 +36,7 @@ public class CastorComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public CastorComposite(Composite parent, int style) {
+	public CasterComposite(Composite parent, int style) {
 		super(parent, style);
 		
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
@@ -56,22 +71,53 @@ public class CastorComposite extends Composite {
 		lblTeam2score.setBounds(745, 46, 75, 30);
 		
 		Button spectateButton = new Button(scoreGroup, SWT.NONE);
+		spectateButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ScheduleGenerator schedule = new ScheduleGenerator(parent, style, team1.getLeagueID(), ((GUIShell)parent).getLeagueGenerator(), ((GUIShell)parent).getMatchGenerator(), ((GUIShell)parent).getTeamGenerator());
+				SpectatorGenerator spectator = new SpectatorGenerator(parent, style, ((GUIShell)parent), match, team1, team2, schedule.getScheduleComposite());
+			}
+		});
 		spectateButton.setBounds(1131, 10, 119, 30);
 		spectateButton.setText("Spectator View");
 		
 		Button team1ScoreIncrementButton = new Button(scoreGroup, SWT.NONE);
+		team1ScoreIncrementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Team1 score incremented.");
+			}
+		});
 		team1ScoreIncrementButton.setBounds(175, 46, 40, 30);
 		team1ScoreIncrementButton.setText("+");
 		
 		Button team1ScoreDecrementButton = new Button(scoreGroup, SWT.NONE);
+		team1ScoreDecrementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Team1 score decremented.");
+			}
+		});
 		team1ScoreDecrementButton.setText("-");
 		team1ScoreDecrementButton.setBounds(221, 46, 40, 30);
 		
 		Button team2ScoreIncrementButton = new Button(scoreGroup, SWT.NONE);
+		team2ScoreIncrementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Team2 score incremented.");
+			}
+		});
 		team2ScoreIncrementButton.setText("+");
 		team2ScoreIncrementButton.setBounds(885, 46, 40, 30);
 		
 		Button team2ScoreDecrementButton = new Button(scoreGroup, SWT.NONE);
+		team2ScoreDecrementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Team2 score decremented.");
+			}
+		});
 		team2ScoreDecrementButton.setText("-");
 		team2ScoreDecrementButton.setBounds(931, 46, 40, 30);
 		
@@ -141,10 +187,22 @@ public class CastorComposite extends Composite {
 		lblStat1.setText("stat1");
 		
 		Button stat1DecrementButton = new Button(statComposite_team1_expanded, SWT.NONE);
+		stat1DecrementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Stat1 decremented.");
+			}
+		});
 		stat1DecrementButton.setText("-");
 		stat1DecrementButton.setBounds(427, 50, 40, 30);
 		
 		Button stat1IncrementButton = new Button(statComposite_team1_expanded, SWT.NONE);
+		stat1IncrementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Stat1 incremented.");
+			}
+		});
 		stat1IncrementButton.setBounds(381, 50, 40, 30);
 		stat1IncrementButton.setText("+");
 		
@@ -185,7 +243,22 @@ public class CastorComposite extends Composite {
 	
 	public void fillComposite(Composite parent)
 	{
-		
+		// All implementation for the composite will reside here.
+	}
+	
+	public void setMatch(Match match)
+	{
+		this.match = match;
+	}
+	
+	public void setTeam1(Team team1)
+	{
+		this.team1 = team1;
+	}
+	
+	public void setTeam2(Team team2)
+	{
+		this.team2 = team2;
 	}
 
 	@Override
