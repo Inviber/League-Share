@@ -454,8 +454,8 @@ public class DatabaseHelper {
 		Document newStatisticDocument = new Document();
 		
 		newStatisticDocument.put("_id", new ObjectId());
-		newStatisticDocument.put("statName", statisticName);
-		newStatisticDocument.put("statValue", 0);
+		newStatisticDocument.put("statisticName", statisticName);
+		newStatisticDocument.put("statisticValue", 0);
 		
 		return newStatisticDocument;
 	}
@@ -463,10 +463,10 @@ public class DatabaseHelper {
 	public void updatePlayerStatisticByName(String leagueID, String teamID, String playerID, String statName, int newStatValue)
 	{
 		BasicDBObject where = new BasicDBObject().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID))
-				.append("teams.players._id",new ObjectId(playerID)).append("teams.players.statistics.statName", statName);
+				.append("teams.players._id",new ObjectId(playerID)).append("teams.players.statistics.statisticName", statName);
 
 		Document leagueDocument = this.database.getCollection(LEAGUES).find(where).first();
-				
+						
 		JSONParser parser = new JSONParser();
 		
 		try
@@ -520,7 +520,7 @@ public class DatabaseHelper {
 			for (int i = 0; i < statisticDataArray.size(); i++)  // get the player data, matching the ID so that we can get the number needed to be modified.
 			{
 				JSONObject currentPlayerData = (JSONObject) statisticDataArray.get(i);
-				String currentStatName = currentPlayerData.get("statName").toString(); 
+				String currentStatName = currentPlayerData.get("statisticName").toString(); 
 				if (currentStatName.split("\"")[0].equals(statName)) // if this is the id searched for...
 				{
 					statDocNum = i;
@@ -528,9 +528,10 @@ public class DatabaseHelper {
 				}
 			}
 			
-			//System.out.println("teams." + teamDocNum + ".players." + playerDocNum + ".statistics." + statDocNum + ".statValue"); // for checking where the update document is going.
+//			System.out.println("teams." + teamDocNum + ".players." + playerDocNum + ".statistics." + statDocNum + ".statValue"); // for checking where the update document is going.
 			
-			Bson update = new Document().append("teams." + teamDocNum + ".players." + playerDocNum + ".statistics." + statDocNum + ".statValue", newStatValue);
+			Bson update = new Document().append("teams." + teamDocNum + ".players." + playerDocNum + ".statistics." + statDocNum 
+					+ ".statisticValue", newStatValue);
 			
 			Bson set = new Document().append("$set", update);
 			
@@ -636,7 +637,7 @@ public class DatabaseHelper {
 		// Updating all players
 		
 
-		newTrackedStatisticDocument.put("statValue", 0);
+		newTrackedStatisticDocument.put("statisticValue", 0);
 
 		
 		Bson where = new Document().append("_id",new ObjectId(leagueID));
@@ -851,18 +852,14 @@ public class DatabaseHelper {
 //		dbHelper.deletePlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e600d8688302978a1ed1e52");
 		
 		
-		// -- CREATING AND DELETING NEW PLAYER STATSTICS --
-//		dbHelper.createStatistic("5e59763368ec36619a66bfdc", "Farts borked", "0");
-
-//		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
-
-		
 		// -- CREATING, UPDATING, AND DELETING NEW TRACKED STATSTICS --
-//		dbHelper.createTrackedStatistic("5e8cc22649a7ee3fef1299d7", "Cried Hours");
+//		dbHelper.createTrackedStatistic("5e7129f4b0f12336fb6ad648", "Portraits Completed");
+//		dbHelper.createTrackedStatistic("5e7129f4b0f12336fb6ad648", "Most Colors Used");
+//		dbHelper.createTrackedStatistic("5e7129f4b0f12336fb6ad648", "Fastest Painting (seconds)");
 
-//		dbHelper.updatePlayerStatisticByName("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "5e8e2b5e0c991a250bf4b108", "Hours crying", 10);
-		
-//		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8e2c7ea97c666ccd8f9313");
+//		dbHelper.updatePlayerStatisticByName("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "5e7129f4b0f12336fb6ad64e", "Most Colors Used", 12);
+				
+//		dbHelper.deleteTrackedStatistic("5e7129f4b0f12336fb6ad648", "5e8e31bff0b91e51b70c4cb2");
 
 		
 		
