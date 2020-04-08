@@ -448,7 +448,7 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
 	
-	private Document makeStatisticForPlayer(ArrayList<Document> statistics, String statisticName)
+	private Document makeStatisticForPlayer(ArrayList<Document> statistics, String statisticName) // used
 	{
 		Document newStatisticDocument = new Document();
 		
@@ -459,6 +459,89 @@ public class DatabaseHelper {
 		return newStatisticDocument;
 	}
 		
+	public void updatePlayerStatisticByName(String leagueID, String teamID, String playerID, String statName, int newStatValue)
+	{
+		BasicDBObject where = new BasicDBObject().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID))
+				.append("teams.players._id",new ObjectId(playerID)).append("teams.players.statistics.statName", statName);
+
+		Document leagueDocument = this.database.getCollection(LEAGUES).find(where).first();
+				
+		JSONParser parser = new JSONParser();
+		
+		try
+		{	
+			int teamDocNum = 0;
+			int playerDocNum = 0;
+			int statDocNum = 0;
+			
+			
+			Object obj = parser.parse(leagueDocument.toJson());
+			JSONObject leagueData = (JSONObject) obj;
+			
+			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
+			
+			JSONObject teamData = (JSONObject) teamDataArray.get(0);
+			
+			for (int i = 0; i < teamDataArray.size(); i++) // get the team data, matching the ID so that we can get the number needed to be modified.
+			{
+				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
+				String oid = currentTeamData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(teamID)) // if this is the id searched for...
+				{
+					teamData = currentTeamData; // save this data.
+					teamDocNum = i;
+					break;
+				}
+			}
+			
+
+			JSONArray playerDataArray = (JSONArray) teamData.get("players");
+
+			JSONObject playerData = (JSONObject) playerDataArray.get(0);
+			
+			for (int i = 0; i < playerDataArray.size(); i++)  // get the player data, matching the ID so that we can get the number needed to be modified.
+			{
+				JSONObject currentPlayerData = (JSONObject) playerDataArray.get(i);
+				String oid = currentPlayerData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(playerID)) // if this is the id searched for...
+				{
+					playerData = currentPlayerData;
+					playerDocNum = i;
+					break;
+				}
+			}
+			
+			
+			JSONArray statisticDataArray = (JSONArray) playerData.get("statistics");
+
+			for (int i = 0; i < statisticDataArray.size(); i++)  // get the player data, matching the ID so that we can get the number needed to be modified.
+			{
+				JSONObject currentPlayerData = (JSONObject) statisticDataArray.get(i);
+				String currentStatName = currentPlayerData.get("statName").toString(); 
+				if (currentStatName.split("\"")[0].equals(statName)) // if this is the id searched for...
+				{
+					statDocNum = i;
+					break;
+				}
+			}
+			
+			//System.out.println("teams." + teamDocNum + ".players." + playerDocNum + ".statistics." + statDocNum + ".statValue"); // for checking where the update document is going.
+			
+			Bson update = new Document().append("teams." + teamDocNum + ".players." + playerDocNum + ".statistics." + statDocNum + ".statValue", newStatValue);
+			
+			Bson set = new Document().append("$set", update);
+			
+			this.database.getCollection(LEAGUES).updateOne(where, set);
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Error -- Document not found, Update Player Statistics");
+			return; // its not here.
+		}
+	}
+	
 	
 	public Document getMatchDocumentByID(String leagueID, String matchID)
 	{
@@ -707,11 +790,11 @@ public class DatabaseHelper {
 		
 		
 		
-		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
+//		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllUsers();
 		
-//		dbHelper.printLeague("5e7129f4b0f12336fb6ad648");
+//		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
@@ -741,8 +824,8 @@ public class DatabaseHelper {
 //		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e6ba667266a35632f569097");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "Brandons", "Mom");
-		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "Cringes", "Mom");
+//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "Brandons", "Mom");
+//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "Cringes", "Mom");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 
@@ -755,9 +838,11 @@ public class DatabaseHelper {
 //		dbHelper.deleteStatistic("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e5fddfa4dabc675c9788718", "5e600ea9ca5c042a95d71db6");
 
 		
-		// -- CREATING AND DELETING NEW TRACKED STATSTICS --
+		// -- CREATING, UPDATING, AND DELETING NEW TRACKED STATSTICS --
 //		dbHelper.createTrackedStatistic("5e8cc22649a7ee3fef1299d7", "Hours crying");
 
+//		dbHelper.updatePlayerStatisticByName("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "5e8cc7ae53b18d517d634c10", "Hours crying", 10);
+		
 //		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8cc29b9e153c253f41c99d");
 
 		
