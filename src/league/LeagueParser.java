@@ -68,7 +68,7 @@ public class LeagueParser implements LeagueParserInterface {
 		  this.trackedStatisticsIDs = new ArrayList<String>(); 	// needs to be cleared out before filling again.
 		  
 		  // have to do this to get the ID from the match because team is an object, not just a array of strings.
-		  for (int i = 0; i < matches.size(); i++)
+		  for (int i = 0; i < trackedStatistics.size(); i++)
 		  {
 			  JSONObject trackedStatistic = (JSONObject) trackedStatistics.get(i);
 			  String oid = trackedStatistic.get("_id").toString(); 
