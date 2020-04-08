@@ -617,6 +617,13 @@ public class DatabaseHelper {
 	}
 	 
 	
+	public Document getTrackedStatisticDocumentByID(String leagueID, String trackedStatisticID)
+	{
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("trackedStatistics._id", new ObjectId(trackedStatisticID));
+
+		return this.database.getCollection(LEAGUES).find(where).first();
+	}
+	
 	public String createTrackedStatistic(String leagueID, String statisticName)
 	{
 		Document newTrackedStatisticDocument = new Document();
@@ -801,21 +808,10 @@ public class DatabaseHelper {
 //		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
 			
 		
+		/*  NEW FUNCTIONS  */
 		
 		
-		// ---- TO DO ----
-		
-// DONE	//CREATE PLAYER - does not create a player for a specific team but instead creates a player that is added to every team in the league
-// DONE	//UPDATE MATCH SCORE - does not behave as expected and couldnt get it to work.. it may be easier to refactor and pass in each value at the same time to update
-
-// DONE //CREATE STATISTIC - only creates the statistic for 1 team, not all teams in the league
-		  // -- RAN INTO ISSUE - Newly created players will not have theses stats automatically. Need something to add it to them.
-		
-		//UPDATE STATISTIC - (needs to be created) .. pass in the player id, the stat string to update, and the new value of the stat
-		
-		
-		
-		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
+//		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllUsers();
 				
@@ -866,11 +862,11 @@ public class DatabaseHelper {
 
 //		dbHelper.updatePlayerStatisticByName("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "5e8e2b5e0c991a250bf4b108", "Hours crying", 10);
 		
-		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8e2c7ea97c666ccd8f9313");
+//		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8e2c7ea97c666ccd8f9313");
 
 		
 		
-		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
+//		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllLeagues();
 
