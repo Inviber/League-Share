@@ -18,7 +18,8 @@ public class LeagueGenerator {
 		leagueParser.parseLeague(leagueID);
 		  
 		  League league = new League(leagueID, leagueParser.getLeagueName(), leagueParser.getSport(), leagueParser.getOwnerID(), 
-				  	leagueParser.getDescription(), leagueParser.getCasterIDs(), leagueParser.getTeamIDs(), leagueParser.getMatchIDs(), leagueDBInterator);
+				  	leagueParser.getDescription(), leagueParser.getCasterIDs(), leagueParser.getTeamIDs(), leagueParser.getMatchIDs(), 
+				  	leagueParser.getTrackedStatisticsIDs(), leagueDBInterator);
 		  
 		  return league;
 	}

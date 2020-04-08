@@ -12,10 +12,11 @@ public class League {
 	private ArrayList<String> casterIDs = new ArrayList<String>();
 	private ArrayList<String> teamIDs = new ArrayList<String>();
 	private ArrayList<String> matchIDs = new ArrayList<String>();
+	private ArrayList<String> trackedStatisticsIDs = new ArrayList<String>();
 	private LeagueDBInterator leagueUpdater;
 	
 	public League(String leagueID, String leagueName, String ownerID, String sport, String description, 
-			ArrayList<String> casterIDs, ArrayList<String> teamIDs, ArrayList<String> matchIDs, LeagueDBInterator leagueUpdater) 
+			ArrayList<String> casterIDs, ArrayList<String> teamIDs, ArrayList<String> matchIDs, ArrayList<String> trackedStatisticsIDs, LeagueDBInterator leagueUpdater) 
 	{
 		this.leagueID = leagueID;
 		this.leagueName = leagueName;
@@ -25,6 +26,7 @@ public class League {
 		this.casterIDs = casterIDs;
 		this.teamIDs = teamIDs;
 		this.matchIDs = matchIDs;
+		this.trackedStatisticsIDs = trackedStatisticsIDs;
 		this.leagueUpdater = leagueUpdater;
 	}
 	
@@ -68,6 +70,11 @@ public class League {
 		return casterIDs;
 	}
 	
+	public ArrayList<String> getTrackedStatisticsIDs() 
+	{
+		return trackedStatisticsIDs;
+	}
+	
 
 	public void setDescription(String description) 
 	{
@@ -94,6 +101,20 @@ public class League {
 		{
 			this.casterIDs.remove(casterID);
 			leagueUpdater.removeCasterIDs(this.leagueID, casterID);
+		} 
+	}
+	
+	public void createTrackedStatistic(String statisticName)
+	{
+		leagueUpdater.createTrackedStatistic(this.leagueID, statisticName);
+	}
+	
+	public void removeTrackedStatistic(String statisticID)
+	{
+		if (this.trackedStatisticsIDs.contains(statisticID)) 
+		{
+			this.trackedStatisticsIDs.remove(statisticID);
+			leagueUpdater.removeCasterIDs(this.leagueID, statisticID);
 		} 
 	}
 	
