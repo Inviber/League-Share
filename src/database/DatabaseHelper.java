@@ -10,6 +10,7 @@ import com.mongodb.MongoClientURI;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Projections.*;
 
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 
 import java.util.ArrayList;
@@ -618,23 +619,47 @@ public class DatabaseHelper {
 	
 	public String createTrackedStatistic(String leagueID, String statisticName)
 	{
-		Document newMatchDocument = new Document();
+		Document newTrackedStatisticDocument = new Document();
 		
-		newMatchDocument.put("_id", new ObjectId());
-		newMatchDocument.put("statisticName", statisticName);
+		newTrackedStatisticDocument.put("_id", new ObjectId());
+		newTrackedStatisticDocument.put("statisticName", statisticName);
 	
-		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("trackedStatistics", newMatchDocument));
+		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("trackedStatistics", newTrackedStatisticDocument));
 		
-		return newMatchDocument.get("_id").toString();
+		// Updating all players
+		
+
+		newTrackedStatisticDocument.put("statValue", 0);
+
+		
+		Bson where = new Document().append("_id",new ObjectId(leagueID));
+		
+		Bson update = new Document().append("teams.$[].players.$[].statistics", newTrackedStatisticDocument);
+		
+		Bson set = new Document().append("$addToSet", update);
+		
+		this.database.getCollection(LEAGUES).updateMany(where, set);
+		
+		return newTrackedStatisticDocument.get("_id").toString();
 	}
 	
 	public void deleteTrackedStatistic(String leagueID, String trackedStatisticID)
 	{	
-		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("trackedStatistics._id",new ObjectId(trackedStatisticID));
-
-		Bson update = new Document().append("trackedStatistics", new BasicDBObject("_id", new ObjectId(trackedStatisticID)));
+		
+		Bson where = new Document().append("_id",new ObjectId(leagueID));
+		
+		Bson update = new Document().append("teams.$[].players.$[].statistics", new BasicDBObject("_id", new ObjectId(trackedStatisticID)));
 		
 		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateMany(where, set);
+		
+		
+		where = new Document().append("_id",new ObjectId(leagueID)).append("trackedStatistics._id",new ObjectId(trackedStatisticID));
+
+		update = new Document().append("trackedStatistics", new BasicDBObject("_id", new ObjectId(trackedStatisticID)));
+		
+		set = new Document().append("$pull", update);
 		
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
@@ -790,12 +815,10 @@ public class DatabaseHelper {
 		
 		
 		
-//		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
+		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllUsers();
-		
-//		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
-		
+				
 		// -- CREATING NEW COLLECTIONS ON MONGO-- 
 //		dbHelper.createCollection("Users");
 //		dbHelper.createCollection("Leagues");
@@ -839,15 +862,15 @@ public class DatabaseHelper {
 
 		
 		// -- CREATING, UPDATING, AND DELETING NEW TRACKED STATSTICS --
-//		dbHelper.createTrackedStatistic("5e8cc22649a7ee3fef1299d7", "Hours crying");
+//		dbHelper.createTrackedStatistic("5e8cc22649a7ee3fef1299d7", "Cried Hours");
 
-//		dbHelper.updatePlayerStatisticByName("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "5e8cc7ae53b18d517d634c10", "Hours crying", 10);
+//		dbHelper.updatePlayerStatisticByName("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "5e8e2b5e0c991a250bf4b108", "Hours crying", 10);
 		
-//		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8cc29b9e153c253f41c99d");
+		dbHelper.deleteTrackedStatistic("5e8cc22649a7ee3fef1299d7", "5e8e2c7ea97c666ccd8f9313");
 
 		
 		
-//		dbHelper.printLeague("5e59763368ec36619a66bfdc");
+		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllLeagues();
 
