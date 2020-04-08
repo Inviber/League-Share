@@ -70,5 +70,10 @@ public class PlayerDBInterator implements PlayerDBInteratorInterface {
 		
 		return playerData;
 	}
+	
+	public void updatePlayerStatistics(String leagueID, String teamID, String playerID, String statName, int newStatValue)
+	{
+		dbHelper.updatePlayerStatisticByName(leagueID, teamID, playerID, statName, newStatValue);
+	}
 
 }

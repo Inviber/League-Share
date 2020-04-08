@@ -39,10 +39,10 @@ public class PlayerParser implements PlayerParserInterface {
 		for (int i = 0; i < matchStatistics.size(); i++)
 		{
 			JSONObject stat = (JSONObject) matchStatistics.get(i);
-			String statName = stat.get("statName").toString(); 
+			String statName = stat.get("statisticName").toString(); 
 			statisticNames.add(statName.split("\"")[0]); //  go to the next ", name is stored in element 1.
 			
-			String statValue = stat.get("statValue").toString(); 
+			String statValue = stat.get("statisticValue").toString(); 
 			statisticValues.add(statValue.split("\"")[0]); //  go to the next ", value is stored in element 1.
 		}
 		
