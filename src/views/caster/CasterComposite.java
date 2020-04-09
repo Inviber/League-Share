@@ -15,10 +15,8 @@ import org.eclipse.swt.widgets.Text;
 import match.Match;
 import team.Team;
 import views.GUIShell;
-import views.schedule.ScheduleGenerator;
 import views.spectator.SpectatorGenerator;
 
-import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
@@ -74,8 +72,7 @@ public class CasterComposite extends Composite {
 		spectateButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				ScheduleGenerator schedule = new ScheduleGenerator(parent, style, team1.getLeagueID(), ((GUIShell)parent).getLeagueGenerator(), ((GUIShell)parent).getMatchGenerator(), ((GUIShell)parent).getTeamGenerator());
-				SpectatorGenerator spectator = new SpectatorGenerator(parent, style, ((GUIShell)parent), match, team1, team2, schedule.getScheduleComposite());
+				SpectatorGenerator spectator = new SpectatorGenerator(parent, style, ((GUIShell)parent), match, team1, team2);
 			}
 		});
 		spectateButton.setBounds(1131, 10, 119, 30);
