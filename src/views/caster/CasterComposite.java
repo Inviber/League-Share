@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Text;
 
 import match.Match;
+import player.PlayerDBInterator;
 import team.Team;
 import views.GUIShell;
 import views.spectator.SpectatorGenerator;
@@ -26,6 +27,7 @@ public class CasterComposite extends Composite {
 	private Match match;
 	private Team team1;
 	private Team team2;
+	private PlayerDBInterator playerDBInterator;
 	
 	private Text text;
 
@@ -40,6 +42,7 @@ public class CasterComposite extends Composite {
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		setLayout(new FormLayout());
 		
+		// Top score panel of view ----------------------------------------------------------->
 		Group scoreGroup = new Group(this, SWT.NONE);
 		FormData fd_scoreGroup = new FormData();
 		fd_scoreGroup.bottom = new FormAttachment(0, 110);
@@ -83,6 +86,7 @@ public class CasterComposite extends Composite {
 		team1ScoreIncrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				System.out.println("Team1 score incremented.");
 			}
 		});
@@ -123,7 +127,9 @@ public class CasterComposite extends Composite {
 		lblVs.setAlignment(SWT.CENTER);
 		lblVs.setBounds(546, 10, 40, 30);
 		lblVs.setText("V.S.");
+		// end top score panel <-----------------------------------------------------
 		
+		// bottom text entry panel of view ----------------------------------------->
 		Button btnSubmit = new Button(this, SWT.NONE);
 		FormData fd_btnSubmit = new FormData();
 		fd_btnSubmit.bottom = new FormAttachment(100, -25);
@@ -148,6 +154,7 @@ public class CasterComposite extends Composite {
 		fd_lblPostAnnouncement.right = new FormAttachment(100, -1095);
 		lblPostAnnouncement.setLayoutData(fd_lblPostAnnouncement);
 		lblPostAnnouncement.setText("Post Announcement");
+		// end bottom text entry panel of view <--------------------------------------
 		
 		// Team 1 player list and expandable stat menu group
 		Group statsTeam1Group = new Group(this, SWT.NONE);
@@ -257,6 +264,11 @@ public class CasterComposite extends Composite {
 	public void setTeam2(Team team2)
 	{
 		this.team2 = team2;
+	}
+	
+	public void setPlayerDBInterator(PlayerDBInterator playerDBInterator)
+	{
+		this.playerDBInterator = playerDBInterator;
 	}
 
 	@Override

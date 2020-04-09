@@ -6,10 +6,8 @@ import org.eclipse.swt.widgets.Composite;
 
 import match.Match;
 import player.Player;
-import player.PlayerDBInterator;
 import player.PlayerGenerator;
 import team.Team;
-import views.GUIShell;
 
 public class CasterGenerator {
 	CasterComposite casterComposite;
@@ -18,17 +16,16 @@ public class CasterGenerator {
 	private Team team2;
 	private ArrayList<Player> team1Players;
 	private ArrayList<Player> team2Players;
-	private PlayerDBInterator playerDBInterator;
 	
 	public CasterGenerator(Composite parent, int style, Match match, Team team1, Team team2, PlayerGenerator playerGenerator)
 	{
 		this.match = match;
 		this.team1 = team1;
 		this.team2 = team2;
-		this.playerDBInterator = playerGenerator.getPlayerDBInterator();
 		
 		populateTeamPlayerLists(playerGenerator);
 		createComposite(parent, style);
+		casterComposite.setPlayerDBInterator(playerGenerator.getPlayerDBInterator());
 	}
 	
 	public void populateTeamPlayerLists(PlayerGenerator playerGenerator)
