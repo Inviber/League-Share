@@ -11,10 +11,11 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import match.Match;
 import player.Player;
-
+import player.PlayerGenerator;
 import team.Team;
 
 import views.GUIShell;
+import views.caster.CasterGenerator;
 
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -48,10 +49,11 @@ public class SpectatorComposite extends Composite {
 	
 	private void CreateComponents(GUIShell shell, Composite parent, Match match,
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
-		//TODO make a caster composite and replace this blank one;
-		Composite temporaryCaster = new Composite(parent, SWT.NONE);
 
-		CreateTopButtons(previousWindow, temporaryCaster, parent);
+		CasterGenerator casterGenerator = new CasterGenerator(parent, SWT.NONE, match, homeTeam, awayTeam, ((GUIShell)parent).getPlayerGenerator());
+		Composite caster = casterGenerator.getCasterComposite();
+
+		CreateTopButtons(previousWindow, caster, parent);
 
 		CreateChat();
 
@@ -62,14 +64,14 @@ public class SpectatorComposite extends Composite {
 	}
 	
 	
-	private void CreateTopButtons(Composite previousWindow, Composite CasterComposite, Composite parent){
+	private void CreateTopButtons(Composite previousWindow, Composite caster, Composite parent){
 	
 	//button to switch to caster (no caster composite for now)
 		Button switchToCaster = new Button(this, SWT.NONE);
 		switchToCaster.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				((GUIShell) parent).setDisplayedComposite(CasterComposite);
+				((GUIShell)parent).setDisplayedComposite(caster);
 				System.out.println("Caster Selected");
 			}
 		});
