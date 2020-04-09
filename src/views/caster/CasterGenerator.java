@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import match.Match;
 import player.Player;
+import player.PlayerDBInterator;
 import player.PlayerGenerator;
 import team.Team;
 import views.GUIShell;
@@ -17,12 +18,14 @@ public class CasterGenerator {
 	private Team team2;
 	private ArrayList<Player> team1Players;
 	private ArrayList<Player> team2Players;
+	private PlayerDBInterator playerDBInterator;
 	
 	public CasterGenerator(Composite parent, int style, Match match, Team team1, Team team2, PlayerGenerator playerGenerator)
 	{
 		this.match = match;
 		this.team1 = team1;
 		this.team2 = team2;
+		this.playerDBInterator = playerGenerator.getPlayerDBInterator();
 		
 		populateTeamPlayerLists(playerGenerator);
 		createComposite(parent, style);
@@ -38,7 +41,7 @@ public class CasterGenerator {
 		String leagueID = team1.getLeagueID();
 		
 		// Verify both teams are in the same league before generating players otherwise don't generate players.
-		if ( team1.getLeagueID() == team2.getLeagueID() )
+		if ( team1.getLeagueID().equals(team2.getLeagueID()) )
 		{
 			// Generate all players from team1 and add them to the team1 array list
 			team1Players = new ArrayList<Player>(); // Clear list before populating it again.
@@ -54,9 +57,14 @@ public class CasterGenerator {
 				team2Players.add( playerGenerator.generatePlayer(leagueID, team2ID, team2PlayerIDs.get(i)) );
 			}
 		}
+		else
+		{
+			System.out.println("Error: The provided teams do not belong to the same league. Unable to getAllPlayers().");
+
+		}
 		
-		System.out.println("Error: The provided teams do not belong to the same league. Unable to getAllPlayers().");
-		
+//		System.out.println(team1PlayerIDs);
+//		System.out.println(team2PlayerIDs);
 	}
 	
 	public ArrayList<Player> getTeam1Players()
