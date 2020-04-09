@@ -14,6 +14,8 @@ public class LeagueParser implements LeagueParserInterface {
 	private ArrayList<String> casterIDs = new ArrayList<String>();
 	private ArrayList<String> teamIDs = new ArrayList<String>();
 	private ArrayList<String> matchIDs = new ArrayList<String>();
+	private ArrayList<String> trackedStatisticsIDs = new ArrayList<String>();
+
 	
 	// Database related variables
 	private LeagueDBInterator leagueDBInterator;
@@ -61,6 +63,19 @@ public class LeagueParser implements LeagueParserInterface {
 			  matchIDs.add(id[3]); // id is stored in element 3.
 		  }
 		  
+		  JSONArray trackedStatistics = (JSONArray) leagueData.get("trackedStatistics");
+		  
+		  this.trackedStatisticsIDs = new ArrayList<String>(); 	// needs to be cleared out before filling again.
+		  
+		  // have to do this to get the ID from the match because team is an object, not just a array of strings.
+		  for (int i = 0; i < trackedStatistics.size(); i++)
+		  {
+			  JSONObject trackedStatistic = (JSONObject) trackedStatistics.get(i);
+			  String oid = trackedStatistic.get("_id").toString(); 
+			  String[] id = oid.split("\""); // removing oid from string.
+			  trackedStatisticsIDs.add(id[3]); // id is stored in element 3.
+		  }
+		  
 		  //System.out.println(leagueName + " " + sport  + " " + description  + " " +  casterIDs + " " + teamIDs + " " + matchIDs);
 	}
 
@@ -93,6 +108,10 @@ public class LeagueParser implements LeagueParserInterface {
 	}
 
 	public ArrayList<String> getMatchIDs() {
+		return matchIDs;
+	}
+	
+	public ArrayList<String> getTrackedStatisticsIDs() {
 		return matchIDs;
 	}
 }

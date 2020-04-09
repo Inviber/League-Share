@@ -49,4 +49,14 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 	{
 		dbHelper.removeLeagueCasterID(leagueID, casterID);
 	}
+	
+	public void createTrackedStatistic(String leagueID, String statisticName)
+	{
+		dbHelper.createTrackedStatistic(leagueID, statisticName);
+	}
+	
+	public void deleteTrackedStatistic(String leagueID, String trackedStatisticID)
+	{
+		dbHelper.deleteTrackedStatistic(leagueID, trackedStatisticID);
+	}
 }
