@@ -72,7 +72,8 @@ public class CasterComposite extends Composite {
 		spectateButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SpectatorGenerator spectator = new SpectatorGenerator(parent, style, ((GUIShell)parent), match, team1, team2);
+				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, style, ((GUIShell)parent), match, team1, team2);
+				((GUIShell)parent).setDisplayedComposite(spectatorGenerator.getSpectatorComposite());
 			}
 		});
 		spectateButton.setBounds(1131, 10, 119, 30);

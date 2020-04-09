@@ -8,9 +8,10 @@ import match.Match;
 import player.Player;
 import player.PlayerGenerator;
 import team.Team;
+import views.GUIShell;
 
 public class CasterGenerator {
-	CasterComposite castorComposite;
+	CasterComposite casterComposite;
 	private Match match;
 	private Team team1;
 	private Team team2;
@@ -70,10 +71,15 @@ public class CasterGenerator {
 	
 	public void createComposite(Composite parent, int style)
 	{
-		castorComposite = new CasterComposite(parent, style);
-		castorComposite.setMatch(match);
-		castorComposite.setTeam1(team1);
-		castorComposite.setTeam2(team2);
+		casterComposite = new CasterComposite(parent, style);
+		casterComposite.setMatch(match);
+		casterComposite.setTeam1(team1);
+		casterComposite.setTeam2(team2);
 		// Populate caster composite after all listener placeholders have been added.
+	}
+	
+	public CasterComposite getCasterComposite()
+	{
+		return casterComposite;
 	}
 }
