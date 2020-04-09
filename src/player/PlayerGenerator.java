@@ -26,5 +26,8 @@ public class PlayerGenerator {
 		  return player;
 	}
 
-	
+	public PlayerDBInterator getPlayerDBInterator()
+	{
+		return playerDBInterator;
+	}
 }
