@@ -2,7 +2,11 @@ package views.caster;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Button;
@@ -13,6 +17,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Text;
 
 import match.Match;
+import player.Player;
 import player.PlayerDBInterator;
 import team.Team;
 import views.GUIShell;
@@ -27,6 +32,8 @@ public class CasterComposite extends Composite {
 	private Match match;
 	private Team team1;
 	private Team team2;
+	private ArrayList<Player> team1Players;
+	private ArrayList<Player> team2Players;
 	private PlayerDBInterator playerDBInterator;
 	
 	private Text text;
@@ -38,7 +45,10 @@ public class CasterComposite extends Composite {
 	 */
 	public CasterComposite(Composite parent, int style) {
 		super(parent, style);
-		
+	}
+	
+	public void fillComposite(Composite parent)
+	{
 		Color dark_gray = getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 		setLayout(new FormLayout());
 		
@@ -75,7 +85,7 @@ public class CasterComposite extends Composite {
 		spectateButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, style, ((GUIShell)parent), match, team1, team2);
+				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), match, team1, team2);
 				((GUIShell)parent).setDisplayedComposite(spectatorGenerator.getSpectatorComposite());
 			}
 		});
@@ -97,6 +107,7 @@ public class CasterComposite extends Composite {
 		team1ScoreDecrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				System.out.println("Team1 score decremented.");
 			}
 		});
@@ -107,6 +118,7 @@ public class CasterComposite extends Composite {
 		team2ScoreIncrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				System.out.println("Team2 score incremented.");
 			}
 		});
@@ -117,6 +129,7 @@ public class CasterComposite extends Composite {
 		team2ScoreDecrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				System.out.println("Team2 score decremented.");
 			}
 		});
@@ -169,13 +182,24 @@ public class CasterComposite extends Composite {
 		statsTeam1Group.setLayoutData(fd_statsTeam1Group);
 		
 		// ADD ACTION LISTENER TO EXPAND COMPOSITE
-		Composite statComposite_team1 = new Composite(statsTeam1Group, SWT.NONE);
+		Composite statComposite_team1 = new ScrolledComposite(statsTeam1Group, SWT.NONE);
 		statComposite_team1.setBounds(10, 10, 565, 30);
 		
-		Label lblPlayername = new Label(statComposite_team1, SWT.NONE);
-		lblPlayername.setAlignment(SWT.CENTER);
-		lblPlayername.setBounds(10, 10, 75, 15);
-		lblPlayername.setText("player.name");
+		// Create components for each player on the team.
+		for(int i = 0; i < team1Players.size(); i++)
+		{
+			Button btnPlayername = new Button(statComposite_team1, SWT.NONE);
+			btnPlayername.setAlignment(SWT.CENTER);
+			btnPlayername.setBounds(10, 10, 75, 15);
+			btnPlayername.addSelectionListener( new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					
+				}
+			});
+			btnPlayername.setText( team1Players.get(i).getFirstName() + " " + team1Players.get(i).getLastName() );
+		}
+		
 		
 		// START EXPANDED COMPOSITE EXAMPLE----------------------------------------------------->
 		Composite statComposite_team1_expanded = new Composite(statsTeam1Group, SWT.NONE);
@@ -239,16 +263,21 @@ public class CasterComposite extends Composite {
 		Composite statComposite_team2 = new Composite(statsTeam2Group, SWT.NONE);
 		statComposite_team2.setBounds(10, 10, 565, 30);
 		
-		Label lblPlayername_2 = new Label(statComposite_team2, SWT.NONE);
-		lblPlayername_2.setText("player.name");
-		lblPlayername_2.setAlignment(SWT.CENTER);
-		lblPlayername_2.setBounds(10, 10, 75, 15);
+		// Create components for each player on the team.
+		for(int i = 0; i < team1Players.size(); i++)
+		{
+			Button btnPlayername = new Button(statComposite_team2, SWT.NONE);
+			btnPlayername.setAlignment(SWT.CENTER);
+			btnPlayername.setBounds(10, 10, 75, 15);
+			btnPlayername.addSelectionListener( new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					
+				}
+			});
+			btnPlayername.setText( team2Players.get(i).getFirstName() + " " + team2Players.get(i).getLastName() );
+		}
 
-	}
-	
-	public void fillComposite(Composite parent)
-	{
-		// All implementation for the composite will reside here.
 	}
 	
 	public void setMatch(Match match)
@@ -269,6 +298,16 @@ public class CasterComposite extends Composite {
 	public void setPlayerDBInterator(PlayerDBInterator playerDBInterator)
 	{
 		this.playerDBInterator = playerDBInterator;
+	}
+	
+	public void setTeam1Players(ArrayList<Player> team1Players)
+	{
+		this.team1Players = team1Players;
+	}
+	
+	public void setTeam2Players(ArrayList<Player> team2Players)
+	{
+		this.team2Players = team2Players;
 	}
 
 	@Override

@@ -37,18 +37,19 @@ public class CasterGenerator {
 		String team2ID = team2.getTeamID();
 		String leagueID = team1.getLeagueID();
 		
+		team1Players = new ArrayList<Player>(); // Clear list before populating it again.
+		team2Players = new ArrayList<Player>(); // Clear list before populating it again.
+		
 		// Verify both teams are in the same league before generating players otherwise don't generate players.
 		if ( team1.getLeagueID().equals(team2.getLeagueID()) )
 		{
 			// Generate all players from team1 and add them to the team1 array list
-			team1Players = new ArrayList<Player>(); // Clear list before populating it again.
 			for(int i = 0; i < team1PlayerIDs.size(); i++)
 			{
 				team1Players.add( playerGenerator.generatePlayer(leagueID, team1ID, team1PlayerIDs.get(i)) );
 			}
 			
 			// Generate all players from team2 and add them to the team2 array list
-			team2Players = new ArrayList<Player>(); // Clear list before populating it again.
 			for(int i = 0; i < team2PlayerIDs.size(); i++)
 			{
 				team2Players.add( playerGenerator.generatePlayer(leagueID, team2ID, team2PlayerIDs.get(i)) );
@@ -80,7 +81,9 @@ public class CasterGenerator {
 		casterComposite.setMatch(match);
 		casterComposite.setTeam1(team1);
 		casterComposite.setTeam2(team2);
-		// Populate caster composite after all listener placeholders have been added.
+		casterComposite.setTeam1Players(team1Players);
+		casterComposite.setTeam2Players(team2Players);
+		casterComposite.fillComposite(parent);
 	}
 	
 	public CasterComposite getCasterComposite()
