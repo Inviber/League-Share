@@ -183,10 +183,11 @@ public class CasterComposite extends Composite {
 		
 		// ADD ACTION LISTENER TO EXPAND COMPOSITE
 		ScrolledComposite statComposite_team1 = new ScrolledComposite(statsTeam1Group, SWT.V_SCROLL);
+		statComposite_team1.setLayout(new GridLayout(1, true));
 		statComposite_team1.setExpandVertical(true);
 		statComposite_team1.setMinSize( 550, 50 );
-//		statComposite_team1.setBounds(10, 10, 565, 50);
 		
+		System.out.println("Number of players on team1: " + team1Players.size());
 		// Create components for each player on the team.
 		for(int i = 0; i < team1Players.size(); i++)
 		{
@@ -265,15 +266,15 @@ public class CasterComposite extends Composite {
 		statComposite_team2.setBounds(10, 10, 565, 30);
 		
 		// Create components for each player on the team.
-		for(int i = 0; i < team1Players.size(); i++)
+		for(int i = 0; i < team2Players.size(); i++)
 		{
 			Button btnPlayername = new Button(statComposite_team2, SWT.NONE);
 			btnPlayername.setAlignment(SWT.CENTER);
-			btnPlayername.setBounds(10, 10, 75, 15);
+			btnPlayername.setSize(565, 30);
 			btnPlayername.addSelectionListener( new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					
+					System.out.println("Player button clicked.");
 				}
 			});
 			btnPlayername.setText( team2Players.get(i).getFirstName() + " " + team2Players.get(i).getLastName() );
