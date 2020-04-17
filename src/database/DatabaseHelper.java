@@ -784,7 +784,7 @@ public class DatabaseHelper {
 	
 	public Document getChatDocumentByMatchID(String leagueID, String matchID)
 	{
-		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("match._id", new ObjectId(matchID));
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("matches._id", new ObjectId(matchID));
 
 		return this.database.getCollection(LEAGUES).find(where).first();
 	}
