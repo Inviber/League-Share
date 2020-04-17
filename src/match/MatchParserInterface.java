@@ -6,6 +6,7 @@ public interface MatchParserInterface {
 	
 	public void getMatchDetails();
 	
+	public String getLeagueID();
 	public String getMatchID();
 	public String getHomeTeamID();
 	public String getAwayTeamID();

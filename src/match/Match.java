@@ -15,14 +15,22 @@ public class Match {
 
     public Match(String leagueID, String matchID, String homeTeamID, String awayTeamID, int homeScore, int awayScore, Calendar date) {
     	this.leagueID = leagueID;
-    	this.matchID = matchID;
-        this.homeTeamID = homeTeamID;
+        this.matchID = matchID;
+    	this.homeTeamID = homeTeamID;
         this.awayTeamID = awayTeamID;
         this.homeScore = homeScore;
         this.awayScore = awayScore;
         this.date = date;
     }
 
+    public String getLeagueID() {
+        return leagueID;
+    }
+    
+    public String getMatchID() {
+        return matchID;
+    }
+    
     public String getHomeTeamID() {
         return homeTeamID;
     }

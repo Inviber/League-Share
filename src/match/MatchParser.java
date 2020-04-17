@@ -21,6 +21,11 @@ public class MatchParser implements MatchParserInterface{
 
 		getMatchDetails();
 	}
+
+	public String getLeagueID()
+	{
+		return this.leagueID;
+	}
 	
 	public void getMatchDetails() 
 	{

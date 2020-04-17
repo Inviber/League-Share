@@ -92,7 +92,7 @@ public class Account {
 		return this._ID;
 	}
 	
-	String getUsername()
+	public String getUsername()
 	{
 		return this.username;
 	}
@@ -135,13 +135,13 @@ public class Account {
 		return managedTeamLeagueIDs;
 	}
 
-	ArrayList<String> getFollowedTeamIDs() 
+	public ArrayList<String> getFollowedTeamIDs() 
 	{
 		return followedTeamIDs;
 	}
 	
 	
-	Boolean getSuccessfullyLoggedIn() 
+	public Boolean getSuccessfullyLoggedIn() 
 	{
 		return successfullyLoggedIn;
 	}
