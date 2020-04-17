@@ -15,7 +15,8 @@ public class MatchGenerator {
 	
 	public void setMatch(String leagueID, String matchID) {
 		matchParser = new MatchParser(leagueID, matchID, matchDBInterator);
-		match = new Match(matchParser.getHomeTeamID(), matchParser.getAwayTeamID(), matchParser.getHomeScore(), matchParser.getAwayScore(), matchParser.getDate());
+		match = new Match(matchParser.getLeagueID(), matchParser.getMatchID(), matchParser.getHomeTeamID(),
+				matchParser.getAwayTeamID(), matchParser.getHomeScore(), matchParser.getAwayScore(), matchParser.getDate());
 	}
 	
 	public Match getMatch() {
