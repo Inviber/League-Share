@@ -42,7 +42,9 @@ public class SpectatorComposite extends Composite {
 	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match,
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 		super(parent, style);
-		
+//		System.out.println("match: " + match);
+//		System.out.println("team1: " + homeTeam);
+//		System.out.println("team2: " + awayTeam);
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
 		
 	}
@@ -50,7 +52,7 @@ public class SpectatorComposite extends Composite {
 	private void CreateComponents(GUIShell shell, Composite parent, Match match,
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 
-		CasterGenerator casterGenerator = new CasterGenerator(parent, SWT.NONE, match, homeTeam, awayTeam, ((GUIShell)parent).getPlayerGenerator());
+		CasterGenerator casterGenerator = new CasterGenerator(parent, SWT.NONE, match, homeTeam, awayTeam);
 		Composite caster = casterGenerator.getCasterComposite();
 
 		CreateTopButtons(previousWindow, caster, parent);

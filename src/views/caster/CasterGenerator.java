@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import org.eclipse.swt.widgets.Composite;
 
 import match.Match;
+import match.MatchGenerator;
 import player.Player;
 import player.PlayerGenerator;
 import team.Team;
+import views.GUIShell;
 
 public class CasterGenerator {
 	CasterComposite casterComposite;
@@ -17,15 +19,18 @@ public class CasterGenerator {
 	private ArrayList<Player> team1Players;
 	private ArrayList<Player> team2Players;
 	
-	public CasterGenerator(Composite parent, int style, Match match, Team team1, Team team2, PlayerGenerator playerGenerator)
+	public CasterGenerator(Composite parent, int style, Match match, Team team1, Team team2)
 	{
 		this.match = match;
 		this.team1 = team1;
 		this.team2 = team2;
+		PlayerGenerator playerGenerator = ((GUIShell)parent).getPlayerGenerator();
+		MatchGenerator matchGenerator = ((GUIShell)parent).getMatchGenerator();
 		
 		populateTeamPlayerLists(playerGenerator);
 		createComposite(parent, style);
 		casterComposite.setPlayerDBInterator(playerGenerator.getPlayerDBInterator());
+		casterComposite.setMatchDBInterator(matchGenerator.getMatchDBInterator());
 	}
 	
 	public void populateTeamPlayerLists(PlayerGenerator playerGenerator)

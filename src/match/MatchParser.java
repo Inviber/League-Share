@@ -31,6 +31,11 @@ public class MatchParser implements MatchParserInterface{
 	{
 		System.out.println(matchData.toString());
 	}
+	
+	public String getLeagueID()
+	{
+		return leagueID;
+	}
 
 	public String getMatchID() 
 	{
