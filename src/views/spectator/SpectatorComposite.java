@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Label;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -32,6 +33,7 @@ public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
 	private GUIShell shell;
+	private String pastChat = "";
 
 	/**
 	 * Create the composite.
@@ -192,13 +194,28 @@ public class SpectatorComposite extends Composite {
 	
 	private void CreateChat(GUIShell shell) {
 		Group grpChatToBe = new Group(this, SWT.NONE);
-		grpChatToBe.setText("Chat to be completed");
+		grpChatToBe.setText("Chat");
 		grpChatToBe.setBounds(10, 466, 1260, 219);
 
+//		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe,
+//				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe,
-				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setBounds(0, 21, 1260, 163);
+				SWT.BORDER | SWT.V_SCROLL);
 		scrolledComposite.setExpandVertical(true);
+	    scrolledComposite.setExpandHorizontal(true);
+	    scrolledComposite.setAlwaysShowScrollBars(true);
+		scrolledComposite.setBounds(0, 21, 1245, 163);
+
+		Label chatLabel = new Label(scrolledComposite, SWT.NONE);
+	
+		chatLabel.setSize(1250, 5000);
+		scrolledComposite.setContent(chatLabel);
+		scrolledComposite.setMinSize(chatLabel.computeSize(SWT.DEFAULT, 1000));
+		
+		
+		
+		
+		
 		
 		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
 		txtEnterAMessage.setBounds(0, 184, 428, 25);
@@ -217,12 +234,18 @@ public class SpectatorComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				System.out.println(shell.getAccount().getUsername());
 				System.out.println(txtEnterAMessage.getText());
-			    Calendar calendar = Calendar.getInstance();
-			    calendar.set(Calendar.HOUR_OF_DAY, 0);
-			    calendar.set(Calendar.MINUTE, 0);
-			    calendar.set(Calendar.MILLISECOND, 0);      
-			    calendar.set(Calendar.SECOND, 37540);
-			    System.out.println(new SimpleDateFormat("HH:mm:ss").format(calendar.getTime()));
+				
+			    Calendar calendar = new GregorianCalendar();
+			    calendar.getTime();
+			    String calendarString = "(";
+			    calendarString += calendar.get(Calendar.HOUR_OF_DAY) + ":";
+			    calendarString += calendar.get(Calendar.MINUTE) + ":";
+			    calendarString += calendar.get(Calendar.SECOND) + ")";
+			    
+			    //chatText.setText(txtEnterAMessage.getText());
+			    pastChat += "\n"+ calendarString + " " + shell.getAccount().getUsername() + ": "  + txtEnterAMessage.getText();
+			    chatLabel.setText(pastChat);
+			    txtEnterAMessage.setText("");
 				
 			}
 		});
