@@ -1,30 +1,19 @@
 package views.spectator;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
-
 import match.ChatMessage;
 import match.Match;
 import player.Player;
-
 import team.Team;
-
 import views.GUIShell;
-
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Text;
@@ -44,10 +33,12 @@ public class SpectatorComposite extends Composite {
 	private Composite chatComposite;
 	private ScrolledComposite scrolledComposite;
 	private Group grpChatToBe;
-	String username;
-	String leagueID;
-	String matchID;
+	private String username;
+	private String leagueID;
+	private String matchID;
 	private GUIShell shell;
+	private Thread chatThread;
+	//private boolean chatThread = true;
 
 	/**
 	 * Create the composite.
@@ -84,23 +75,54 @@ public class SpectatorComposite extends Composite {
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 		
-		refreshChat();
+		//refreshChat();
 		
-		new Thread(new Runnable() {
-		      public void run() {
-		         while (true) {
-		            try { Thread.sleep(1000); } catch (Exception e) { }
-		            Display.getDefault().asyncExec(new Runnable() {
-		               public void run() {
-		                  refreshChat();
-		               }
-		            });
-		         }
-		      }
-		   }).start();
 		
+	
+		//Thread.currentThread().interrupt();
 		
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
+		
+//		chatThread = new Thread(new Runnable() {
+//		      public void run() {
+//		         while (true) {
+//		            try { Thread.sleep(1000); } catch (Exception e) { }
+//		            Display.getDefault().asyncExec(new Runnable() {
+//		               public void run() {
+//		                  refreshChat();
+//		               }
+//		            });
+//		         }
+//		      }
+//		   });
+//		
+//		chatThread.start();
+		
+		
+		chatThread = new Thread(new Runnable() 
+		{
+		  public void run() 
+		  {
+		     while (true) 
+		     {
+		        
+		        Display.getDefault().asyncExec(new Runnable() 
+		        {
+		           public void run() 
+		           {
+		              refreshChat();
+		           }
+		        });
+		        
+		        try { Thread.sleep(1000); } catch (Exception e) { }
+		     }
+		  }
+		});
+	
+		chatThread.start();
+		
+		
+		
 		
 	}
 	
@@ -127,6 +149,7 @@ public class SpectatorComposite extends Composite {
 		switchToCaster.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				chatThread.stop();
 				((GUIShell) parent).setDisplayedComposite(CasterComposite);
 				System.out.println("Caster Selected");
 			}
@@ -139,7 +162,17 @@ public class SpectatorComposite extends Composite {
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+//				while(!chatThread.isInterrupted())
+//				{
+//					chatThread.interrupt();
+//				}
+				
+				//chatThread.interrupt();
+				//System.out.println(chatThread.isInterrupted());
+				chatThread.stop();
+				
 				((GUIShell) parent).setDisplayedComposite(previousWindow);
+			
 				System.out.println("Back button pressed.");
 			}
 		});
