@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-
+import match.ChatMessage;
 import match.Match;
 import player.Player;
 
@@ -229,11 +229,27 @@ public class SpectatorComposite extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Format f = new SimpleDateFormat("hh:mm:ss");
-				String calendarString = "(" + f.format(new Date()) + ")";
-						
-				new Label(chatComposite, SWT.NONE).setText(calendarString + " " + shell.getAccount().getUsername() + ": "  + txtEnterAMessage.getText());
+				String timeString = "(" + f.format(new Date()) + ")";
+				
+				String username = shell.getAccount().getUsername();
+				String leagueID = shell.getMatchGenerator().getMatchParser().getLeagueID();
+				String matchID = shell.getMatchGenerator().getMatchParser().getMatchID();
+				
+//				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
+//				System.out.println(chat);
+				//ArrayList<ChatMessage> chat = 
+				
+				//String chatMessage = timeString + " " + username + ": "  + txtEnterAMessage.getText();
+				String chatMessage = txtEnterAMessage.getText();
+				
+				
+				new Label(chatComposite, SWT.NONE).setText(chatMessage);
 				scrolledComposite.setContent(chatComposite);
 				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				
+				
+				shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
+			
 				
 				txtEnterAMessage.setText("");	
 				

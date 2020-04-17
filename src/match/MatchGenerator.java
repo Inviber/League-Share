@@ -21,5 +21,15 @@ public class MatchGenerator {
 	public Match getMatch() {
 		return match;
 	}
+	
+	public MatchDBInterator getMatchDBInterator()
+	{
+		return this.matchDBInterator;
+	}
+	
+	public MatchParser getMatchParser()
+	{
+		return this.matchParser;
+	}
 
 }
