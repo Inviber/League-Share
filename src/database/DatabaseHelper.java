@@ -316,11 +316,12 @@ public class DatabaseHelper {
         				matchingIDs.add(id[3]); // id is stored in element 3.
     					matchingIDs.add(currentLeagueName);
         				
-        				System.out.println(id[3]); // matched ID's
+        				//System.out.println(id[3]); // matched ID's
     				}
         		}
         		catch (Exception e) 
         		{
+        			System.out.println(e.getMessage());
         			// do nothing, move on.
         		}
             }
