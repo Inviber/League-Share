@@ -562,6 +562,10 @@ public class DatabaseHelper {
 		newMatchDocument.put("date", date);
 		newMatchDocument.put("homeScore", "0");
 		newMatchDocument.put("awayScore", "0");
+		
+		ArrayList<Document> chat = new ArrayList<Document>();
+		
+		newMatchDocument.put("chat", chat);
 	
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("matches", newMatchDocument));
 		
@@ -706,6 +710,35 @@ public class DatabaseHelper {
 		}
 	}
 
+	public String addMessageToChat(String leagueID, String matchID, String username, String message, String time)
+	{
+		Document newChatDocument = new Document();
+		
+		newChatDocument.put("_id", new ObjectId());
+		newChatDocument.put("username", username);
+		newChatDocument.put("message", message);
+		newChatDocument.put("time", time);		
+			
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID));
+		
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("matches.$.chat", newChatDocument));
+		
+		return newChatDocument.get("_id").toString();
+	}
+	
+	public void  deleteMessageFromChat(String leagueID, String matchID, String chatID)
+	{
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID)).append("matches.chat._id",new ObjectId(chatID));
+
+		Bson update = new Document().append("matches.$.chat", new BasicDBObject("_id", new ObjectId(chatID)));
+		
+		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
+	
+	
 	
 	void printAllUsers()
 	{		
@@ -832,12 +865,17 @@ public class DatabaseHelper {
 //		dbHelper.printLeague(newLeagueID);
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
-//		dbHelper.createMatch("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "5e7129f4b0f12336fb6ad64c", "03/01/2020");
+//		dbHelper.createMatch("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "5e8cc3224272bc0dbc1320af", "04/18/2020");
 		
 //		dbHelper.updateMatchScore("5e7129f4b0f12336fb6ad648", "5e7247b449419c7c70020ed5", "5", "5");
 //		dbHelper.updateMatchDate("5e59763368ec36619a66bfdc", "5e72424369db37222c784f01", "3/25/2020");
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
+		
+		
+		// -- CREATING AND DELETING CHAT MESSAGES --
+//		dbHelper.addMessageToChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "Brandon's mom", "FUC U.", "20:35");
+		dbHelper.deleteMessageFromChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "5e99c0d99ff85804f922bee8");
 		
 		// -- CREATING AND DELETING NEW TEAMS -- 
 //		dbHelper.createTeam("5e8cc22649a7ee3fef1299d7", "Cringes Mom", "Her moms house");
