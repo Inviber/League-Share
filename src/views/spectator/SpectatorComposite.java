@@ -3,7 +3,9 @@ package views.spectator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -29,6 +31,7 @@ import org.eclipse.swt.layout.FillLayout;
 public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
+	private GUIShell shell;
 
 	/**
 	 * Create the composite.
@@ -42,6 +45,7 @@ public class SpectatorComposite extends Composite {
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 		super(parent, style);
 		
+		this.shell = shell;
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
 		
 	}
@@ -53,7 +57,7 @@ public class SpectatorComposite extends Composite {
 
 		CreateTopButtons(previousWindow, temporaryCaster, parent);
 
-		CreateChat();
+		CreateChat(shell);
 
 		CreateConstantLabels();
 
@@ -186,7 +190,7 @@ public class SpectatorComposite extends Composite {
 
 	}
 	
-	private void CreateChat() {
+	private void CreateChat(GUIShell shell) {
 		Group grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat to be completed");
 		grpChatToBe.setBounds(10, 466, 1260, 219);
@@ -195,11 +199,31 @@ public class SpectatorComposite extends Composite {
 				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setBounds(0, 21, 1260, 163);
 		scrolledComposite.setExpandVertical(true);
+		
+		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
+		txtEnterAMessage.setBounds(0, 184, 428, 25);
+		txtEnterAMessage.setText("Enter a message");
+		txtEnterAMessage.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				txtEnterAMessage.setText("");
+				
+			}
+		});
 
 		Button btnSubmit = new Button(grpChatToBe, SWT.NONE);
 		btnSubmit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				System.out.println(shell.getAccount().getUsername());
+				System.out.println(txtEnterAMessage.getText());
+			    Calendar calendar = Calendar.getInstance();
+			    calendar.set(Calendar.HOUR_OF_DAY, 0);
+			    calendar.set(Calendar.MINUTE, 0);
+			    calendar.set(Calendar.MILLISECOND, 0);      
+			    calendar.set(Calendar.SECOND, 37540);
+			    System.out.println(new SimpleDateFormat("HH:mm:ss").format(calendar.getTime()));
+				
 			}
 		});
 
@@ -216,14 +240,7 @@ public class SpectatorComposite extends Composite {
 		btnSubmit.setBounds(428, 183, 90, 26);
 		btnSubmit.setText("Submit");
 
-		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
-		txtEnterAMessage.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				txtEnterAMessage.setText("");
-			}
-		});
-		txtEnterAMessage.setBounds(0, 184, 428, 25);
-		txtEnterAMessage.setText("Enter a message");
+		
+		
 	}
 }

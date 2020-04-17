@@ -92,7 +92,7 @@ public class Account {
 		return this._ID;
 	}
 	
-	String getUsername()
+	public String getUsername()
 	{
 		return this.username;
 	}
