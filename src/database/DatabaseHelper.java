@@ -267,7 +267,7 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
-	public ArrayList<String> getLeagueIDByLeagueName(String leagueName)
+	public ArrayList<String> getLeagueByLeagueName(String leagueName)
 	{
 		ArrayList<String> matchingIDs = new ArrayList<String>();
 				 
@@ -900,7 +900,7 @@ public class DatabaseHelper {
 		
 		
 		// -- FINDING LEAGUE BY NAME -- 
-//		System.out.println(dbHelper.getLeagueIDByLeagueName("paint"));
+		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
 
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
