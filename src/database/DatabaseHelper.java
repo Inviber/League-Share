@@ -132,29 +132,47 @@ public class DatabaseHelper {
 	
 	
 	public String getUserIDByUsername(String username)
-	{
-		try 
+	{		 
+        // Performing a read operation on the collection.
+        FindIterable<Document> fi = this.database.getCollection(USERS).find();
+        MongoCursor<Document> cursor = fi.iterator();
+        try {
+            while(cursor.hasNext()) 
+            {      
+            	
+            	Document userDocument = cursor.next();
+            	
+        		JSONParser parser = new JSONParser();
+        		
+        		try
+        		{
+        			Object obj = parser.parse(userDocument.toJson());
+        			JSONObject userData = (JSONObject) obj;
+        			        						
+    				String currentUsername = userData.get("username").toString();
+    				
+    				//System.out.println(currentLeagueName.split("\"")[0]); // all leagues that this search matches.
+    				
+    				if (currentUsername.split("\"")[0].toLowerCase().equals(username.toLowerCase())) //  go to the next ", name is stored in element 1.
+    				{        				
+    					String oid = userData.get("_id").toString(); 
+    					String[] id = oid.split("\""); // removing oid from string.
+        				return id[3];
+    				}
+        		}
+        		catch (Exception e) 
+        		{
+        			// do nothing, move on.
+        		}
+            }
+        }
+        catch (NullPointerException e)
 		{
-			//creating query request to be searched for
-			BasicDBObject query = new BasicDBObject();
-		    query.put("username", username);
-		        
-		    //retrieving all documents that match query
-		    FindIterable<Document> userDocuments = this.database.getCollection(USERS).find(query);
-		    
-		    //choosing the first document because it is known that all usernames are unique
-		    Document userDocument = userDocuments.first();
-		    
-		    //retrieving id
-		    ObjectId userID = (ObjectId) userDocument.get("_id");
-		    
-		    //toStringing it
-		    return userID.toString();
+            cursor.close();
+			return "error";
 		}
-		catch (NullPointerException e)
-		{
-			return "";
-		}
+        
+        return "";
 		
 	}
 	
@@ -894,13 +912,17 @@ public class DatabaseHelper {
 //		dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
 //		System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 		
+		// -- FINDING USER BY NAME -- 
+//		System.out.println(dbHelper.getUserIDByUsername("leaf_consumer"));
+		
+		
 		// -- CREATING NEW LEAGUE -- 
 //		String newLeagueID = dbHelper.createLeague("Your mothers favorite league", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
 //		dbHelper.printLeague(newLeagueID);
 		
 		
 		// -- FINDING LEAGUE BY NAME -- 
-		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
+//		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
 
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
