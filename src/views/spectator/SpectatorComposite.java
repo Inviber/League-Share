@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -38,7 +40,13 @@ public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
 	
-	private Composite chatComposite;
+	//private Composite chatComposite;
+	//private ScrolledComposite scrolledComposite;
+	//private Group grpChatToBe;
+	String username;
+	String leagueID;
+	String matchID;
+	private GUIShell shell;
 
 	/**
 	 * Create the composite.
@@ -51,6 +59,14 @@ public class SpectatorComposite extends Composite {
 	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match,
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 		super(parent, style);
+		
+		this.shell = shell;
+		username = shell.getAccount().getUsername();
+		leagueID = match.getLeagueID();
+		matchID = match.getMatchID();
+		
+		
+		
 		
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
 		
@@ -201,18 +217,33 @@ public class SpectatorComposite extends Composite {
 		grpChatToBe.setText("Chat");
 		grpChatToBe.setBounds(10, 466, 1260, 219);
 		
+//		grpChatToBe = new Group(this, SWT.NONE);
+//		grpChatToBe.setText("Chat");
+//		grpChatToBe.setBounds(10, 466, 1260, 219);
+		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe,
 				SWT.BORDER | SWT.V_SCROLL);
 		scrolledComposite.setBounds(0, 21, 1245, 163);
-	
-		this.chatComposite = new Composite(scrolledComposite, SWT.NONE);
+		
+//		scrolledComposite = new ScrolledComposite(grpChatToBe,
+//				SWT.BORDER | SWT.V_SCROLL);
+//		scrolledComposite.setBounds(0, 21, 1245, 163);
+		
+		
+		Composite chatComposite = new Composite(scrolledComposite, SWT.NONE);
 		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		
-		scrolledComposite.setContent(this.chatComposite);
+		scrolledComposite.setContent(chatComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
-		
-		scrolledComposite.setMinSize(this.chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+        
+        
+        
+        
+        
+        
+        
 		
 		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
 		txtEnterAMessage.setBounds(0, 184, 428, 25);
@@ -228,41 +259,34 @@ public class SpectatorComposite extends Composite {
 		btnSubmit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
 				Format f = new SimpleDateFormat("hh:mm:ss");
 				String timeString = "(" + f.format(new Date()) + ")";
+				String chatMessage = txtEnterAMessage.getText();
 				
-				String username = shell.getAccount().getUsername();
-				String leagueID = match.getLeagueID();
-				String matchID = match.getMatchID();
+//				Timer timer = new Timer();
+//				timer.schedule(new TimerTask(shell,match,username,leagueID,matchID), 0, 5000);
 				
-//				System.out.println(leagueID);
-//				System.out.println(matchID);
-				
-				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
-				//System.out.println(chat);
-				
-				System.out.println(chat.get(0).getMessage());
-//				
-//				for(int i = 0; i < chat.size(); i++)
-//				{
-//					String dbMessage = "(" + chat.get(i).getTime() + ") " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
-//					new Label(chatComposite, SWT.NONE).setText(dbMessage);
-//				}
-//				
-//				
 //				//String chatMessage = timeString + " " + username + ": "  + txtEnterAMessage.getText();
-//				String chatMessage = txtEnterAMessage.getText();
 				
-				
-				//new Label(chatComposite, SWT.NONE).setText(chatMessage);
-				scrolledComposite.setContent(chatComposite);
-				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				
-				
-				//shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
-			
-				
+				shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
 				txtEnterAMessage.setText("");	
+				
+//				Composite chatComposite = new Composite(scrolledComposite, SWT.NONE);
+//				chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+//				
+//				scrolledComposite.setContent(chatComposite);
+//				scrolledComposite.setExpandHorizontal(true);
+//				scrolledComposite.setExpandVertical(true);
+//				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+									
+				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
+			
+				for(int i = 0; i < chat.size(); i++)
+				{
+					String dbMessage = chat.get(i).getTime() + " " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
+					new Label(chatComposite, SWT.NONE).setText(dbMessage);
+				}
 				
 				Rectangle bounds = chatComposite.getBounds();
 				//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
@@ -276,7 +300,12 @@ public class SpectatorComposite extends Composite {
 		          origin.x = Math.max(0, bounds.x + bounds.width - area.width);
 		        if (origin.y + area.height < bounds.y + bounds.height)
 		          origin.y = Math.max(0, bounds.y + bounds.height - area.height);
-		        scrolledComposite.setOrigin(origin);    
+		        scrolledComposite.setOrigin(origin);   
+				
+				scrolledComposite.setContent(chatComposite);
+				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			
+		        //refreshChat();
 			}
 		});
 
@@ -284,28 +313,28 @@ public class SpectatorComposite extends Composite {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					Format f = new SimpleDateFormat("hh:mm:ss");
-					String calendarString = "(" + f.format(new Date()) + ")";
-							
-					new Label(chatComposite, SWT.NONE).setText(calendarString + " " + shell.getAccount().getUsername() + ": "  + txtEnterAMessage.getText());
-					scrolledComposite.setContent(chatComposite);
-					scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-					
-					txtEnterAMessage.setText("");	
-					
-					Rectangle bounds = chatComposite.getBounds();
-					//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
-			        Rectangle area = scrolledComposite.getClientArea();
-			        Point origin = scrolledComposite.getOrigin();
-			        if (origin.x > bounds.x)
-			          origin.x = Math.max(0, bounds.x);
-			        if (origin.y > bounds.y)
-			          origin.y = Math.max(0, bounds.y);
-			        if (origin.x + area.width < bounds.x + bounds.width)
-			          origin.x = Math.max(0, bounds.x + bounds.width - area.width);
-			        if (origin.y + area.height < bounds.y + bounds.height)
-			          origin.y = Math.max(0, bounds.y + bounds.height - area.height);
-			        scrolledComposite.setOrigin(origin);
+//					Format f = new SimpleDateFormat("hh:mm:ss");
+//					String calendarString = "(" + f.format(new Date()) + ")";
+//							
+//					new Label(chatComposite, SWT.NONE).setText(calendarString + " " + shell.getAccount().getUsername() + ": "  + txtEnterAMessage.getText());
+//					scrolledComposite.setContent(chatComposite);
+//					scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//					
+//					txtEnterAMessage.setText("");	
+//					
+//					Rectangle bounds = chatComposite.getBounds();
+//					//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
+//			        Rectangle area = scrolledComposite.getClientArea();
+//			        Point origin = scrolledComposite.getOrigin();
+//			        if (origin.x > bounds.x)
+//			          origin.x = Math.max(0, bounds.x);
+//			        if (origin.y > bounds.y)
+//			          origin.y = Math.max(0, bounds.y);
+//			        if (origin.x + area.width < bounds.x + bounds.width)
+//			          origin.x = Math.max(0, bounds.x + bounds.width - area.width);
+//			        if (origin.y + area.height < bounds.y + bounds.height)
+//			          origin.y = Math.max(0, bounds.y + bounds.height - area.height);
+//			        scrolledComposite.setOrigin(origin);
 				}
 			}
 		});
@@ -315,4 +344,47 @@ public class SpectatorComposite extends Composite {
 		
 		
 	}
+	
+//	private void refreshChat() {
+//		
+//		System.out.println("Refreshing");
+//		
+////		Group grpChatToBe = new Group(this, SWT.NONE);
+////		grpChatToBe.setText("Chat");
+////		grpChatToBe.setBounds(10, 466, 1260, 219);
+//		
+//		scrolledComposite = new ScrolledComposite(grpChatToBe,
+//				SWT.BORDER | SWT.V_SCROLL);
+//		scrolledComposite.setBounds(0, 21, 1245, 163);
+//		
+//		chatComposite = new Composite(scrolledComposite, SWT.NONE);
+//		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+//		
+//		scrolledComposite.setContent(chatComposite);
+//		scrolledComposite.setExpandHorizontal(true);
+//		scrolledComposite.setExpandVertical(true);
+//		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+//							
+//		ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
+//	
+//		for(int i = 0; i < chat.size(); i++)
+//		{
+//			String dbMessage = chat.get(i).getTime() + " " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
+//			new Label(chatComposite, SWT.NONE).setText(dbMessage);
+//		}
+//		
+//		Rectangle bounds = chatComposite.getBounds();
+//		//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
+//        Rectangle area = scrolledComposite.getClientArea();
+//        Point origin = scrolledComposite.getOrigin();
+//        if (origin.x > bounds.x)
+//          origin.x = Math.max(0, bounds.x);
+//        if (origin.y > bounds.y)
+//          origin.y = Math.max(0, bounds.y);
+//        if (origin.x + area.width < bounds.x + bounds.width)
+//          origin.x = Math.max(0, bounds.x + bounds.width - area.width);
+//        if (origin.y + area.height < bounds.y + bounds.height)
+//          origin.y = Math.max(0, bounds.y + bounds.height - area.height);
+//        scrolledComposite.setOrigin(origin);   
+//	}
 }
