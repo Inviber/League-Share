@@ -45,14 +45,22 @@ public class LoginComposite extends Composite {
 				//WILL NEED TO ADD INPUT VALIDATION
 				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
 				currentUser.getAccountDetails(true);
-				shell.setAccount(currentUser);
-
-				text.setText("");
-				text_1.setText("");
+				if (currentUser.getSuccessfullyLoggedIn())
+				{
+					shell.setAccount(currentUser);
+					
+					text.setText("");
+					text_1.setText("");
+					
+					shell.disposeDisplayedComposite();
+					LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
+					shell.setDisplayedComposite(landingComposite);
+				}
+				else
+				{
+					System.out.println("Invalid password");
+				}
 				
-				shell.disposeDisplayedComposite();
-				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
-				shell.setDisplayedComposite(landingComposite);
 			}
 		});
 		btnNewButton.setBounds(590, 380, 93, 29);
