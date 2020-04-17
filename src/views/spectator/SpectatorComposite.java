@@ -235,23 +235,31 @@ public class SpectatorComposite extends Composite {
 				String leagueID = match.getLeagueID();
 				String matchID = match.getMatchID();
 				
-				System.out.println(leagueID);
-				System.out.println(matchID);
+//				System.out.println(leagueID);
+//				System.out.println(matchID);
 				
-//				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
-//				System.out.println(chat);
-				//ArrayList<ChatMessage> chat = 
+				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
+				//System.out.println(chat);
 				
-				//String chatMessage = timeString + " " + username + ": "  + txtEnterAMessage.getText();
-				String chatMessage = txtEnterAMessage.getText();
+				System.out.println(chat.get(0).getMessage());
+//				
+//				for(int i = 0; i < chat.size(); i++)
+//				{
+//					String dbMessage = "(" + chat.get(i).getTime() + ") " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
+//					new Label(chatComposite, SWT.NONE).setText(dbMessage);
+//				}
+//				
+//				
+//				//String chatMessage = timeString + " " + username + ": "  + txtEnterAMessage.getText();
+//				String chatMessage = txtEnterAMessage.getText();
 				
 				
-				new Label(chatComposite, SWT.NONE).setText(chatMessage);
+				//new Label(chatComposite, SWT.NONE).setText(chatMessage);
 				scrolledComposite.setContent(chatComposite);
 				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				
 				
-				shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
+				//shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
 			
 				
 				txtEnterAMessage.setText("");	
