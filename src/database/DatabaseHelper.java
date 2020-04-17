@@ -267,26 +267,53 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
-	public String getLeagueIDByLeagueName(String leagueName)
+	public ArrayList<String> getLeagueByLeagueName(String leagueName)
 	{
-		try
+		ArrayList<String> matchingIDs = new ArrayList<String>();
+				 
+        // Performing a read operation on the collection.
+        FindIterable<Document> fi = this.database.getCollection(LEAGUES).find();
+        MongoCursor<Document> cursor = fi.iterator();
+        try {
+            while(cursor.hasNext()) 
+            {      
+            	
+            	Document leagueDocument = cursor.next();
+            	
+        		JSONParser parser = new JSONParser();
+        		
+        		try
+        		{
+        			Object obj = parser.parse(leagueDocument.toJson());
+        			JSONObject leagueData = (JSONObject) obj;
+        			        						
+    				String currentLeagueName = leagueData.get("leagueName").toString();
+    				
+    				//System.out.println(currentLeagueName.split("\"")[0]); // all leagues that this search matches.
+    				
+    				if (currentLeagueName.split("\"")[0].toLowerCase().contains(leagueName.toLowerCase())) //  go to the next ", name is stored in element 1.
+    				{
+    					String oid = leagueData.get("_id").toString(); 
+    					String[] id = oid.split("\""); // removing oid from string.
+        				matchingIDs.add(id[3]); // id is stored in element 3.
+    					matchingIDs.add(currentLeagueName);
+        				
+        				System.out.println(id[3]); // matched ID's
+    				}
+        		}
+        		catch (Exception e) 
+        		{
+        			// do nothing, move on.
+        		}
+            }
+        }
+        catch (NullPointerException e)
 		{
-		    //retrieving all documents that match query
-		    FindIterable<Document> leagueDocuments = this.database.getCollection(LEAGUES).find(eq("leagueName", leagueName));
-		    
-		    //choosing the first document because currently the firstNames are unique... and Josh doesn't know what else to do currently. <3
-		    Document leagueDocument = leagueDocuments.first();
-		    
-		    //retrieving id
-		    ObjectId leagueID = (ObjectId) leagueDocument.get("_id");
-		    
-		    //toStringing it
-		    return leagueID.toString();
+            cursor.close();
+			return matchingIDs;
 		}
-		catch (NullPointerException e)
-		{
-			return "";
-		}
+        
+        return matchingIDs;
 	}
 	
 	public String createLeague(String leagueName, String ownerID, String sport, String description) 
@@ -851,7 +878,7 @@ public class DatabaseHelper {
 		
 		/*  NEW FUNCTIONS  */
 		
-		
+				
 //		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllUsers();
@@ -870,6 +897,11 @@ public class DatabaseHelper {
 		// -- CREATING NEW LEAGUE -- 
 //		String newLeagueID = dbHelper.createLeague("Your mothers favorite league", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
 //		dbHelper.printLeague(newLeagueID);
+		
+		
+		// -- FINDING LEAGUE BY NAME -- 
+		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
+
 		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
 //		dbHelper.createMatch("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "5e8cc3224272bc0dbc1320af", "04/18/2020");
