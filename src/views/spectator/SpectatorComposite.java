@@ -161,10 +161,11 @@ public class SpectatorComposite extends Composite {
 	//button to switch to caster (no caster composite for now)
 		Button switchToCaster = new Button(this, SWT.NONE);
 		switchToCaster.addSelectionListener(new SelectionAdapter() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				chatThread.stop();
-				((GUIShell) parent).setDisplayedComposite(CasterComposite);
+				((GUIShell) parent).setDisplayedComposite(caster);
 				System.out.println("Caster Selected");
 			}
 		});

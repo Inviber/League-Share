@@ -72,6 +72,7 @@ public class MatchDBInterator implements MatchDBInteratorInterface {
 		
 		dbHelper.updateMatchDate(leagueID, matchID, date);
 //		System.out.println("date: " + date);
+	}
 
 	public ArrayList<ChatMessage> getChat(String leagueID, String matchID)
 	{

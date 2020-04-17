@@ -24,7 +24,7 @@ public class Match {
     }
 
     public String getLeagueID() {
-        return leagueID;
+        return this.leagueID;
     }
     
     public String getMatchID() {
@@ -64,16 +64,8 @@ public class Match {
         this.date = date;
     }
 
-	public String getLeagueID() {
-		return leagueID;
-	}
-
 	public void setLeagueID(String leagueID) {
 		this.leagueID = leagueID;
-	}
-
-	public String getMatchID() {
-		return matchID;
 	}
 
 	public void setMatchID(String matchID) {
