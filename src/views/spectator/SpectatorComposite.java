@@ -40,9 +40,9 @@ public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
 	
-	//private Composite chatComposite;
-	//private ScrolledComposite scrolledComposite;
-	//private Group grpChatToBe;
+	private Composite chatComposite;
+	private ScrolledComposite scrolledComposite;
+	private Group grpChatToBe;
 	String username;
 	String leagueID;
 	String matchID;
@@ -64,6 +64,24 @@ public class SpectatorComposite extends Composite {
 		username = shell.getAccount().getUsername();
 		leagueID = match.getLeagueID();
 		matchID = match.getMatchID();
+		
+		
+		grpChatToBe = new Group(this, SWT.NONE);
+		grpChatToBe.setText("Chat");
+		grpChatToBe.setBounds(10, 466, 1260, 219);
+				
+		scrolledComposite = new ScrolledComposite(grpChatToBe,
+				SWT.BORDER | SWT.V_SCROLL);
+		scrolledComposite.setBounds(0, 21, 1245, 163);
+				
+		
+		chatComposite = new Composite(scrolledComposite, SWT.NONE);
+		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		scrolledComposite.setContent(chatComposite);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 		
 		
 		
@@ -213,30 +231,22 @@ public class SpectatorComposite extends Composite {
 	}
 	
 	private void CreateChat(GUIShell shell, Match match) {
-		Group grpChatToBe = new Group(this, SWT.NONE);
-		grpChatToBe.setText("Chat");
-		grpChatToBe.setBounds(10, 466, 1260, 219);
-		
-//		grpChatToBe = new Group(this, SWT.NONE);
+//		Group grpChatToBe = new Group(this, SWT.NONE);
 //		grpChatToBe.setText("Chat");
 //		grpChatToBe.setBounds(10, 466, 1260, 219);
-		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe,
-				SWT.BORDER | SWT.V_SCROLL);
-		scrolledComposite.setBounds(0, 21, 1245, 163);
-		
-//		scrolledComposite = new ScrolledComposite(grpChatToBe,
+//				
+//		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe,
 //				SWT.BORDER | SWT.V_SCROLL);
 //		scrolledComposite.setBounds(0, 21, 1245, 163);
-		
-		
-		Composite chatComposite = new Composite(scrolledComposite, SWT.NONE);
-		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
-		
-		scrolledComposite.setContent(chatComposite);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+//				
+//		
+//		Composite chatComposite = new Composite(scrolledComposite, SWT.NONE);
+//		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+//		
+//		scrolledComposite.setContent(chatComposite);
+//		scrolledComposite.setExpandHorizontal(true);
+//		scrolledComposite.setExpandVertical(true);
+//		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
         
         
         
@@ -272,40 +282,8 @@ public class SpectatorComposite extends Composite {
 				shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
 				txtEnterAMessage.setText("");	
 				
-//				Composite chatComposite = new Composite(scrolledComposite, SWT.NONE);
-//				chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
-//				
-//				scrolledComposite.setContent(chatComposite);
-//				scrolledComposite.setExpandHorizontal(true);
-//				scrolledComposite.setExpandVertical(true);
-//				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-									
-				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
 			
-				for(int i = 0; i < chat.size(); i++)
-				{
-					String dbMessage = chat.get(i).getTime() + " " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
-					new Label(chatComposite, SWT.NONE).setText(dbMessage);
-				}
-				
-				Rectangle bounds = chatComposite.getBounds();
-				//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
-		        Rectangle area = scrolledComposite.getClientArea();
-		        Point origin = scrolledComposite.getOrigin();
-		        if (origin.x > bounds.x)
-		          origin.x = Math.max(0, bounds.x);
-		        if (origin.y > bounds.y)
-		          origin.y = Math.max(0, bounds.y);
-		        if (origin.x + area.width < bounds.x + bounds.width)
-		          origin.x = Math.max(0, bounds.x + bounds.width - area.width);
-		        if (origin.y + area.height < bounds.y + bounds.height)
-		          origin.y = Math.max(0, bounds.y + bounds.height - area.height);
-		        scrolledComposite.setOrigin(origin);   
-				
-				scrolledComposite.setContent(chatComposite);
-				scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-			
-		        //refreshChat();
+		        refreshChat();
 			}
 		});
 
@@ -345,46 +323,42 @@ public class SpectatorComposite extends Composite {
 		
 	}
 	
-//	private void refreshChat() {
-//		
-//		System.out.println("Refreshing");
-//		
-////		Group grpChatToBe = new Group(this, SWT.NONE);
-////		grpChatToBe.setText("Chat");
-////		grpChatToBe.setBounds(10, 466, 1260, 219);
-//		
-//		scrolledComposite = new ScrolledComposite(grpChatToBe,
-//				SWT.BORDER | SWT.V_SCROLL);
-//		scrolledComposite.setBounds(0, 21, 1245, 163);
-//		
-//		chatComposite = new Composite(scrolledComposite, SWT.NONE);
-//		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
-//		
+	private void refreshChat() {
+				
+		chatComposite = new Composite(scrolledComposite, SWT.NONE);
+		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
+	
+		for(int i = 0; i < chat.size(); i++)
+		{
+			String dbMessage = chat.get(i).getTime() + " " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
+			new Label(chatComposite, SWT.NONE).setText(dbMessage);
+		}
+		
+		scrolledComposite.setContent(chatComposite);
+		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//		scrolledComposite.setExpandHorizontal(true);
+//		scrolledComposite.setExpandVertical(true);
+		
+		Rectangle bounds = chatComposite.getBounds();
+		//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
+	    Rectangle area = scrolledComposite.getClientArea();
+	    Point origin = scrolledComposite.getOrigin();
+	    if (origin.x > bounds.x)
+	      origin.x = Math.max(0, bounds.x);
+	    if (origin.y > bounds.y)
+	      origin.y = Math.max(0, bounds.y);
+	    if (origin.x + area.width < bounds.x + bounds.width)
+	      origin.x = Math.max(0, bounds.x + bounds.width - area.width);
+	    if (origin.y + area.height < bounds.y + bounds.height)
+	      origin.y = Math.max(0, bounds.y + bounds.height - area.height);
+	    
+		
 //		scrolledComposite.setContent(chatComposite);
 //		scrolledComposite.setExpandHorizontal(true);
 //		scrolledComposite.setExpandVertical(true);
-//		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-//							
-//		ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
-//	
-//		for(int i = 0; i < chat.size(); i++)
-//		{
-//			String dbMessage = chat.get(i).getTime() + " " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
-//			new Label(chatComposite, SWT.NONE).setText(dbMessage);
-//		}
-//		
-//		Rectangle bounds = chatComposite.getBounds();
-//		//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
-//        Rectangle area = scrolledComposite.getClientArea();
-//        Point origin = scrolledComposite.getOrigin();
-//        if (origin.x > bounds.x)
-//          origin.x = Math.max(0, bounds.x);
-//        if (origin.y > bounds.y)
-//          origin.y = Math.max(0, bounds.y);
-//        if (origin.x + area.width < bounds.x + bounds.width)
-//          origin.x = Math.max(0, bounds.x + bounds.width - area.width);
-//        if (origin.y + area.height < bounds.y + bounds.height)
-//          origin.y = Math.max(0, bounds.y + bounds.height - area.height);
-//        scrolledComposite.setOrigin(origin);   
-//	}
+		//scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite.setOrigin(origin);   
+	}
 }
