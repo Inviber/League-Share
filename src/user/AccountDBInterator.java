@@ -54,6 +54,19 @@ public class AccountDBInterator implements AccountDBInteratorInterface {
 			return false;
 		}
 	}
-
 	
+	public void addOwnedLeagueID(String userID, String leagueID)
+	{
+		dbHelper.addOwnedLeagueID(userID, leagueID);
+	}
+	
+	public void addLeagueCastedID(String userID, String leagueID)
+	{
+		dbHelper.addLeagueCastedID(userID, leagueID);
+	}
+	
+	public void addFollowedLeagueID(String userID, String leagueID)
+	{
+		dbHelper.addFollowedLeagueID(userID, leagueID);
+	}
 }

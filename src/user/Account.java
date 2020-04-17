@@ -148,48 +148,48 @@ public class Account {
 		}
 	}
 	
-	
-	void addLeague(String league_ID, boolean owns, boolean casting)
+	*/
+	public void addLeague(String leagueID, boolean owns, boolean casting)
 	{
 		// lookup league by _ID, pass it here, add to appropriate array
 		if (owns)
 		{
-			if (ownedLeagueIDs.contains(league_ID))
+			if (ownedLeagueIDs.contains(leagueID))
 			{
 				return; // already within array.
 			}
 			else
 			{
-				ownedLeagueIDs.add(league_ID);
-				accountDBInterator.addOwnedLeagueID(this._ID, league_ID);
+				ownedLeagueIDs.add(leagueID);
+				accountDBInterator.addOwnedLeagueID(this.userID, leagueID);
 			}
 		}
 		
 		if (casting)
 		{
-			if (leagueCastedIDs.contains(league_ID))
+			if (leagueCastedIDs.contains(leagueID))
 			{
 				return; // already within array.
 			}
 			else
 			{
-				leagueCastedIDs.add(league_ID);
-				accountDBInterator.addLeagueCastedID(this._ID, league_ID);
+				leagueCastedIDs.add(leagueID);
+				accountDBInterator.addLeagueCastedID(this.userID, leagueID);
 			}
 		}
 		
-		if (followedLeagueIDs.contains(league_ID))
+		if (followedLeagueIDs.contains(leagueID))
 		{
 			return; // already within array.
 		}
 		else
 		{
-			followedLeagueIDs.add(league_ID);
-			accountDBInterator.addFollowedLeagueID(this._ID, league_ID);
+			followedLeagueIDs.add(leagueID);
+			accountDBInterator.addFollowedLeagueID(this.userID, leagueID);
 		}
 		
 	}
-	
+	/*
 	void addTeam(String team_ID, boolean owns, boolean manages)
 	{
 		// lookup team by _ID, pass it here, add to appropriate array

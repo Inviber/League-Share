@@ -63,6 +63,7 @@ public class LandingComposite extends Composite {
 							System.out.println(results.get(i) + " | " + results.get(i+1));
 						}
 						
+						shell.getAccountGenerator().getLoggedInAccount().addLeague(results.get(0), false, false); // add 0 means just the first
 					}
 					else
 					{
