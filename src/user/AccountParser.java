@@ -34,6 +34,7 @@ public class AccountParser implements AccountParserInterface {
 	{
 		this.accountData = accountData;
 		
+		this.username = (String) accountData.get("username");
 		this.firstName = (String) accountData.get("firstName");
 		this.lastName = (String) accountData.get("lastName");
 		
