@@ -737,6 +737,13 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(where, set);
 	}
 	
+	public Document getChatDocumentByMatchID(String leagueID, String matchID)
+	{
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("match._id", new ObjectId(matchID));
+
+		return this.database.getCollection(LEAGUES).find(where).first();
+	}
+	
 	
 	
 	
@@ -875,7 +882,7 @@ public class DatabaseHelper {
 		
 		// -- CREATING AND DELETING CHAT MESSAGES --
 //		dbHelper.addMessageToChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "Brandon's mom", "FUC U.", "20:35");
-		dbHelper.deleteMessageFromChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "5e99c0d99ff85804f922bee8");
+//		dbHelper.deleteMessageFromChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "5e99c0d99ff85804f922bee8");
 		
 		// -- CREATING AND DELETING NEW TEAMS -- 
 //		dbHelper.createTeam("5e8cc22649a7ee3fef1299d7", "Cringes Mom", "Her moms house");
