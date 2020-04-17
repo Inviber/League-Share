@@ -63,7 +63,7 @@ public class SpectatorComposite extends Composite {
 
 		CreateTopButtons(previousWindow, temporaryCaster, parent);
 
-		CreateChat(shell);
+		CreateChat(shell, match);
 
 		CreateConstantLabels();
 
@@ -196,7 +196,7 @@ public class SpectatorComposite extends Composite {
 
 	}
 	
-	private void CreateChat(GUIShell shell) {
+	private void CreateChat(GUIShell shell, Match match) {
 		Group grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat");
 		grpChatToBe.setBounds(10, 466, 1260, 219);
@@ -232,8 +232,11 @@ public class SpectatorComposite extends Composite {
 				String timeString = "(" + f.format(new Date()) + ")";
 				
 				String username = shell.getAccount().getUsername();
-				String leagueID = shell.getMatchGenerator().getMatchParser().getLeagueID();
-				String matchID = shell.getMatchGenerator().getMatchParser().getMatchID();
+				String leagueID = match.getLeagueID();
+				String matchID = match.getMatchID();
+				
+				System.out.println(leagueID);
+				System.out.println(matchID);
 				
 //				ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
 //				System.out.println(chat);
