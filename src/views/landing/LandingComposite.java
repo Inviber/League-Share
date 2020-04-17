@@ -53,6 +53,22 @@ public class LandingComposite extends Composite {
 				@Override
 				public void mouseDown(MouseEvent e) {
 					System.out.println("search button pressed...");
+					ArrayList<String> results = shell.getLeagueGenerator().searchLeagueByName(text.getText());
+					
+					if (results.size() != 0)
+					{
+						System.out.println("Results: ");
+						for (int i = 0; i < results.size(); i+=2)
+						{
+							System.out.println(results.get(i) + " | " + results.get(i+1));
+						}
+						
+					}
+					else
+					{
+						System.out.println("No results found.");
+					}
+					
 				}
 			});
 			btnNewButton.setBounds(748, 83, 49, 40);

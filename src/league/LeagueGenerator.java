@@ -1,5 +1,7 @@
 package league;
 
+import java.util.ArrayList;
+
 import database.DatabaseHelper;
 
 public class LeagueGenerator {
@@ -22,5 +24,11 @@ public class LeagueGenerator {
 				  	leagueParser.getTrackedStatisticsIDs(), leagueDBInterator);
 		  
 		  return league;
+	}
+	
+	public ArrayList<String> searchLeagueByName(String search) 
+	{
+		// returns an array list of the league ID and name, arrayList.at(0) = id, arraylist.at(1) = leageName
+		return leagueDBInterator.getLeagueByName(search);
 	}
 }

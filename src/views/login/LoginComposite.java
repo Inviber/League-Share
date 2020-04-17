@@ -6,6 +6,8 @@ import org.eclipse.swt.widgets.Text;
 
 import database.DatabaseHelper;
 import user.Account;
+import user.AccountDBInterator;
+import user.AccountGenerator;
 import views.GUIShell;
 import views.landing.LandingComposite;
 
@@ -17,6 +19,7 @@ public class LoginComposite extends Composite {
 	private Text text_1;
 	private Text text;
 	private Composite loginComposite = this;
+	private AccountGenerator accountGenerator;
 	
 	Account currentUser;
 	
@@ -30,6 +33,8 @@ public class LoginComposite extends Composite {
 		super(parent, SWT.NONE);
 		setLayout(null);
 		
+		this.accountGenerator = new AccountGenerator(dbHelper);
+		
 		Button btnNewButton = new Button(this, SWT.CENTER);
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -39,16 +44,30 @@ public class LoginComposite extends Composite {
 			
 				
 				//WILL NEED TO ADD INPUT VALIDATION
-				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
-				currentUser.getAccountDetails(true);
-				shell.setAccount(currentUser);
-
-				text.setText("");
-				text_1.setText("");
 				
-				shell.disposeDisplayedComposite();
-				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
-				shell.setDisplayedComposite(landingComposite);
+				try 
+				{
+					currentUser = accountGenerator.generateAccount(text.getText(), text_1.getText());
+					if (currentUser != null)
+					{
+						shell.setAccount(currentUser);
+						
+						text.setText("");
+						text_1.setText("");
+						
+						shell.disposeDisplayedComposite();
+						LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
+						shell.setDisplayedComposite(landingComposite);
+					}
+					else
+					{
+						System.out.println("Invalid password");
+					}
+				}
+				catch (NullPointerException nullError)
+				{
+					System.out.println(nullError.getMessage());
+				}				
 			}
 		});
 		btnNewButton.setBounds(590, 380, 93, 29);
@@ -71,6 +90,40 @@ public class LoginComposite extends Composite {
 		Label lblNewLabel_1_1 = new Label(this, SWT.NONE);
 		lblNewLabel_1_1.setText("Username");
 		lblNewLabel_1_1.setBounds(452, 299, 70, 17);
+		
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+//				System.out.println("Username: " + text.getText() + " Password: " + text_1.getText());
+			
+				
+				
+				
+				if (!accountGenerator.getAccountDBInterator().existingAccount(text.getText())) // if account doesn't exist.
+				{
+					// create account
+					accountGenerator.getAccountDBInterator().createUser(text.getText(), text_1.getText());
+					//WILL NEED TO ADD INPUT VALIDATION
+					currentUser = accountGenerator.generateAccount(text.getText(), text_1.getText());
+					shell.setAccount(currentUser);
+
+					text.setText("");
+					text_1.setText("");
+					
+					shell.disposeDisplayedComposite();
+					LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
+					shell.setDisplayedComposite(landingComposite);
+				}
+				else // if it does exist.
+				{
+					System.out.println("This account already exists.");
+					// exists, don't create.
+				}
+				
+				
+			}
+		});
 
 	}
 
