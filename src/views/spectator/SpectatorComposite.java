@@ -202,7 +202,7 @@ public class SpectatorComposite extends Composite {
 		
 		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
 		txtEnterAMessage.setBounds(0, 184, 428, 25);
-		txtEnterAMessage.setText("Enter a message");
+		//txtEnterAMessage.setText("Enter a message");
 		txtEnterAMessage.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
