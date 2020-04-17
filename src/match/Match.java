@@ -3,8 +3,8 @@ package match;
 import java.util.Calendar;
 
 public class Match {
-	// private String leagueID;
-	// private String matchID;
+	private String leagueID;
+	private String matchID;
 	private String homeTeamID;
 	private String awayTeamID;
 	private int homeScore;
@@ -13,14 +13,24 @@ public class Match {
     
     public Match() {}
 
-    public Match(String homeTeamID, String awayTeamID, int homeScore, int awayScore, Calendar date) {
-        this.homeTeamID = homeTeamID;
+    public Match(String leagueID, String matchID, String homeTeamID, String awayTeamID, int homeScore, int awayScore, Calendar date) {
+    	this.leagueID = leagueID;
+        this.matchID = matchID;
+    	this.homeTeamID = homeTeamID;
         this.awayTeamID = awayTeamID;
         this.homeScore = homeScore;
         this.awayScore = awayScore;
         this.date = date;
     }
 
+    public String getLeagueID() {
+        return leagueID;
+    }
+    
+    public String getMatchID() {
+        return matchID;
+    }
+    
     public String getHomeTeamID() {
         return homeTeamID;
     }

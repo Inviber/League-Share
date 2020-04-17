@@ -1,5 +1,7 @@
 package league;
 
+import java.util.ArrayList;
+
 import org.bson.Document;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -38,6 +40,11 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 		}
 		
 		return leagueData;
+	}
+	
+	public ArrayList<String> getLeagueByName(String search)
+	{
+		return dbHelper.getLeagueByLeagueName(search);
 	}
 	
 	public void addCasterIDs(String leagueID, String casterID) 

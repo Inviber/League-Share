@@ -1,20 +1,19 @@
 package views.spectator;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
-
+import match.ChatMessage;
 import match.Match;
 import player.Player;
-
 import team.Team;
-
 import views.GUIShell;
-
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Text;
@@ -23,11 +22,23 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 
 public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
+	
+	private Composite chatComposite;
+	private ScrolledComposite scrolledComposite;
+	private Group grpChatToBe;
+	private String username;
+	private String leagueID;
+	private String matchID;
+	private GUIShell shell;
+	private Thread chatThread;
+	//private boolean chatThread = true;
 
 	/**
 	 * Create the composite.
@@ -41,10 +52,54 @@ public class SpectatorComposite extends Composite {
 	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match, Team homeTeam, Team awayTeam,
 			Composite previousWindow) {
 		super(parent, style);
-
+		
+		this.shell = shell;
+		username = shell.getAccount().getUsername();
+		leagueID = match.getLeagueID();
+		matchID = match.getMatchID();
+		
+		
+		grpChatToBe = new Group(this, SWT.NONE);
+		grpChatToBe.setText("Chat");
+		grpChatToBe.setBounds(10, 466, 1260, 219);
+				
+		scrolledComposite = new ScrolledComposite(grpChatToBe,
+				SWT.BORDER | SWT.V_SCROLL);
+		scrolledComposite.setBounds(0, 21, 1245, 163);
+				
+		
+		chatComposite = new Composite(scrolledComposite, SWT.NONE);
+		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		scrolledComposite.setContent(chatComposite);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+				
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
-
-	}
+		
+		chatThread = new Thread(new Runnable() 
+		{
+		  public void run() 
+		  {
+		     while (true) 
+		     {
+		        
+		        Display.getDefault().asyncExec(new Runnable() 
+		        {
+		           public void run() 
+		           {
+		              refreshChat();
+		           }
+		        });
+		        
+		        try { Thread.sleep(1000); } catch (Exception e) { }
+		     }
+		  }
+		});
+	
+		chatThread.start();
+  }
 
 	private void CreateComponents(GUIShell shell, Composite parent, Match match, Team homeTeam, Team awayTeam,
 			Composite previousWindow) {
@@ -53,7 +108,7 @@ public class SpectatorComposite extends Composite {
 
 		CreateTopButtons(previousWindow, temporaryCaster, parent);
 
-		CreateChat();
+		CreateChat(shell, match);
 
 		CreateConstantLabels();
 
@@ -67,6 +122,7 @@ public class SpectatorComposite extends Composite {
 		switchToCaster.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				chatThread.stop();
 				((GUIShell) parent).setDisplayedComposite(CasterComposite);
 				System.out.println("Caster Selected");
 			}
@@ -79,7 +135,11 @@ public class SpectatorComposite extends Composite {
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+
+				chatThread.stop();
+				
 				((GUIShell) parent).setDisplayedComposite(previousWindow);
+			
 				System.out.println("Back button pressed.");
 			}
 		});
@@ -167,44 +227,84 @@ public class SpectatorComposite extends Composite {
 
 	}
 
-	private void CreateChat() {
-		Group grpChatToBe = new Group(this, SWT.NONE);
-		grpChatToBe.setText("Chat to be completed");
-		grpChatToBe.setBounds(10, 466, 1260, 219);
-
-		ScrolledComposite scrolledComposite = new ScrolledComposite(grpChatToBe,
-				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setBounds(0, 21, 1260, 163);
-		scrolledComposite.setExpandVertical(true);
+	
+	private void CreateChat(GUIShell shell, Match match) {
+    
+		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
+		txtEnterAMessage.setBounds(0, 184, 428, 25);
+		txtEnterAMessage.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				txtEnterAMessage.setText("");
+				
+			}
+		});
 
 		Button btnSubmit = new Button(grpChatToBe, SWT.NONE);
 		btnSubmit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
+				Format f = new SimpleDateFormat("hh:mm:ss");
+				String timeString = "(" + f.format(new Date()) + ")";
+				String chatMessage = txtEnterAMessage.getText();
+				
+				shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
+				txtEnterAMessage.setText("");	
+				
+		        refreshChat();
 			}
 		});
 
-		btnSubmit.addKeyListener(new KeyAdapter() {
+		txtEnterAMessage.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.CR) {
-					System.out.println("Message Sent");
-					// Need to actually send message here using the text field contents [Should be
-					// the same as above]
+				if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					Format f = new SimpleDateFormat("hh:mm:ss");
+					String timeString = "(" + f.format(new Date()) + ")";
+					String chatMessage = txtEnterAMessage.getText();
+					
+					shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, username, chatMessage, timeString);
+					txtEnterAMessage.setText("");	
+					
+			        refreshChat();
 				}
 			}
 		});
 		btnSubmit.setBounds(428, 183, 90, 26);
 		btnSubmit.setText("Submit");
-
-		txtEnterAMessage = new Text(grpChatToBe, SWT.BORDER);
-		txtEnterAMessage.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				txtEnterAMessage.setText("");
-			}
-		});
-		txtEnterAMessage.setBounds(0, 184, 428, 25);
-		txtEnterAMessage.setText("Enter a message");
+	}
+	
+	private void refreshChat() 
+	{
+				
+		chatComposite = new Composite(scrolledComposite, SWT.NONE);
+		chatComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		ArrayList<ChatMessage> chat = shell.getMatchGenerator().getMatchDBInterator().getChat(leagueID, matchID);
+	
+		for(int i = 0; i < chat.size(); i++)
+		{
+			String dbMessage = chat.get(i).getTime() + " " + chat.get(i).getUsername() + ": " + chat.get(i).getMessage(); 
+			new Label(chatComposite, SWT.NONE).setText(dbMessage);
+		}
+		
+		scrolledComposite.setContent(chatComposite);
+		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
+		Rectangle bounds = chatComposite.getBounds();
+		//http://www.java2s.com/Tutorial/Java/0280__SWT/Scrollawidgetintoviewonfocusin.htm
+	    Rectangle area = scrolledComposite.getClientArea();
+	    Point origin = scrolledComposite.getOrigin();
+	    if (origin.x > bounds.x)
+	      origin.x = Math.max(0, bounds.x);
+	    if (origin.y > bounds.y)
+	      origin.y = Math.max(0, bounds.y);
+	    if (origin.x + area.width < bounds.x + bounds.width)
+	      origin.x = Math.max(0, bounds.x + bounds.width - area.width);
+	    if (origin.y + area.height < bounds.y + bounds.height)
+	      origin.y = Math.max(0, bounds.y + bounds.height - area.height);
+	    
+		scrolledComposite.setOrigin(origin);   
 	}
 }
