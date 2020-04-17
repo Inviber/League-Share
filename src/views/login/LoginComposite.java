@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Text;
 import database.DatabaseHelper;
 import user.Account;
 import user.AccountDBInterator;
+import user.AccountGenerator;
 import views.GUIShell;
 import views.landing.LandingComposite;
 
@@ -18,7 +19,7 @@ public class LoginComposite extends Composite {
 	private Text text_1;
 	private Text text;
 	private Composite loginComposite = this;
-	private AccountDBInterator accountDBInterator;
+	private AccountGenerator accountGenerator;
 	
 	Account currentUser;
 	
@@ -32,7 +33,7 @@ public class LoginComposite extends Composite {
 		super(parent, SWT.NONE);
 		setLayout(null);
 		
-		this.accountDBInterator = new AccountDBInterator(dbHelper);
+		this.accountGenerator = new AccountGenerator(dbHelper);
 		
 		Button btnNewButton = new Button(this, SWT.CENTER);
 		btnNewButton.addMouseListener(new MouseAdapter() {
@@ -43,24 +44,30 @@ public class LoginComposite extends Composite {
 			
 				
 				//WILL NEED TO ADD INPUT VALIDATION
-				currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
-				currentUser.getAccountDetails(true);
-				if (currentUser.getSuccessfullyLoggedIn())
-				{
-					shell.setAccount(currentUser);
-					
-					text.setText("");
-					text_1.setText("");
-					
-					shell.disposeDisplayedComposite();
-					LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
-					shell.setDisplayedComposite(landingComposite);
-				}
-				else
-				{
-					System.out.println("Invalid password");
-				}
 				
+				try 
+				{
+					currentUser = accountGenerator.generateAccount(text.getText(), text_1.getText());
+					if (currentUser != null)
+					{
+						shell.setAccount(currentUser);
+						
+						text.setText("");
+						text_1.setText("");
+						
+						shell.disposeDisplayedComposite();
+						LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
+						shell.setDisplayedComposite(landingComposite);
+					}
+					else
+					{
+						System.out.println("Invalid password");
+					}
+				}
+				catch (NullPointerException nullError)
+				{
+					System.out.println(nullError.getMessage());
+				}				
 			}
 		});
 		btnNewButton.setBounds(590, 380, 93, 29);
@@ -91,13 +98,14 @@ public class LoginComposite extends Composite {
 //				System.out.println("Username: " + text.getText() + " Password: " + text_1.getText());
 			
 				
-				if (!accountDBInterator.existingAccount(text.getText())) // if account doesn't exist.
+				
+				
+				if (!accountGenerator.getAccountDBInterator().existingAccount(text.getText())) // if account doesn't exist.
 				{
 					// create account
-					accountDBInterator.createUser(text.getText(), text_1.getText());
+					accountGenerator.getAccountDBInterator().createUser(text.getText(), text_1.getText());
 					//WILL NEED TO ADD INPUT VALIDATION
-					currentUser = new Account(text.getText(), text_1.getText(), dbHelper);
-					currentUser.getAccountDetails(true);
+					currentUser = accountGenerator.generateAccount(text.getText(), text_1.getText());
 					shell.setAccount(currentUser);
 
 					text.setText("");
