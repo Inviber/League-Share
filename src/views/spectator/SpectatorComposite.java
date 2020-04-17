@@ -74,30 +74,8 @@ public class SpectatorComposite extends Composite {
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-		
-		//refreshChat();
-		
-		
-	
-		//Thread.currentThread().interrupt();
-		
+				
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
-		
-//		chatThread = new Thread(new Runnable() {
-//		      public void run() {
-//		         while (true) {
-//		            try { Thread.sleep(1000); } catch (Exception e) { }
-//		            Display.getDefault().asyncExec(new Runnable() {
-//		               public void run() {
-//		                  refreshChat();
-//		               }
-//		            });
-//		         }
-//		      }
-//		   });
-//		
-//		chatThread.start();
-		
 		
 		chatThread = new Thread(new Runnable() 
 		{
@@ -120,10 +98,6 @@ public class SpectatorComposite extends Composite {
 		});
 	
 		chatThread.start();
-		
-		
-		
-		
 	}
 	
 	private void CreateComponents(GUIShell shell, Composite parent, Match match,
@@ -138,7 +112,6 @@ public class SpectatorComposite extends Composite {
 		CreateConstantLabels();
 
 		CreateDynamicDataLabels(match, homeTeam, awayTeam, shell);
-
 	}
 	
 	
@@ -162,13 +135,7 @@ public class SpectatorComposite extends Composite {
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				while(!chatThread.isInterrupted())
-//				{
-//					chatThread.interrupt();
-//				}
-				
-				//chatThread.interrupt();
-				//System.out.println(chatThread.isInterrupted());
+
 				chatThread.stop();
 				
 				((GUIShell) parent).setDisplayedComposite(previousWindow);
@@ -178,8 +145,6 @@ public class SpectatorComposite extends Composite {
 		});
 		backButton.setText("Back");
 		backButton.setBounds(10, 10, 134, 45);
-		
-		
 	}
 	
 	private void CreateConstantLabels() {
@@ -322,9 +287,6 @@ public class SpectatorComposite extends Composite {
 		});
 		btnSubmit.setBounds(428, 183, 90, 26);
 		btnSubmit.setText("Submit");
-
-		
-		
 	}
 	
 	private void refreshChat() 
