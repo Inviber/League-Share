@@ -844,8 +844,8 @@ public class DatabaseHelper {
 //		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e6ba667266a35632f569097");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "Brandons", "Mom");
-//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "Cringes", "Mom");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Penn", "Jillette");  //////////////////////////////////////////////////////////////////////////////////////////// For adding players
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Raymond", "Teller");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 

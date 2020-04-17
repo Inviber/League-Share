@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-
 import match.Match;
 import player.Player;
 
@@ -33,22 +32,23 @@ public class SpectatorComposite extends Composite {
 	/**
 	 * Create the composite.
 	 * 
-	 * @param homeTeam Home team parameter should be before away team
-	 * @param awayTeam 
-	 * @param previousWindow - the Schedule composite should pass "this" keyword as the parameter
-	 * Called using the POJOs from Schedule, can make generators to go back to the schedule
+	 * @param homeTeam       Home team parameter should be before away team
+	 * @param awayTeam
+	 * @param previousWindow - the Schedule composite should pass "this" keyword as
+	 *                       the parameter Called using the POJOs from Schedule, can
+	 *                       make generators to go back to the schedule
 	 */
-	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match,
-			Team homeTeam, Team awayTeam, Composite previousWindow) {
+	public SpectatorComposite(Composite parent, int style, GUIShell shell, Match match, Team homeTeam, Team awayTeam,
+			Composite previousWindow) {
 		super(parent, style);
-		
+
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
-		
+
 	}
-	
-	private void CreateComponents(GUIShell shell, Composite parent, Match match,
-			Team homeTeam, Team awayTeam, Composite previousWindow) {
-		//TODO make a caster composite and replace this blank one;
+
+	private void CreateComponents(GUIShell shell, Composite parent, Match match, Team homeTeam, Team awayTeam,
+			Composite previousWindow) {
+		// TODO make a caster composite and replace this blank one;
 		Composite temporaryCaster = new Composite(parent, SWT.NONE);
 
 		CreateTopButtons(previousWindow, temporaryCaster, parent);
@@ -58,13 +58,11 @@ public class SpectatorComposite extends Composite {
 		CreateConstantLabels();
 
 		CreateDynamicDataLabels(match, homeTeam, awayTeam, shell);
-
 	}
-	
-	
-	private void CreateTopButtons(Composite previousWindow, Composite CasterComposite, Composite parent){
-	
-	//button to switch to caster (no caster composite for now)
+
+	private void CreateTopButtons(Composite previousWindow, Composite CasterComposite, Composite parent) {
+
+		// button to switch to caster (no caster composite for now)
 		Button switchToCaster = new Button(this, SWT.NONE);
 		switchToCaster.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -75,8 +73,8 @@ public class SpectatorComposite extends Composite {
 		});
 		switchToCaster.setBounds(10, 61, 134, 45);
 		switchToCaster.setText("Caster View");
-		
-	//button to go back to schedule
+
+		// button to go back to schedule
 		Button backButton = new Button(this, SWT.NONE);
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -87,10 +85,8 @@ public class SpectatorComposite extends Composite {
 		});
 		backButton.setText("Back");
 		backButton.setBounds(10, 10, 134, 45);
-		
-		
 	}
-	
+
 	private void CreateConstantLabels() {
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
@@ -103,11 +99,8 @@ public class SpectatorComposite extends Composite {
 		lblNewLabel_1.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.NORMAL));
 		lblNewLabel_1.setBounds(628, 80, 24, 20);
 		lblNewLabel_1.setText("vs.");
-		
-		
 	}
-	
-	//Player Lists could be done more eloquently
+
 	private void CreateDynamicDataLabels(Match match, Team homeTeam, Team awayTeam, GUIShell shell) {
 		Label lblNewLabel_2 = new Label(this, SWT.NONE);
 		lblNewLabel_2.setAlignment(SWT.CENTER);
@@ -123,21 +116,20 @@ public class SpectatorComposite extends Composite {
 		lblNewLabel_3.setAlignment(SWT.CENTER);
 		lblNewLabel_3.setBounds(427, 125, 431, 20);
 		lblNewLabel_3.setText(match.getHomeScore() + "   -   " + match.getAwayScore());
-		
+
 		Group grpHomeTeamInfo = new Group(this, SWT.NONE);
 		grpHomeTeamInfo.setText("Home Team Info");
 		grpHomeTeamInfo.setBounds(20, 151, 606, 313);
 
-		
 		Group grpAwayTeamInfo = new Group(this, SWT.NONE);
 		grpAwayTeamInfo.setText("Away Team Info");
 		grpAwayTeamInfo.setBounds(654, 151, 606, 313);
 
 		displayPlayers(homeTeam, shell, grpHomeTeamInfo);
-		displayPlayers(homeTeam, shell, grpAwayTeamInfo);
+		displayPlayers(awayTeam, shell, grpAwayTeamInfo);
 
 	}
-	
+
 	private void displayPlayers(Team currentTeam, GUIShell shell, Group groupToAddTo) {
 		ScrolledComposite scrollingPlayersComposite = new ScrolledComposite(groupToAddTo, SWT.BORDER | SWT.V_SCROLL);
 		scrollingPlayersComposite.setAlwaysShowScrollBars(true);
@@ -153,22 +145,28 @@ public class SpectatorComposite extends Composite {
 		// Getting the list of home player IDs
 		ArrayList<String> players = currentTeam.getPlayerIDs();
 		// Generating the list of team mates
-		while (!players.isEmpty()) {  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		while (!players.isEmpty()) { 
 			Composite playerInfo = new Composite(playersComposite, SWT.NONE);
 			fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
+			
 			// making a player parser to access the players names
-			displayedPlayer = shell.getPlayerGenerator().generatePlayer(currentTeam.getLeagueID(), currentTeam.getTeamID(),
-					players.remove(0));
+			displayedPlayer = shell.getPlayerGenerator().generatePlayer(currentTeam.getLeagueID(),
+					currentTeam.getTeamID(), players.remove(0));
+
 			Label playerName = new Label(playerInfo, SWT.NONE);
-			// lblNewLabel_4.setBounds(10, 10, 295, 20);
-			playerName.setText(displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName());
+			String playerStats = displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName();
+
+			for(String statName : displayedPlayer.getStatisticNames())
+				playerStats += "\n     " + statName + ": " + displayedPlayer.getStatistics().get(statName);
+			
+			playerName.setText(playerStats);
 		}
 		scrollingPlayersComposite.setContent(playersComposite);
 		scrollingPlayersComposite.setMinSize(playersComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 	}
-	
+
 	private void CreateChat() {
 		Group grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat to be completed");
