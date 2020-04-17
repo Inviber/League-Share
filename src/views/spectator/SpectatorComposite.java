@@ -132,61 +132,44 @@ public class SpectatorComposite extends Composite {
 		grpHomeTeamInfo.setText("Home Team Info");
 		grpHomeTeamInfo.setBounds(20, 151, 606, 313);
 
-		ScrolledComposite homeTeamPlayersComposite = new ScrolledComposite(grpHomeTeamInfo, SWT.BORDER | SWT.V_SCROLL);
-		homeTeamPlayersComposite.setAlwaysShowScrollBars(true);
-		homeTeamPlayersComposite.setExpandHorizontal(true);
-		homeTeamPlayersComposite.setExpandVertical(true);
-		homeTeamPlayersComposite.setBounds(0, 0, 606, 313);
-
-		Composite composite = new Composite(homeTeamPlayersComposite, SWT.NONE);
-		FillLayout fl_composite = new FillLayout(SWT.VERTICAL);
-		fl_composite.spacing = 5;
-		composite.setLayout(fl_composite);
-
-		// Getting the list of home player IDs
-		ArrayList<String> players = homeTeam.getPlayerIDs();
-		// Generating the list of team mates
-		while (!players.isEmpty()) {  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			Composite playerInfo = new Composite(composite, SWT.NONE);
-			FillLayout fill = new FillLayout(SWT.VERTICAL);
-			playerInfo.setLayout(fill);
-			// making a player parser to access the players names
-			displayedPlayer = shell.getPlayerGenerator().generatePlayer(homeTeam.getLeagueID(), homeTeam.getTeamID(),
-					players.remove(0));
-			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
-			// lblNewLabel_4.setBounds(10, 10, 295, 20);
-			lblNewLabel_4.setText(displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName());
-		}
-		homeTeamPlayersComposite.setContent(composite);
-		homeTeamPlayersComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
+		
 		Group grpAwayTeamInfo = new Group(this, SWT.NONE);
 		grpAwayTeamInfo.setText("Away Team Info");
 		grpAwayTeamInfo.setBounds(654, 151, 606, 313);
 
-		ScrolledComposite awayTeamPlayersComposite = new ScrolledComposite(grpAwayTeamInfo, SWT.BORDER | SWT.V_SCROLL);
-		awayTeamPlayersComposite.setExpandVertical(true);
-		awayTeamPlayersComposite.setExpandHorizontal(true);
-		awayTeamPlayersComposite.setAlwaysShowScrollBars(true);
-		awayTeamPlayersComposite.setBounds(0, 0, 606, 313);
+		displayPlayers(homeTeam, shell, grpHomeTeamInfo);
+		displayPlayers(homeTeam, shell, grpAwayTeamInfo);
 
-		// Getting the list of away player IDs
-		players = awayTeam.getPlayerIDs();
+	}
+	
+	private void displayPlayers(Team currentTeam, GUIShell shell, Group groupToAddTo) {
+		ScrolledComposite scrollingPlayersComposite = new ScrolledComposite(groupToAddTo, SWT.BORDER | SWT.V_SCROLL);
+		scrollingPlayersComposite.setAlwaysShowScrollBars(true);
+		scrollingPlayersComposite.setExpandHorizontal(true);
+		scrollingPlayersComposite.setExpandVertical(true);
+		scrollingPlayersComposite.setBounds(0, 0, 606, 313);
+
+		Composite playersComposite = new Composite(scrollingPlayersComposite, SWT.NONE);
+		FillLayout fill = new FillLayout(SWT.VERTICAL);
+		fill.spacing = 5;
+		playersComposite.setLayout(fill);
+
+		// Getting the list of home player IDs
+		ArrayList<String> players = currentTeam.getPlayerIDs();
 		// Generating the list of team mates
-		while (!players.isEmpty()) { ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			Composite playerInfo = new Composite(composite, SWT.NONE);
-			FillLayout fill = new FillLayout(SWT.VERTICAL);
+		while (!players.isEmpty()) {  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			Composite playerInfo = new Composite(playersComposite, SWT.NONE);
+			fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
 			// making a player parser to access the players names
-			displayedPlayer = shell.getPlayerGenerator().generatePlayer(awayTeam.getLeagueID(), awayTeam.getTeamID(),
+			displayedPlayer = shell.getPlayerGenerator().generatePlayer(currentTeam.getLeagueID(), currentTeam.getTeamID(),
 					players.remove(0));
-			Label lblNewLabel_4 = new Label(playerInfo, SWT.NONE);
+			Label playerName = new Label(playerInfo, SWT.NONE);
 			// lblNewLabel_4.setBounds(10, 10, 295, 20);
-			lblNewLabel_4.setText(displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName());
+			playerName.setText(displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName());
 		}
-
-		awayTeamPlayersComposite.setContent(composite);
-		awayTeamPlayersComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrollingPlayersComposite.setContent(playersComposite);
+		scrollingPlayersComposite.setMinSize(playersComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 	}
 	
