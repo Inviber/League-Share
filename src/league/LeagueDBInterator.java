@@ -1,5 +1,7 @@
 package league;
 
+import java.util.ArrayList;
+
 import org.bson.Document;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -40,6 +42,11 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 		return leagueData;
 	}
 	
+	public ArrayList<String> getLeagueByName(String search)
+	{
+		return dbHelper.getLeagueIDByLeagueName(search);
+	}
+	
 	public void addCasterIDs(String leagueID, String casterID) 
 	{
 		dbHelper.addLeagueCasterID(leagueID, casterID);
@@ -58,5 +65,15 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 	public void deleteTrackedStatistic(String leagueID, String trackedStatisticID)
 	{
 		dbHelper.deleteTrackedStatistic(leagueID, trackedStatisticID);
+	}
+	
+	public void createLeague(String leagueName, String ownerID, String sport, String description)
+	{
+		dbHelper.createLeague(leagueName, ownerID, sport, description);
+	}
+	
+	public void deleteLeague(String leagueID)
+	{
+		dbHelper.deleteLeague(leagueID);
 	}
 }

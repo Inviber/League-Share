@@ -14,6 +14,7 @@ import match.MatchGenerator;
 import player.PlayerGenerator;
 import team.TeamGenerator;
 import user.Account;
+import user.AccountGenerator;
 import views.login.LoginComposite;
 
 public class GUIShell extends Shell {
@@ -28,9 +29,8 @@ public class GUIShell extends Shell {
 //	private Composite spectatorComposite = null;
 //	private Composite casterComposite = null;
 //	private Composite adminComposite = null;
-	
-	private Account currentUser;
-	
+		
+	private static AccountGenerator accountGenerator;
 	private static LeagueGenerator leagueGenerator;
 	private static MatchGenerator matchGenerator;
 	private static TeamGenerator teamGenerator;
@@ -76,6 +76,7 @@ public class GUIShell extends Shell {
 		
 		dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 
+		accountGenerator = new AccountGenerator(dbHelper);
 		leagueGenerator = new LeagueGenerator(dbHelper);
 		matchGenerator = new MatchGenerator(dbHelper);
 		teamGenerator = new TeamGenerator(dbHelper);
@@ -91,7 +92,7 @@ public class GUIShell extends Shell {
 		setText("League Share");
 		setSize(1280, 720);
 		
-		loginComposite = new LoginComposite(shell, SWT.NONE, this, dbHelper);
+		loginComposite = new LoginComposite(shell, SWT.NONE, this);
 		
 		displayedComposite = loginComposite;
 		displayedComposite.setSize(1280, 720);
@@ -106,7 +107,7 @@ public class GUIShell extends Shell {
 	public void logout()
 	{
 		disposeDisplayedComposite();
-		loginComposite = new LoginComposite(shell, SWT.NONE, this, dbHelper);
+		loginComposite = new LoginComposite(shell, SWT.NONE, this);
 		
 		displayedComposite = loginComposite;
 		displayedComposite.setSize(1280, 720);
@@ -125,14 +126,8 @@ public class GUIShell extends Shell {
 		displayedComposite.setSize(1280, 720);
 	}
 	
-	public void setAccount(Account currentUser)
-	{
-		this.currentUser = currentUser;
-	}
-	
-	public Account getAccount()
-	{
-		return this.currentUser;
+	public AccountGenerator getAccountGenerator() {
+		return accountGenerator;
 	}
 	
 	public LeagueGenerator getLeagueGenerator() {
