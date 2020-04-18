@@ -65,9 +65,7 @@ public class CasterGenerator {
 			System.out.println("Error: The provided teams do not belong to the same league. Unable to getAllPlayers().");
 
 		}
-		
-//		System.out.println(team1PlayerIDs);
-//		System.out.println(team2PlayerIDs);
+
 	}
 	
 	public ArrayList<Player> getHomePlayers()

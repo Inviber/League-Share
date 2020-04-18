@@ -53,24 +53,25 @@ public class CasterComposite extends Composite {
 	
 	public void fillComposite(Composite parent)
 	{
-		SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), match, homeTeam, awayTeam 
-				/*((GUIShell)parent).getMatchGenerator().getMatch(), ((GUIShell)parent).getTeamGenerator().generateTeam(homeTeam.getLeagueID(), 
-				 * homeTeam.getTeamID()), ((GUIShell)parent).getTeamGenerator().generateTeam(awayTeam.getLeagueID(), awayTeam.getTeamID())*/);
-		Composite previousWindow = spectatorGenerator.getSpectatorComposite();
-		
-		CreateTopButtons(previousWindow, parent);
+		CreateTopButtons(parent);
 		CreateConstantLabels();
 		CreateDynamicDataLabels(((GUIShell)parent));
-
 	}
 	
-	private void CreateTopButtons(Composite previousWindow, Composite parent) {
+	private void CreateTopButtons(Composite parent) {
 		// button to go back to spectator view
 		Button backButton = new Button(this, SWT.NONE);
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				// Create new POJOs based on updated DB stats
+				Match newMatch = ((GUIShell)parent).getMatchGenerator().getMatch();
+				Team newHomeTeam = ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getHomeTeamID());
+				Team newAwayTeam = ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getAwayTeamID());
+				// Create new spectatorGenerator and spectatorComposite with new POJOs
+				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), newMatch, newHomeTeam, newAwayTeam);
+				Composite previousWindow = spectatorGenerator.getSpectatorComposite();
+				// Display new spectator
 				((GUIShell) parent).setDisplayedComposite(previousWindow);
 			
 				System.out.println("Back button pressed.");
@@ -189,14 +190,15 @@ public class CasterComposite extends Composite {
 		fill.spacing = 5;
 		playersComposite.setLayout(fill);
 
+		int i = 0;
 		// Generating the list of team mates
-		while (!players.isEmpty()) { 
+		while (i < players.size()) { 
 			Composite playerInfo = new Composite(playersComposite, SWT.NONE);
 			fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
 			
 			// making a player parser to access the players names
-			displayedPlayer = players.remove(0);
+			displayedPlayer = players.get(i);
 
 			Label playerName = new Label(playerInfo, SWT.NONE);
 			String playerStats = displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName();
@@ -205,6 +207,7 @@ public class CasterComposite extends Composite {
 				playerStats += "\n     " + statName + ": " + displayedPlayer.getStatistics().get(statName);
 			
 			playerName.setText(playerStats);
+			i++;
 		}
 		scrollingPlayersComposite.setContent(playersComposite);
 		scrollingPlayersComposite.setMinSize(playersComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
