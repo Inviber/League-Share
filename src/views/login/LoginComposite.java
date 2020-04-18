@@ -46,9 +46,7 @@ public class LoginComposite extends Composite {
 				{
 					currentUser = shell.getAccountGenerator().generateAccount(text.getText(), text_1.getText());
 					if (currentUser != null)
-					{
-						shell.setAccount(currentUser);
-						
+					{						
 						text.setText("");
 						text_1.setText("");
 						
@@ -103,7 +101,6 @@ public class LoginComposite extends Composite {
 					shell.getAccountGenerator().getAccountDBInterator().createUser(text.getText(), text_1.getText());
 					//WILL NEED TO ADD INPUT VALIDATION
 					currentUser = shell.getAccountGenerator().generateAccount(text.getText(), text_1.getText());
-					shell.setAccount(currentUser);
 
 					text.setText("");
 					text_1.setText("");

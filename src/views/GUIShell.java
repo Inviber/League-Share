@@ -29,9 +29,7 @@ public class GUIShell extends Shell {
 //	private Composite spectatorComposite = null;
 //	private Composite casterComposite = null;
 //	private Composite adminComposite = null;
-	
-	private Account currentUser;
-	
+		
 	private static AccountGenerator accountGenerator;
 	private static LeagueGenerator leagueGenerator;
 	private static MatchGenerator matchGenerator;
@@ -126,16 +124,6 @@ public class GUIShell extends Shell {
 		this.displayedComposite.dispose();
 		this.displayedComposite = currentComposite;
 		displayedComposite.setSize(1280, 720);
-	}
-	
-	public void setAccount(Account currentUser)
-	{
-		this.currentUser = currentUser;
-	}
-	
-	public Account getAccount()
-	{
-		return this.currentUser;
 	}
 	
 	public AccountGenerator getAccountGenerator() {

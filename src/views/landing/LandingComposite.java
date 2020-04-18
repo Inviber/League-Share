@@ -99,7 +99,7 @@ public class LandingComposite extends Composite {
 				public void mouseDoubleClick(MouseEvent e) {
 //					System.out.println(list.getSelection() + " selected...");
 					
-					ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
+					ArrayList<String> followedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getFollowedLeagueIDs();
 //					LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
 //					LeagueParser parser = new LeagueParser(leagueDBInterator);
 					
@@ -159,11 +159,11 @@ public class LandingComposite extends Composite {
 			
 			
 			
-			ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
-			ArrayList<String> ownedLeagueIDs = shell.getAccount().getOwnedLeagueIDs();
-			ArrayList<String> managedLeaguesIDs = shell.getAccount().getLeagueCastedIDs();
-			ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
-	//		ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
+			ArrayList<String> followedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getFollowedLeagueIDs();
+			ArrayList<String> ownedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getOwnedLeagueIDs();
+			ArrayList<String> managedLeaguesIDs = shell.getAccountGenerator().getLoggedInAccount().getLeagueCastedIDs();
+			ArrayList<String> managedTeamIDs = shell.getAccountGenerator().getLoggedInAccount().getManagedTeamIDs();
+	//		ArrayList<String> managedTeamLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getManagedTeamLeagueIDs();
 			
 			
 			
