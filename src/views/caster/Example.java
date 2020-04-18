@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class Example extends Composite {
-
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -39,7 +38,7 @@ public class Example extends Composite {
 		// Top score panel of view ----------------------------------------------------------->
 		Group scoreGroup = new Group(this, SWT.NONE);
 		FormData fd_scoreGroup = new FormData();
-		fd_scoreGroup.bottom = new FormAttachment(0, 110);
+		fd_scoreGroup.bottom = new FormAttachment(0, 85);
 		fd_scoreGroup.right = new FormAttachment(0, 1260);
 		fd_scoreGroup.top = new FormAttachment(0, 10);
 		fd_scoreGroup.left = new FormAttachment(0, 10);
@@ -48,20 +47,20 @@ public class Example extends Composite {
 		Label lblTeamname_1 = new Label(scoreGroup, SWT.NONE);
 		lblTeamname_1.setAlignment(SWT.CENTER);
 		lblTeamname_1.setBounds(165, 10, 375, 30);
-		lblTeamname_1.setText("team1.name");
+		lblTeamname_1.setText(team1.getTeamName());
 		
 		Label lblTeamname_2 = new Label(scoreGroup, SWT.NONE);
-		lblTeamname_2.setText("team2.name");
+		lblTeamname_2.setText(team2.getTeamName());
 		lblTeamname_2.setAlignment(SWT.CENTER);
 		lblTeamname_2.setBounds(596, 10, 375, 30);
 		
 		Label lblTeam1score = new Label(scoreGroup, SWT.NONE);
 		lblTeam1score.setAlignment(SWT.CENTER);
 		lblTeam1score.setBounds(315, 46, 75, 30);
-		lblTeam1score.setText("team1.score");
+		lblTeam1score.setText( "" + match.getHomeScore() );
 		
 		Label lblTeam2score = new Label(scoreGroup, SWT.NONE);
-		lblTeam2score.setText("team2.score");
+		lblTeam2score.setText( "" + match.getAwayScore() );
 		lblTeam2score.setAlignment(SWT.CENTER);
 		lblTeam2score.setBounds(745, 46, 75, 30);
 		
@@ -69,7 +68,11 @@ public class Example extends Composite {
 		spectateButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println("Spectate!");
+//				System.out.println("match: " + match);
+//				System.out.println("team1: " + team1);
+//				System.out.println("team2: " + team2);
+				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), match, team1, team2 /*((GUIShell)parent).getMatchGenerator().getMatch(), ((GUIShell)parent).getTeamGenerator().generateTeam(team1.getLeagueID(), team1.getTeamID()), ((GUIShell)parent).getTeamGenerator().generateTeam(team2.getLeagueID(), team2.getTeamID())*/);
+				((GUIShell)parent).setDisplayedComposite(spectatorGenerator.getSpectatorComposite());
 			}
 		});
 		spectateButton.setBounds(1131, 10, 119, 30);
@@ -79,7 +82,8 @@ public class Example extends Composite {
 		team1ScoreIncrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				match.setHomeScore( match.getHomeScore() + 1 );
+				matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
 				System.out.println("Team1 score incremented.");
 			}
 		});
@@ -90,7 +94,10 @@ public class Example extends Composite {
 		team1ScoreDecrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				if ( match.getHomeScore() > 0 ) {
+					match.setHomeScore( match.getHomeScore() - 1 );
+					matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
+				}
 				System.out.println("Team1 score decremented.");
 			}
 		});
@@ -101,7 +108,8 @@ public class Example extends Composite {
 		team2ScoreIncrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				match.setAwayScore( match.getAwayScore() + 1 );
+				matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
 				System.out.println("Team2 score incremented.");
 			}
 		});
@@ -112,7 +120,10 @@ public class Example extends Composite {
 		team2ScoreDecrementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				if ( match.getAwayScore() > 0 ) {
+					match.setAwayScore( match.getAwayScore() - 1 );
+					matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
+				}
 				System.out.println("Team2 score decremented.");
 			}
 		});
@@ -153,54 +164,46 @@ public class Example extends Composite {
 		
 		// Team 1 player list and expandable stat menu group
 		Group statsTeam1Group = new Group(this, SWT.NONE);
-		fd_lblPostAnnouncement.top = new FormAttachment(0, 635);
 		statsTeam1Group.setLayout(new GridLayout(1, true));
 		statsTeam1Group.setBackground(dark_gray);
+		fd_lblPostAnnouncement.top = new FormAttachment(0, 675);
 		FormData fd_statsTeam1Group = new FormData();
-		fd_statsTeam1Group.bottom = new FormAttachment(100, -104);
+		fd_statsTeam1Group.bottom = new FormAttachment(text, -6);
 		fd_statsTeam1Group.top = new FormAttachment(scoreGroup, 6);
-		fd_statsTeam1Group.left = new FormAttachment(0, 10);
+		fd_statsTeam1Group.left = new FormAttachment(scoreGroup, 0, SWT.LEFT);
+		fd_statsTeam1Group.right = new FormAttachment(0, 630);
 		statsTeam1Group.setLayoutData(fd_statsTeam1Group);
 		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(statsTeam1Group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		// ScrolledComposite to scroll through all players
+		ScrolledComposite scrolledComposite_team1 = new ScrolledComposite(statsTeam1Group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_scrolledComposite.widthHint = 583;
-		gd_scrolledComposite.heightHint = 475;
-		scrolledComposite.setLayoutData(gd_scrolledComposite);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
+		gd_scrolledComposite.heightHint = 480;
+		gd_scrolledComposite.widthHint = 580;
+		scrolledComposite_team1.setLayoutData(gd_scrolledComposite);
+		scrolledComposite_team1.setExpandHorizontal(true);
+		scrolledComposite_team1.setExpandVertical(true);
 		
-		Composite composite = new Composite(scrolledComposite, SWT.NONE);
+		// Put playerBtnList onto Scrolled Composite
+		Composite playerBtnList = new Composite(scrolledComposite_team1, SWT.NONE);
+
+		// Add action listeners to player buttons for expanding
+		// Create components for each player on the team.
+		for(int i = 0; i < team1Players.size(); i++)
+		{
+			Button btnPlayername = new Button(playerBtnList, SWT.NONE);
+			btnPlayername.setText( team1Players.get(i).getFirstName() + " " + team1Players.get(i).getLastName() );
+			btnPlayername.setBounds(0, i * 36, 560, 30);
+			btnPlayername.addSelectionListener( new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					System.out.println("Player button clicked.");
+				}
+			});
+
+		}
 		
-		ExpandBar expandBar = new ExpandBar(composite, SWT.NONE);
-		expandBar.setTouchEnabled(true);
-		expandBar.setBounds(0, 0, SWT.FILL, SWT.FILL);
-		
-		ExpandItem xpndtmNewExpanditem = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmNewExpanditem.setExpanded(false);
-		xpndtmNewExpanditem.setText("New ExpandItem");
-		
-		Composite composite_2 = new Composite(expandBar, SWT.NONE);
-		xpndtmNewExpanditem.setControl(composite_2);
-		
-		Label lblNewLabel = new Label(composite_2, SWT.BORDER);
-		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
-		lblNewLabel.setBounds(10, 10, 150, 30);
-		lblNewLabel.setText("New Label");
-		
-		Button btnNewButton = new Button(composite_2, SWT.NONE);
-		btnNewButton.setBounds(210, 10, 75, 30);
-		btnNewButton.setText("New Button");
-		
-		Button btnNewButton_1 = new Button(composite_2, SWT.NONE);
-		btnNewButton_1.setText("New Button");
-		btnNewButton_1.setBounds(291, 10, 75, 30);
-		xpndtmNewExpanditem.setHeight(xpndtmNewExpanditem.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		
-		
-		scrolledComposite.setContent(composite);
-		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		
+		scrolledComposite_team1.setContent(playerBtnList);
+		scrolledComposite_team1.setMinSize(playerBtnList.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 		// START EXPANDED COMPOSITE EXAMPLE----------------------------------------------------->
 //		Composite statComposite_team1_expanded = new Composite(statsTeam1Group, SWT.NONE);
@@ -252,29 +255,46 @@ public class Example extends Composite {
 		
 		// Team 2 player list and expandable stat menu group
 		Group statsTeam2Group = new Group(this, SWT.NONE);
-		fd_statsTeam1Group.right = new FormAttachment(statsTeam2Group, -6);
 		statsTeam2Group.setLayout(new GridLayout(1, true));
 		statsTeam2Group.setBackground(dark_gray);
 		FormData fd_statsTeam2Group = new FormData();
-		fd_statsTeam2Group.bottom = new FormAttachment(statsTeam1Group, 0, SWT.BOTTOM);
-		fd_statsTeam2Group.right = new FormAttachment(100, -10);
-		fd_statsTeam2Group.left = new FormAttachment(0, 640);
+		fd_statsTeam2Group.bottom = new FormAttachment(btnSubmit, -6);
 		fd_statsTeam2Group.top = new FormAttachment(scoreGroup, 6);
+		fd_statsTeam2Group.right = new FormAttachment(scoreGroup, 0, SWT.RIGHT);
+		fd_statsTeam2Group.left = new FormAttachment(100, -630);
 		statsTeam2Group.setLayoutData(fd_statsTeam2Group);
 		
-		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(statsTeam2Group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		GridData gd_scrolledComposite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_scrolledComposite_1.widthHint = 585;
-		gd_scrolledComposite_1.heightHint = 475;
-		scrolledComposite_1.setLayoutData(gd_scrolledComposite_1);
-		scrolledComposite_1.setExpandVertical(true);
-		scrolledComposite_1.setExpandHorizontal(true);
+		// ScrolledComposite to scroll through all players
+		ScrolledComposite scrolledComposite_team2 = new ScrolledComposite(statsTeam2Group, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		GridData gd_scrolledComposite2 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_scrolledComposite2.heightHint = 480;
+		gd_scrolledComposite2.widthHint = 580;
+		scrolledComposite_team2.setLayoutData(gd_scrolledComposite2);
+		scrolledComposite_team2.setExpandHorizontal(true);
+		scrolledComposite_team2.setExpandVertical(true);
 		
-		Composite composite_1 = new Composite(scrolledComposite_1, SWT.NONE);
+		// Put playerBtnList2 onto Scrolled Composite for team 2
+		Composite playerBtnList2 = new Composite(scrolledComposite_team2, SWT.NONE);
+
+		// Add action listeners to player buttons for expanding
+		// Create components for each player on the team.
+		for(int i = 0; i < team2Players.size(); i++)
+		{
+			Button btnPlayername2 = new Button(playerBtnList2, SWT.NONE);
+			btnPlayername2.setText( team2Players.get(i).getFirstName() + " " + team2Players.get(i).getLastName() );
+			btnPlayername2.setBounds(0, i * 36, 560, 30);
+			btnPlayername2.addSelectionListener( new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					System.out.println("Player button clicked.");
+				}
+			});
+
+		}
 		
-		scrolledComposite_1.setContent(composite_1);
-		scrolledComposite_1.setMinSize(composite_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		scrolledComposite_1.setMinSize(new Point(568, 714));
+		scrolledComposite_team2.setContent(playerBtnList2);
+		scrolledComposite_team2.setMinSize(playerBtnList2.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//		scrolledComposite_team2.setMinSize(new Point(560, 714));
 
 	}
 
