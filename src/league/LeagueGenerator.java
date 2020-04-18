@@ -31,4 +31,14 @@ public class LeagueGenerator {
 		// returns an array list of the league ID and name, arrayList.at(0) = id, arraylist.at(1) = leageName
 		return leagueDBInterator.getLeagueByName(search);
 	}
+	
+	public void createLeague(String leagueName, String ownerID, String sport, String description)
+	{
+		leagueDBInterator.createLeague(leagueName, ownerID, sport, description);
+	}
+	
+	public void deleteLeague(String leagueID)
+	{
+		leagueDBInterator.deleteLeague(leagueID);
+	}
 }

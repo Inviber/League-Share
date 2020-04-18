@@ -57,12 +57,18 @@ public class LandingComposite extends Composite {
 					
 					if (results.size() != 0)
 					{
-						System.out.println("Results: ");
+						/*
+						System.out.println("Results: "); // for if we want to create a search menu.
 						for (int i = 0; i < results.size(); i+=2)
 						{
 							System.out.println(results.get(i) + " | " + results.get(i+1));
 						}
+						*/
 						
+						ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, results.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+						shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+
+						//shell.getAccountGenerator().getLoggedInAccount().addLeague(results.get(0), false, false); // add 0 means just the first
 					}
 					else
 					{
@@ -96,16 +102,18 @@ public class LandingComposite extends Composite {
 //				}
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
-					//System.out.println(list.getSelection()[0] + " selected...");
-//					System.out.println(list.getSelectionIndex());
+//					System.out.println(list.getSelection() + " selected...");
 					
-					ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
+					ArrayList<String> followedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getFollowedLeagueIDs();
 //					LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
 //					LeagueParser parser = new LeagueParser(leagueDBInterator);
 					
-					ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-//					ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-					shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+					if (list.getSelectionIndex() != -1) // -1 means nothing selected
+					{
+						ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(list.getSelectionIndex()), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+//						ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+						shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+					}
 				}
 			});
 			list.setBounds(178, 167, 350, 200);
@@ -156,11 +164,11 @@ public class LandingComposite extends Composite {
 			
 			
 			
-			ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
-			ArrayList<String> ownedLeagueIDs = shell.getAccount().getOwnedLeagueIDs();
-			ArrayList<String> managedLeaguesIDs = shell.getAccount().getLeagueCastedIDs();
-			ArrayList<String> managedTeamIDs = shell.getAccount().getManagedTeamIDs();
-	//		ArrayList<String> managedTeamLeagueIDs = shell.getAccount().getManagedTeamLeagueIDs();
+			ArrayList<String> followedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getFollowedLeagueIDs();
+			ArrayList<String> ownedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getOwnedLeagueIDs();
+			ArrayList<String> managedLeaguesIDs = shell.getAccountGenerator().getLoggedInAccount().getLeagueCastedIDs();
+			ArrayList<String> managedTeamIDs = shell.getAccountGenerator().getLoggedInAccount().getManagedTeamIDs();
+	//		ArrayList<String> managedTeamLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getManagedTeamLeagueIDs();
 			
 			
 			

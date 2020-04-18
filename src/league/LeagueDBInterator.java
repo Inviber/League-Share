@@ -44,7 +44,7 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 	
 	public ArrayList<String> getLeagueByName(String search)
 	{
-		return dbHelper.getLeagueByLeagueName(search);
+		return dbHelper.getLeagueIDByLeagueName(search);
 	}
 	
 	public void addCasterIDs(String leagueID, String casterID) 
@@ -65,5 +65,15 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 	public void deleteTrackedStatistic(String leagueID, String trackedStatisticID)
 	{
 		dbHelper.deleteTrackedStatistic(leagueID, trackedStatisticID);
+	}
+	
+	public void createLeague(String leagueName, String ownerID, String sport, String description)
+	{
+		dbHelper.createLeague(leagueName, ownerID, sport, description);
+	}
+	
+	public void deleteLeague(String leagueID)
+	{
+		dbHelper.deleteLeague(leagueID);
 	}
 }

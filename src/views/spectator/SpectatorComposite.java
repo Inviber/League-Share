@@ -54,7 +54,7 @@ public class SpectatorComposite extends Composite {
 		super(parent, style);
 		
 		this.shell = shell;
-		username = shell.getAccount().getUsername();
+		username = shell.getAccountGenerator().getLoggedInAccount().getUsername();
 		leagueID = match.getLeagueID();
 		matchID = match.getMatchID();
 		

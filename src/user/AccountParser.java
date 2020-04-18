@@ -45,7 +45,7 @@ public class AccountParser implements AccountParserInterface {
 		this.managedTeamIDs = (ArrayList<String>) accountData.get("managedTeamIDs");
 		
 		this.managedTeamLeagueIDs = (ArrayList<String>) accountData.get("managedTeamLeagueIDs");
-//			System.out.println(this.managedTeamLeagueIDs.toString());
+			System.out.println(this.followedLeagueIDs.toString());
 		
 		this.followedTeamIDs = (ArrayList<String>) accountData.get("followedTeamIDs");
 	

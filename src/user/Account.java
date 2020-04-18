@@ -91,219 +91,160 @@ public class Account {
 		return followedTeamIDs;
 	}
 	
-	/*
-	void createLeague(String leagueName, String sport, String leagueDescription)
-	{
-		// access db, this call will likely return an ID from the db.
-		//String leage_ID = accountDBInterator.createLeague(leagueName, this._ID, sport, leagueDescription); 
-		//new LeagueParser(leagueName, accountDBInterator); awaiting actual use of this within GUI for refactor.
-		//addLeague(leage_ID, true, false);
-		System.out.println("Doing nothing currently.");
-	}
-	
-	boolean updateLeague(String _ID, String leagueName, String leagueDescription) // returns boolean for if update was successful
-	{
-		if (ownedLeagueIDs.contains(_ID))
-		{
-			// access DB, this call will probably return a boolean on update success.
-			//return accountDBInterator.updateLeague(this._ID, leagueName, leagueDescription);
-			return true; // currently no update function for the database.
-		}
-		else
-		{
-			System.out.println("Not authorized to update this league.");
-			return false;
-		}
-	}
-	
-	
-	void createTeam(String leagueID, String teamName, String zipcode)
-	{
-		
-		if (ownedLeagueIDs.contains(this._ID))
-		{
-			String teamID = accountDBInterator.createTeam(leagueID, teamName, zipcode); 
-			addTeam(teamID, true, false);
-		}
-		else
-		{
-			System.out.println("You don't have authority to create a team in this league.");
-		}
-			
-	}
-	
-	boolean updateTeam(String leagueID, String teamName) // returns boolean for if update was successful
-	{
-		if (ownedLeagueIDs.contains(this._ID) || ownedTeamIDs.contains(this._ID) || managedTeamIDs.contains(this._ID))
-		{
-			// access DB, this call will probably return a boolean on update success.
-			String teamID = accountDBInterator.getTeamIDByTeamName(leagueID, teamName);
-			//accountDBInterator.updateTeam(leagueID, teamID);
-			return true;
-		}
-		else
-		{
-			System.out.println("Not authorized to update this Team.");
-			return false;
-		}
-	}
-	
-	
-	void addLeague(String league_ID, boolean owns, boolean casting)
+	public void addLeague(String leagueID, boolean owns, boolean casting)
 	{
 		// lookup league by _ID, pass it here, add to appropriate array
 		if (owns)
 		{
-			if (ownedLeagueIDs.contains(league_ID))
+			if (ownedLeagueIDs.contains(leagueID))
 			{
 				return; // already within array.
 			}
 			else
 			{
-				ownedLeagueIDs.add(league_ID);
-				accountDBInterator.addOwnedLeagueID(this._ID, league_ID);
+				ownedLeagueIDs.add(leagueID);
+				accountDBInterator.addOwnedLeagueID(this.userID, leagueID);
 			}
 		}
 		
 		if (casting)
 		{
-			if (leagueCastedIDs.contains(league_ID))
+			if (leagueCastedIDs.contains(leagueID))
 			{
 				return; // already within array.
 			}
 			else
 			{
-				leagueCastedIDs.add(league_ID);
-				accountDBInterator.addLeagueCastedID(this._ID, league_ID);
+				leagueCastedIDs.add(leagueID);
+				accountDBInterator.addLeagueCastedID(this.userID, leagueID);
 			}
 		}
 		
-		if (followedLeagueIDs.contains(league_ID))
+		if (followedLeagueIDs.contains(leagueID))
 		{
 			return; // already within array.
 		}
 		else
 		{
-			followedLeagueIDs.add(league_ID);
-			accountDBInterator.addFollowedLeagueID(this._ID, league_ID);
+			followedLeagueIDs.add(leagueID);
+			accountDBInterator.addFollowedLeagueID(this.userID, leagueID);
 		}
 		
 	}
 	
-	void addTeam(String team_ID, boolean owns, boolean manages)
+	public void addTeam(String teamID, boolean owns, boolean manages)
 	{
 		// lookup team by _ID, pass it here, add to appropriate array
 		if (owns)
 		{
-			if (ownedTeamIDs.contains(team_ID))
+			if (ownedTeamIDs.contains(teamID))
 			{
 				return; // already within array.
 			}
 			else
 			{
-				ownedTeamIDs.add(team_ID);
-				accountDBInterator.addOwnedTeamID(this._ID, team_ID);
+				ownedTeamIDs.add(teamID);
+				accountDBInterator.addOwnedTeamID(this.userID, teamID);
 			}
 		}
 		
 		if (manages)
 		{
-			if (managedTeamIDs.contains(team_ID))
+			if (managedTeamIDs.contains(teamID))
 			{
 				return; // already within array.
 			}
 			else
 			{
-				managedTeamIDs.add(team_ID);
-				accountDBInterator.addManagedTeamID(this._ID, team_ID);
+				managedTeamIDs.add(teamID);
+				accountDBInterator.addManagedTeamID(this.userID, teamID);
 			}
 		}
 		
-		if (followedTeamIDs.contains(team_ID))
+		if (followedTeamIDs.contains(teamID))
 		{
 			return; // already within array.
 		}
 		else
 		{
-			followedTeamIDs.add(team_ID);
-			accountDBInterator.addFollowedTeamID(this._ID, team_ID);
+			followedTeamIDs.add(teamID);
+			accountDBInterator.addFollowedTeamID(this.userID, teamID);
 		}
 	}
 	
-	void deleteLeague(String league_ID)
+	public void deleteLeague(String leagueID) // for league owners
 	{
-		if (ownedLeagueIDs.contains(league_ID))
+		if (ownedLeagueIDs.contains(leagueID))
 		{
-			ownedLeagueIDs.remove(league_ID);
-			accountDBInterator.removeOwnedLeagueID(this._ID, league_ID);
-			if (leagueCastedIDs.contains(league_ID))
+			ownedLeagueIDs.remove(leagueID);
+			accountDBInterator.removeOwnedLeagueID(this.userID, leagueID);
+			if (leagueCastedIDs.contains(leagueID))
 			{
-				leagueCastedIDs.remove(league_ID);
-				accountDBInterator.removeLeagueCastedID(this._ID, league_ID);
+				leagueCastedIDs.remove(leagueID);
+				accountDBInterator.removeLeagueCastedID(this.userID, leagueID);
 			}
 
-			if (followedLeagueIDs.contains(league_ID))
+			if (followedLeagueIDs.contains(leagueID))
 			{
-				followedLeagueIDs.remove(league_ID);
-				accountDBInterator.removeFollowedLeagueID(this._ID, league_ID);
+				followedLeagueIDs.remove(leagueID);
+				accountDBInterator.removeFollowedLeagueID(this.userID, leagueID);
 			}
 		}	
 	}
 	
-	void deleteTeam(String team_ID)
+	public void deleteTeam(String teamID) // for league owners
 	{
-		if (ownedTeamIDs.contains(team_ID))
+		if (ownedTeamIDs.contains(teamID))
 		{
-			ownedTeamIDs.remove(team_ID);
-			accountDBInterator.removeOwnedTeamID(this._ID, team_ID);
-			if (managedTeamIDs.contains(team_ID))
+			ownedTeamIDs.remove(teamID);
+			accountDBInterator.removeOwnedTeamID(this.userID, teamID);
+			if (managedTeamIDs.contains(teamID))
 			{
-				managedTeamIDs.remove(team_ID);
-				accountDBInterator.removeManagedTeamID(this._ID, team_ID);
+				managedTeamIDs.remove(teamID);
+				accountDBInterator.removeManagedTeamID(this.userID, teamID);
 			}
 
-			if (followedTeamIDs.contains(team_ID))
+			if (followedTeamIDs.contains(teamID))
 			{
-				followedTeamIDs.remove(team_ID);
-				accountDBInterator.removeFollowedTeamID(this._ID, team_ID);
+				followedTeamIDs.remove(teamID);
+				accountDBInterator.removeFollowedTeamID(this.userID, teamID);
 			}
 		}	
 	}
 	
-	void unfollowLeague(String league_ID)
+	public void unfollowLeague(String leagueID)
 	{
-		followedLeagueIDs.remove(league_ID);
-		accountDBInterator.removeFollowedLeagueID(this._ID, league_ID);
+		followedLeagueIDs.remove(leagueID);
+		accountDBInterator.removeFollowedLeagueID(this.userID, leagueID);
 	}
 	
-	void promoteLeagueCaster(String league_ID)
+	public void promoteLeagueCaster(String leagueID)
 	{
-		leagueCastedIDs.add(league_ID);
-		accountDBInterator.addLeagueCastedID(this._ID, league_ID);
+		leagueCastedIDs.add(leagueID);
+		accountDBInterator.addLeagueCastedID(this.userID, leagueID);
 	}
 	
-	void demoteLeagueCaster(String league_ID)
+	public void demoteLeagueCaster(String leagueID)
 	{
-		leagueCastedIDs.remove(league_ID);
-		accountDBInterator.removeLeagueCastedID(this._ID, league_ID);
+		leagueCastedIDs.remove(leagueID);
+		accountDBInterator.removeLeagueCastedID(this.userID, leagueID);
 	}
 	
-	void unfollowTeam(String team_ID)
+	public void unfollowTeam(String teamID)
 	{
-		followedTeamIDs.remove(team_ID);
-		accountDBInterator.removeFollowedTeamID(this._ID, team_ID);
+		followedTeamIDs.remove(teamID);
+		accountDBInterator.removeFollowedTeamID(this.userID, teamID);
 	}
 	
-	void promoteTeamManager(String team_ID)
+	public void promoteTeamManager(String teamID)
 	{
-		managedTeamIDs.add(team_ID);
-		accountDBInterator.addManagedTeamID(this._ID, team_ID);
+		managedTeamIDs.add(teamID);
+		accountDBInterator.addManagedTeamID(this.userID, teamID);
 	}
 	
-	void demoteTeamManager(String team_ID)
+	public void demoteTeamManager(String teamID)
 	{
-		managedTeamIDs.remove(team_ID);
-		accountDBInterator.removeManagedTeamID(this._ID, team_ID);
+		managedTeamIDs.remove(teamID);
+		accountDBInterator.removeManagedTeamID(this.userID, teamID);
 	}
-	*/
 }
