@@ -64,13 +64,18 @@ public class CasterComposite extends Composite {
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// Create new POJOs based on updated DB stats
+				// regenerate match based on updated DB
+				((GUIShell)parent).getMatchGenerator().setMatch(match.getLeagueID(), match.getMatchID());
+				
+				// get new POJOs based on updated DB stats
 				Match newMatch = ((GUIShell)parent).getMatchGenerator().getMatch();
 				Team newHomeTeam = ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getHomeTeamID());
 				Team newAwayTeam = ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getAwayTeamID());
+				
 				// Create new spectatorGenerator and spectatorComposite with new POJOs
 				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), newMatch, newHomeTeam, newAwayTeam);
 				Composite previousWindow = spectatorGenerator.getSpectatorComposite();
+				
 				// Display new spectator
 				((GUIShell) parent).setDisplayedComposite(previousWindow);
 			
