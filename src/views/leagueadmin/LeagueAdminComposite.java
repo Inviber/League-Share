@@ -46,14 +46,9 @@ public class LeagueAdminComposite extends Composite {
 		fd_grpLeagueOptions.bottom = new FormAttachment(100, -39);
 		grpLeagueOptions.setLayoutData(fd_grpLeagueOptions);
 		
-		Button btnNewButton = new Button(grpLeagueOptions, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnNewButton.setBounds(25, 36, 192, 48);
-		btnNewButton.setText("Update League Information");
+		Button btnUpdateLeagueInfo = new Button(grpLeagueOptions, SWT.NONE);
+		btnUpdateLeagueInfo.setBounds(25, 36, 192, 48);
+		btnUpdateLeagueInfo.setText("Update League Information");
 		
 		Button btnEditTeams = new Button(grpLeagueOptions, SWT.NONE);
 		btnEditTeams.setText("Edit Teams");
@@ -83,20 +78,20 @@ public class LeagueAdminComposite extends Composite {
 		composite.setLayoutData(fd_composite);
 		
 		Button btnBack = new Button(this, SWT.NONE);
-		FormData fd_btnNewButton_1 = new FormData();
-		fd_btnNewButton_1.bottom = new FormAttachment(lblNewLabel, -8, SWT.BOTTOM);
-		fd_btnNewButton_1.right = new FormAttachment(0, 138);
-		fd_btnNewButton_1.left = new FormAttachment(0, 50);
-		fd_btnNewButton_1.top = new FormAttachment(lblNewLabel, 3, SWT.TOP);
-		btnBack.setLayoutData(fd_btnNewButton_1);
+		FormData fd_btnBack = new FormData();
+		fd_btnBack.bottom = new FormAttachment(lblNewLabel, -8, SWT.BOTTOM);
+		fd_btnBack.right = new FormAttachment(0, 138);
+		fd_btnBack.left = new FormAttachment(0, 50);
+		fd_btnBack.top = new FormAttachment(lblNewLabel, 3, SWT.TOP);
+		btnBack.setLayoutData(fd_btnBack);
 		btnBack.setText("Back");
 		
 		Composite EditTeamComposite = new Composite(this, SWT.NONE);
-		fd_grpLeagueOptions.right = new FormAttachment(EditTeamComposite, -63);
+		fd_grpLeagueOptions.right = new FormAttachment(EditTeamComposite, -62);
 		FormData fd_EditTeamComposite = new FormData();
-		fd_EditTeamComposite.right = new FormAttachment(composite, -6);
-		fd_EditTeamComposite.bottom = new FormAttachment(grpLeagueOptions, 0, SWT.BOTTOM);
+		fd_EditTeamComposite.bottom = new FormAttachment(100, -39);
 		fd_EditTeamComposite.top = new FormAttachment(lblNewLabel, 21);
+		fd_EditTeamComposite.right = new FormAttachment(composite, -6);
 		fd_EditTeamComposite.left = new FormAttachment(composite, -785, SWT.LEFT);
 		EditTeamComposite.setLayoutData(fd_EditTeamComposite);
 		
