@@ -1,4 +1,4 @@
-package views.LeagueAdmin;
+package views.leagueadmin;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;

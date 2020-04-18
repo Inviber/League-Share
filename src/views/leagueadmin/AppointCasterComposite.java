@@ -1,4 +1,4 @@
-package views.LeagueAdmin;
+package views.leagueadmin;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
