@@ -117,9 +117,9 @@ public class LeagueAdminComposite extends Composite {
 //				}
 				displayedComposite.dispose();
 				EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
-				editTeams.setLocation(350, 150);
+				editTeams.setLocation(350, 100);
 				displayedComposite = editTeams;
-				//displayedComposite.update();
+				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 				//displayedComposite.setParent(displayedComposite);
 			}
@@ -135,7 +135,7 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				CreateNewTeamComposite createTeam = new CreateNewTeamComposite(self, SWT.NONE);
-				createTeam.setLocation(350, 150);
+				createTeam.setLocation(350, 125);
 				displayedComposite = createTeam;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -152,7 +152,7 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				TrackNewPlayerStatsComposite newStat = new TrackNewPlayerStatsComposite(self, SWT.NONE);
-				newStat.setLocation(300, 100);
+				newStat.setLocation(350, 150);
 				displayedComposite = newStat;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -169,7 +169,7 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE);
-				createMatch.setLocation(350, 150);
+				createMatch.setLocation(350, 100);
 				displayedComposite = createMatch;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -186,7 +186,7 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				AppointCasterComposite appointCastor = new AppointCasterComposite(self, SWT.NONE);
-				appointCastor.setLocation(350, 150);
+				appointCastor.setLocation(375, 100);
 				displayedComposite = appointCastor;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
