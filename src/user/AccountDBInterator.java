@@ -24,6 +24,11 @@ public class AccountDBInterator implements AccountDBInteratorInterface {
 	{
 		JSONObject accountData = null;
 		Document accountDocument = dbHelper.getDocument("Users", userID); 	
+		
+		if (accountDocument == null)
+		{
+			return null;
+		}
 				
 		try
 		{
