@@ -1,6 +1,6 @@
 package views.landing;
 
-
+import views.leagueadmin.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -123,6 +123,31 @@ public class LandingComposite extends Composite {
 			lblNewLabel_3.setText("Followed Leagues");
 			
 			List list_1 = new List(this, SWT.BORDER | SWT.V_SCROLL);
+			list_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					//System.out.println("Clickedeeee");
+					
+//					if (list.getSelectionIndex() != -1) // -1 means nothing selected
+//					{
+//						ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(list.getSelectionIndex()), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+////						ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+//						shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+//					}
+					ArrayList<String> ownedLeagueIDs = shell.getAccountGenerator().getLoggedInAccount().getOwnedLeagueIDs();
+					
+					if(list_1.getSelectionIndex() != -1)
+					{
+						//System.out.println(ownedLeagueIDs.get(list_1.getSelectionIndex()));
+						LeagueAdminComposite leagueAdminComposite = new LeagueAdminComposite(shell, SWT.NONE, shell, ownedLeagueIDs.get(list_1.getSelectionIndex()));
+						shell.setDisplayedComposite(leagueAdminComposite);
+					}
+					
+					
+					
+					//LeagueAdminComposite leagueAdminComposite = new LeagueAdminComposite();
+				}
+			});
 			list_1.setBounds(178, 430, 350, 200);
 			
 			Label lblNewLabel = new Label(this, SWT.NONE);
@@ -146,6 +171,7 @@ public class LandingComposite extends Composite {
 					//System.out.println(parser.getTeamID());
 	//				System.out.println(parser.getTeamName() + " selected");
 					//System.out.println(parser.getZipcode());
+					System.out.println("clicked");
 					
 				}
 			});
@@ -192,6 +218,7 @@ public class LandingComposite extends Composite {
 					League league = shell.getLeagueGenerator().generateLeague(ownedLeagueIDs.get(i));
 	//				System.out.println(parser.getLeagueName());
 					list_1.add(league.getLeagueName());
+					
 				}
 			}
 			else
@@ -215,7 +242,8 @@ public class LandingComposite extends Composite {
 			}
 			
 			
-			
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// NEEDS FIXED
 			if(managedTeamIDs.size() != 0)
 			{
 				for(int i = 0; i < managedTeamIDs.size(); i++)

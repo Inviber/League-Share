@@ -1,4 +1,4 @@
-package views.LeagueAdmin;
+package views.leagueadmin;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Button;
 
 public class AppointCastorComposite extends Composite {
 	private Text text;
+	private Text text_1;
 
 	/**
 	 * Create the composite.
@@ -21,7 +22,7 @@ public class AppointCastorComposite extends Composite {
 	public AppointCastorComposite(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new FormLayout());
-		
+				
 		Label lblAppointCastor = new Label(this, SWT.NONE);
 		FormData fd_lblAppointCastor = new FormData();
 		fd_lblAppointCastor.left = new FormAttachment(0, 307);
@@ -57,12 +58,12 @@ public class AppointCastorComposite extends Composite {
 		fd_btnNewButton.right = new FormAttachment(0, 425);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.setText("Appoint");
-
+		
+		setSize(863, 521);
 	}
 
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
-
 }

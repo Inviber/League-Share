@@ -1,4 +1,4 @@
-package views.LeagueAdmin;
+package views.leagueadmin;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -25,8 +25,8 @@ public class CreateMatchComposite extends Composite {
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		FormData fd_lblNewLabel = new FormData();
-		fd_lblNewLabel.right = new FormAttachment(100, -317);
-		fd_lblNewLabel.left = new FormAttachment(0, 320);
+		fd_lblNewLabel.right = new FormAttachment(100, -138);
+		fd_lblNewLabel.left = new FormAttachment(0, 584);
 		lblNewLabel.setLayoutData(fd_lblNewLabel);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
 		lblNewLabel.setAlignment(SWT.CENTER);
@@ -36,18 +36,17 @@ public class CreateMatchComposite extends Composite {
 		lblTeamA.setAlignment(SWT.CENTER);
 		lblTeamA.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
 		FormData fd_lblTeamA = new FormData();
-		fd_lblTeamA.left = new FormAttachment(0, 241);
+		fd_lblTeamA.left = new FormAttachment(0, 472);
 		lblTeamA.setLayoutData(fd_lblTeamA);
 		lblTeamA.setText("Team A");
 		
 		Combo combo = new Combo(this, SWT.NONE);
-		fd_lblNewLabel.bottom = new FormAttachment(combo, -6);
-		fd_lblTeamA.top = new FormAttachment(combo, 1, SWT.TOP);
+		fd_lblNewLabel.bottom = new FormAttachment(combo, -7);
+		fd_lblTeamA.bottom = new FormAttachment(combo, 0, SWT.BOTTOM);
 		fd_lblTeamA.right = new FormAttachment(combo, -6);
 		FormData fd_combo = new FormData();
-		fd_combo.top = new FormAttachment(0, 132);
-		fd_combo.right = new FormAttachment(100, -306);
-		fd_combo.left = new FormAttachment(0, 306);
+		fd_combo.left = new FormAttachment(0, 537);
+		fd_combo.right = new FormAttachment(100, -72);
 		combo.setLayoutData(fd_combo);
 		
 		Label lblTeamB = new Label(this, SWT.NONE);
@@ -55,33 +54,37 @@ public class CreateMatchComposite extends Composite {
 		lblTeamB.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
 		lblTeamB.setAlignment(SWT.CENTER);
 		FormData fd_lblTeamB = new FormData();
+		fd_lblTeamB.left = new FormAttachment(0, 472);
 		fd_lblTeamB.top = new FormAttachment(lblTeamA, 6);
-		fd_lblTeamB.right = new FormAttachment(lblTeamA, -6, SWT.RIGHT);
 		lblTeamB.setLayoutData(fd_lblTeamB);
 		
 		Combo combo_1 = new Combo(this, SWT.NONE);
+		fd_combo.bottom = new FormAttachment(combo_1, -6);
+		fd_lblTeamB.right = new FormAttachment(combo_1, -6);
 		FormData fd_combo_1 = new FormData();
-		fd_combo_1.right = new FormAttachment(lblTeamB, 180, SWT.RIGHT);
-		fd_combo_1.top = new FormAttachment(combo, 6);
-		fd_combo_1.left = new FormAttachment(lblTeamB, 12);
+		fd_combo_1.right = new FormAttachment(combo, 0, SWT.RIGHT);
+		fd_combo_1.top = new FormAttachment(0, 235);
+		fd_combo_1.left = new FormAttachment(combo, 0, SWT.LEFT);
 		combo_1.setLayoutData(fd_combo_1);
 		
 		DateTime dateTime = new DateTime(this, SWT.BORDER);
 		FormData fd_dateTime = new FormData();
-		fd_dateTime.bottom = new FormAttachment(combo_1, 36, SWT.BOTTOM);
 		fd_dateTime.top = new FormAttachment(combo_1, 6);
-		fd_dateTime.left = new FormAttachment(0, 336);
-		fd_dateTime.right = new FormAttachment(100, -343);
+		fd_dateTime.left = new FormAttachment(0, 566);
+		fd_dateTime.right = new FormAttachment(100, -113);
 		dateTime.setLayoutData(fd_dateTime);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
+		fd_dateTime.bottom = new FormAttachment(100, -227);
 		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.bottom = new FormAttachment(dateTime, 46, SWT.BOTTOM);
 		fd_btnNewButton.top = new FormAttachment(dateTime, 6);
-		fd_btnNewButton.right = new FormAttachment(dateTime, 0, SWT.RIGHT);
-		fd_btnNewButton.left = new FormAttachment(0, 336);
+		fd_btnNewButton.left = new FormAttachment(dateTime, 0, SWT.LEFT);
+		fd_btnNewButton.right = new FormAttachment(100, -113);
+		fd_btnNewButton.bottom = new FormAttachment(100, -181);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.setText("Add");
+		
+		setSize(863, 521);
 
 	}
 
