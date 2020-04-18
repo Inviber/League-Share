@@ -57,13 +57,18 @@ public class LandingComposite extends Composite {
 					
 					if (results.size() != 0)
 					{
-						System.out.println("Results: ");
+						/*
+						System.out.println("Results: "); // for if we want to create a search menu.
 						for (int i = 0; i < results.size(); i+=2)
 						{
 							System.out.println(results.get(i) + " | " + results.get(i+1));
 						}
+						*/
 						
-						shell.getAccountGenerator().getLoggedInAccount().addLeague(results.get(0), false, false); // add 0 means just the first
+						ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, results.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+						shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+
+						//shell.getAccountGenerator().getLoggedInAccount().addLeague(results.get(0), false, false); // add 0 means just the first
 					}
 					else
 					{

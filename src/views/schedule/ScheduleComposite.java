@@ -112,6 +112,43 @@ public class ScheduleComposite extends Composite {
 		grpMatches.setLayoutData(fd_grpMatches);
 		grpMatches.setText("MATCHES");
 		
+		Button btnFollow = new Button(this, SWT.NONE);
+		GUIShell shell = (GUIShell) parent;
+		boolean following = shell.getAccountGenerator().getLoggedInAccount().getFollowedLeagueIDs().contains(matches.get(0).getLeagueID());
+		if (following == false) // if user doesn't follow league.
+		{
+			btnFollow.setText("Follow League");
+			
+		}
+		else
+		{
+			btnFollow.setText("Unfollow League");
+		}
+		btnFollow.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (following == false) // if user doesn't follow league.
+				{
+					shell.getAccountGenerator().getLoggedInAccount().addLeague(matches.get(0).getLeagueID(), false, false);
+				}
+				else
+				{
+					shell.getAccountGenerator().getLoggedInAccount().unfollowLeague(matches.get(0).getLeagueID());
+				}
+				btnFollow.setVisible(false);
+
+			}
+		});
+		
+		
+		
+		FormData fd_btnFollow = new FormData();
+		fd_btnFollow.left = new FormAttachment(lblSchedule, -107);
+		fd_btnFollow.bottom = new FormAttachment(btnNewButton, 0, SWT.BOTTOM);
+		fd_btnFollow.top = new FormAttachment(btnNewButton, 0, SWT.TOP);
+		fd_btnFollow.right = new FormAttachment(lblNewLabel, 0, SWT.RIGHT);
+		btnFollow.setLayoutData(fd_btnFollow);
+		
 		for(int i = 0; i < matches.size(); i++)
 		{			
 			Composite matchComp = new Composite(grpMatches, SWT.NONE);
