@@ -32,5 +32,15 @@ public class MatchGenerator {
 	{
 		return this.matchParser;
 	}
+	
+	public void createMatch(String leagueID, String homeTeamID, String awayTeamID, String date)
+	{
+		matchDBInterator.createMatch(leagueID, homeTeamID, awayTeamID, date);
+	}
+	
+	public void deleteMatch(String leagueID, String matchID)
+	{
+		matchDBInterator.deleteMatch(leagueID, matchID);
+	}
 
 }

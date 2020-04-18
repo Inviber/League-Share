@@ -84,4 +84,35 @@ public class AccountDBInterator implements AccountDBInteratorInterface {
 	{
 		dbHelper.removeFollowedLeagueID(userID, leagueID);
 	}
+	
+
+	public void addOwnedTeamID(String userID, String teamID)
+	{
+		dbHelper.addOwnedTeamID(userID, teamID);
+	}
+	
+	public void addManagedTeamID(String userID, String teamID)
+	{
+		dbHelper.addManagedTeamID(userID, teamID);
+	}
+	
+	public void addFollowedTeamID(String userID, String teamID)
+	{
+		dbHelper.addFollowedTeamID(userID, teamID);
+	}
+	
+	public void removeOwnedTeamID(String userID, String teamID)
+	{
+		dbHelper.removeOwnedTeamID(userID, teamID);
+	}
+	
+	public void removeManagedTeamID(String userID, String teamID)
+	{
+		dbHelper.removeManagedTeamID(userID, teamID);
+	}
+	
+	public void removeFollowedTeamID(String userID, String teamID)
+	{
+		dbHelper.removeFollowedTeamID(userID, teamID);
+	}
 }

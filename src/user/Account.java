@@ -91,64 +91,6 @@ public class Account {
 		return followedTeamIDs;
 	}
 	
-	/*
-	public void createLeague(String leagueName, String sport, String leagueDescription)
-	{
-		// access db, this call will likely return an ID from the db.
-		//String leage_ID = accountDBInterator.createLeague(leagueName, this.userID, sport, leagueDescription); 
-		//new LeagueParser(leagueName, accountDBInterator); awaiting actual use of this within GUI for refactor.
-		//addLeague(leage_ID, true, false);
-		System.out.println("Doing nothing currently.");
-	}
-	
-	public boolean updateLeague(String _ID, String leagueName, String leagueDescription) // returns boolean for if update was successful
-	{
-		if (ownedLeagueIDs.contains(_ID))
-		{
-			// access DB, this call will probably return a boolean on update success.
-			//return accountDBInterator.updateLeague(this.userID, leagueName, leagueDescription);
-			return true; // currently no update function for the database.
-		}
-		else
-		{
-			System.out.println("Not authorized to update this league.");
-			return false;
-		}
-	}
-	
-	
-	public void createTeam(String leagueID, String teamName, String zipcode)
-	{
-		
-		if (ownedLeagueIDs.contains(this.userID))
-		{
-			String teamID = accountDBInterator.createTeam(leagueID, teamName, zipcode); 
-			addTeam(teamID, true, false);
-		}
-		else
-		{
-			System.out.println("You don't have authority to create a team in this league.");
-		}
-			
-	}
-	
-	public boolean updateTeam(String leagueID, String teamName) // returns boolean for if update was successful
-	{
-		if (ownedLeagueIDs.contains(this.userID) || ownedTeamIDs.contains(this.userID) || managedTeamIDs.contains(this.userID))
-		{
-			// access DB, this call will probably return a boolean on update success.
-			String teamID = accountDBInterator.getTeamIDByTeamName(leagueID, teamName);
-			//accountDBInterator.updateTeam(leagueID, teamID);
-			return true;
-		}
-		else
-		{
-			System.out.println("Not authorized to update this Team.");
-			return false;
-		}
-	}
-	
-	*/
 	public void addLeague(String leagueID, boolean owns, boolean casting)
 	{
 		// lookup league by _ID, pass it here, add to appropriate array
@@ -189,7 +131,7 @@ public class Account {
 		}
 		
 	}
-	/*
+	
 	public void addTeam(String teamID, boolean owns, boolean manages)
 	{
 		// lookup team by _ID, pass it here, add to appropriate array
@@ -269,7 +211,6 @@ public class Account {
 			}
 		}	
 	}
-	*/
 	
 	public void unfollowLeague(String leagueID)
 	{
@@ -277,7 +218,6 @@ public class Account {
 		accountDBInterator.removeFollowedLeagueID(this.userID, leagueID);
 	}
 	
-	/*
 	public void promoteLeagueCaster(String leagueID)
 	{
 		leagueCastedIDs.add(leagueID);
@@ -307,5 +247,4 @@ public class Account {
 		managedTeamIDs.remove(teamID);
 		accountDBInterator.removeManagedTeamID(this.userID, teamID);
 	}
-	*/
 }

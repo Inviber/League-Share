@@ -285,7 +285,7 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
-	public ArrayList<String> getLeagueByLeagueName(String leagueName)
+	public ArrayList<String> getLeagueIDByLeagueName(String leagueName)
 	{
 		ArrayList<String> matchingIDs = new ArrayList<String>();
 				 
@@ -378,6 +378,11 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("casterIDs", leagueCasterID));
 	}
 	
+	public void deleteLeague(String leagueID)
+	{
+		this.database.getCollection(LEAGUES).deleteOne(eq("_id", new ObjectId(leagueID)));
+	}
+	
 	public String getTeamIDByTeamName(String leagueID, String teamName)
 	{
 		try
@@ -453,7 +458,6 @@ public class DatabaseHelper {
 		Bson set = new Document().append("$pull", update);
 
 		this.database.getCollection(LEAGUES).updateOne(where, set);
-
 	}
 	
 	
@@ -917,10 +921,11 @@ public class DatabaseHelper {
 //		System.out.println(dbHelper.getUserIDByUsername("leaf_consumer"));
 		
 		
-		// -- CREATING NEW LEAGUE -- 
-//		String newLeagueID = dbHelper.createLeague("Your mothers favorite league", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
+		// -- CREATING AND DELETING LEAGUES -- 
+//		String newLeagueID = dbHelper.createLeague("DeleteLeague", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
 //		dbHelper.printLeague(newLeagueID);
 		
+//		dbHelper.deleteLeague("5e9b12e63e7d5c58005be9ed");
 		
 		// -- FINDING LEAGUE BY NAME -- 
 //		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
