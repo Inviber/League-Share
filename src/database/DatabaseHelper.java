@@ -60,7 +60,14 @@ public class DatabaseHelper {
 	
 	public Document getDocument(String collectionName, String uniqueID)
 	{
-		return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
+		try
+		{
+			return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
+		}
+		catch (java.lang.IllegalArgumentException e)
+		{
+			return null; // bad input, not in database.
+		}
 	}
 	
 	

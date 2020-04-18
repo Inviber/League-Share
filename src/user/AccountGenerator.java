@@ -21,16 +21,18 @@ public class AccountGenerator {
 		String userID = accountDBInterator.getUserIDByUsername(username);
 		JSONObject accountData = accountDBInterator.getAccountDetails(userID);
 				
-		if (password.compareTo((String) accountData.get("password")) == 0)
+		if (accountData != null)
 		{
-			accountParser.parseAccount(userID, accountData);
-			  
-			loggedInAccount = new Account(userID, accountParser.getUsername(),  accountParser.getFirstName(), accountParser.getLastName(),
-					 accountParser.getOwnedLeagueIDs(), accountParser.getLeagueCastedIDs(), accountParser.getFollowedLeagueIDs(), 
-					 accountParser.getOwnedTeamIDs(), accountParser.getManagedTeamIDs(), accountParser.getManagedTeamLeagueIDs(),
-					 accountParser.getFollowedTeamIDs(), accountDBInterator);
+			if (password.compareTo((String) accountData.get("password")) == 0)
+			{
+				accountParser.parseAccount(userID, accountData);
+				  
+				loggedInAccount = new Account(userID, accountParser.getUsername(),  accountParser.getFirstName(), accountParser.getLastName(),
+						 accountParser.getOwnedLeagueIDs(), accountParser.getLeagueCastedIDs(), accountParser.getFollowedLeagueIDs(), 
+						 accountParser.getOwnedTeamIDs(), accountParser.getManagedTeamIDs(), accountParser.getManagedTeamLeagueIDs(),
+						 accountParser.getFollowedTeamIDs(), accountDBInterator);
+			}
 		}
-		
 		
 		return loggedInAccount;
 	}
