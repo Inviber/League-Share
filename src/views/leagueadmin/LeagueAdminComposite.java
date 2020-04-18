@@ -1,4 +1,4 @@
-package views.leagueadmin;
+package views.LeagueAdmin;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.FormLayout;
@@ -53,6 +53,9 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
+		FormData fd_editTeams = new FormData();
+		fd_editTeams.right = new FormAttachment(100, -23);
+		editTeams.setLayoutData(fd_editTeams);
 		//editTeams.setLocation(0, 0);
 		displayedComposite = editTeams;
 		//displayedComposite.update();
@@ -78,6 +81,9 @@ public class LeagueAdminComposite extends Composite {
 		// lblNewLabel.setText(team.getTeamName());
 		
 		Group grpLeagueOptions = new Group(this, SWT.NONE);
+		fd_editTeams.left = new FormAttachment(grpLeagueOptions, 24);
+		fd_editTeams.bottom = new FormAttachment(grpLeagueOptions, 0, SWT.BOTTOM);
+		fd_editTeams.top = new FormAttachment(grpLeagueOptions, 0, SWT.TOP);
 		grpLeagueOptions.setText("League Options");
 		FormData fd_grpLeagueOptions = new FormData();
 		fd_grpLeagueOptions.bottom = new FormAttachment(100, -181);
@@ -91,7 +97,7 @@ public class LeagueAdminComposite extends Composite {
 				System.out.println("Update League Information");
 				displayedComposite.dispose();
 				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE);
-				updateInfo.setLocation(0, 0);
+				updateInfo.setLocation(350, 150);
 				displayedComposite = updateInfo;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -111,7 +117,7 @@ public class LeagueAdminComposite extends Composite {
 //				}
 				displayedComposite.dispose();
 				EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
-				//editTeams.setLocation(0, 0);
+				editTeams.setLocation(350, 150);
 				displayedComposite = editTeams;
 				//displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -129,7 +135,7 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				CreateNewTeamComposite createTeam = new CreateNewTeamComposite(self, SWT.NONE);
-				//createTeam.setLocation(0, 0);
+				createTeam.setLocation(350, 150);
 				displayedComposite = createTeam;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -144,11 +150,12 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Track New Player Statistic");
 				
-//				TrackNewStatisticComposite newStat = new TrackNewStatisticComposite(displayedComposite, SWT.NONE);
-//				newStat.setLocation(0, 0);
-//				displayedComposite = newStat;
-//				displayedComposite.redraw();
-//				displayedComposite.setSize(863, 521);
+				displayedComposite.dispose();
+				TrackNewPlayerStatsComposite newStat = new TrackNewPlayerStatsComposite(self, SWT.NONE);
+				newStat.setLocation(300, 100);
+				displayedComposite = newStat;
+				displayedComposite.update();
+				displayedComposite.setSize(863, 521);
 			}
 		});
 		btnNewPlayerStatistic.setText("Track New Player Statistic");
@@ -162,9 +169,9 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE);
-				//createMatch.setLocation(0, 0);
+				createMatch.setLocation(350, 150);
 				displayedComposite = createMatch;
-				//displayedComposite.update();
+				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
@@ -178,33 +185,15 @@ public class LeagueAdminComposite extends Composite {
 				System.out.println("Appoint Caster");
 				
 				displayedComposite.dispose();
-				AppointCastorComposite appointCastor = new AppointCastorComposite(self, SWT.NONE);
-				//appointCastor.setLocation(0, 0);
+				AppointCasterComposite appointCastor = new AppointCasterComposite(self, SWT.NONE);
+				appointCastor.setLocation(350, 150);
 				displayedComposite = appointCastor;
-				//displayedComposite.update();
+				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
 		btnAppointCastor.setText("Appoint Caster");
 		btnAppointCastor.setBounds(25, 360, 192, 48);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		Composite composite = new Composite(this, SWT.NONE);
-		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(0, 193);
-		fd_composite.right = new FormAttachment(100, -78);
-		fd_composite.left = new FormAttachment(100, -62);
-		composite.setLayoutData(fd_composite);
 		
 		Button btnBack = new Button(this, SWT.NONE);
 		btnBack.addMouseListener(new MouseAdapter() {

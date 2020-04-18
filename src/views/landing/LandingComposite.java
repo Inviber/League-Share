@@ -1,6 +1,6 @@
 package views.landing;
 
-import views.leagueadmin.*;
+import views.LeagueAdmin.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -16,6 +16,7 @@ import league.LeagueDBInterator;
 import league.LeagueParser;
 import team.TeamParser;
 import views.GUIShell;
+import views.LeagueAdmin.LeagueAdminComposite;
 import views.schedule.ScheduleComposite;
 import views.schedule.ScheduleGenerator;
 
