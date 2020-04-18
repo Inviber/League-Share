@@ -21,10 +21,8 @@ public class AppointCastorComposite extends Composite {
 	 */
 	public AppointCastorComposite(Composite parent, int style) {
 		super(parent, style);
-		//setLayout(new FormLayout());
-		
-		
-		
+		setLayout(new FormLayout());
+				
 		Label lblAppointCastor = new Label(this, SWT.NONE);
 		FormData fd_lblAppointCastor = new FormData();
 		fd_lblAppointCastor.left = new FormAttachment(0, 307);
@@ -61,23 +59,6 @@ public class AppointCastorComposite extends Composite {
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.setText("Appoint");
 		
-		
-
-		
-		
-//		text_1 = new Text(this, SWT.BORDER);
-//		FormData fd_text_1 = new FormData();
-//		fd_text_1.top = new FormAttachment(0, 202);
-//		fd_text_1.left = new FormAttachment(0, 337);
-//		text_1.setLayoutData(fd_text_1);
-//		
-//		Label lblUsername = new Label(this, SWT.NONE);
-//		FormData fd_lblUsername = new FormData();
-//		fd_lblUsername.top = new FormAttachment(text_1, 0, SWT.TOP);
-//		fd_lblUsername.right = new FormAttachment(text_1, -6);
-//		lblUsername.setLayoutData(fd_lblUsername);
-//		lblUsername.setText("Username:");
-//		
 		setSize(863, 521);
 	}
 
