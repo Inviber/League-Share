@@ -30,4 +30,15 @@ public class PlayerGenerator {
 	{
 		return playerDBInterator;
 	}
+
+	public void createPlayer(String leagueID, String teamID, String firstName, String lastName)
+	{
+		playerDBInterator.createPlayer(leagueID, teamID, firstName, lastName);
+	}
+	
+	public void deletePlayer(String leagueID, String teamID, String playerID)
+	{
+		playerDBInterator.deletePlayer(leagueID, teamID, playerID);
+	}
+
 }

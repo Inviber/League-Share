@@ -60,7 +60,14 @@ public class DatabaseHelper {
 	
 	public Document getDocument(String collectionName, String uniqueID)
 	{
-		return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
+		try
+		{
+			return this.database.getCollection(collectionName).find(eq("_id", new ObjectId(uniqueID))).first();
+		}
+		catch (java.lang.IllegalArgumentException e)
+		{
+			return null; // bad input, not in database.
+		}
 	}
 	
 	
@@ -285,7 +292,7 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
-	public ArrayList<String> getLeagueByLeagueName(String leagueName)
+	public ArrayList<String> getLeagueIDByLeagueName(String leagueName)
 	{
 		ArrayList<String> matchingIDs = new ArrayList<String>();
 				 
@@ -378,6 +385,11 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("casterIDs", leagueCasterID));
 	}
 	
+	public void deleteLeague(String leagueID)
+	{
+		this.database.getCollection(LEAGUES).deleteOne(eq("_id", new ObjectId(leagueID)));
+	}
+	
 	public String getTeamIDByTeamName(String leagueID, String teamName)
 	{
 		try
@@ -453,7 +465,6 @@ public class DatabaseHelper {
 		Bson set = new Document().append("$pull", update);
 
 		this.database.getCollection(LEAGUES).updateOne(where, set);
-
 	}
 	
 	
@@ -917,10 +928,11 @@ public class DatabaseHelper {
 //		System.out.println(dbHelper.getUserIDByUsername("leaf_consumer"));
 		
 		
-		// -- CREATING NEW LEAGUE -- 
-//		String newLeagueID = dbHelper.createLeague("Your mothers favorite league", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
+		// -- CREATING AND DELETING LEAGUES -- 
+//		String newLeagueID = dbHelper.createLeague("DeleteLeague", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
 //		dbHelper.printLeague(newLeagueID);
 		
+//		dbHelper.deleteLeague("5e9b12e63e7d5c58005be9ed");
 		
 		// -- FINDING LEAGUE BY NAME -- 
 //		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
@@ -944,8 +956,8 @@ public class DatabaseHelper {
 //		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e6ba667266a35632f569097");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "Brandons", "Mom");
-//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "Cringes", "Mom");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Penn", "Jillette");  //////////////////////////////////////////////////////////////////////////////////////////// For adding players
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Raymond", "Teller");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 

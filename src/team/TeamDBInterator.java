@@ -49,4 +49,14 @@ public class TeamDBInterator implements TeamDBInteratorInterface {
 			return null;
 		}
 	}
+	
+	public void createTeam(String leagueID, String teamName, String zipcode)
+	{
+		dbHelper.createTeam(leagueID, teamName, zipcode);
+	}
+	
+	public void deleteTeam(String leagueID, String teamID)
+	{
+		dbHelper.deleteTeam(leagueID, teamID);
+	}
 }

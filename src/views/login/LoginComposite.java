@@ -19,7 +19,6 @@ public class LoginComposite extends Composite {
 	private Text text_1;
 	private Text text;
 	private Composite loginComposite = this;
-	private AccountGenerator accountGenerator;
 	
 	Account currentUser;
 	
@@ -29,11 +28,9 @@ public class LoginComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public LoginComposite(Composite parent, int style, GUIShell shell, DatabaseHelper dbHelper) {
+	public LoginComposite(Composite parent, int style, GUIShell shell) {
 		super(parent, SWT.NONE);
 		setLayout(null);
-		
-		this.accountGenerator = new AccountGenerator(dbHelper);
 		
 		Button btnNewButton = new Button(this, SWT.CENTER);
 		btnNewButton.addMouseListener(new MouseAdapter() {
@@ -47,11 +44,9 @@ public class LoginComposite extends Composite {
 				
 				try 
 				{
-					currentUser = accountGenerator.generateAccount(text.getText(), text_1.getText());
+					currentUser = shell.getAccountGenerator().generateAccount(text.getText(), text_1.getText());
 					if (currentUser != null)
-					{
-						shell.setAccount(currentUser);
-						
+					{						
 						text.setText("");
 						text_1.setText("");
 						
@@ -100,13 +95,12 @@ public class LoginComposite extends Composite {
 				
 				
 				
-				if (!accountGenerator.getAccountDBInterator().existingAccount(text.getText())) // if account doesn't exist.
+				if (!shell.getAccountGenerator().getAccountDBInterator().existingAccount(text.getText())) // if account doesn't exist.
 				{
 					// create account
-					accountGenerator.getAccountDBInterator().createUser(text.getText(), text_1.getText());
+					shell.getAccountGenerator().getAccountDBInterator().createUser(text.getText(), text_1.getText());
 					//WILL NEED TO ADD INPUT VALIDATION
-					currentUser = accountGenerator.generateAccount(text.getText(), text_1.getText());
-					shell.setAccount(currentUser);
+					currentUser = shell.getAccountGenerator().generateAccount(text.getText(), text_1.getText());
 
 					text.setText("");
 					text_1.setText("");

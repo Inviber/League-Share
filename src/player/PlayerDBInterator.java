@@ -75,5 +75,14 @@ public class PlayerDBInterator implements PlayerDBInteratorInterface {
 	{
 		dbHelper.updatePlayerStatisticByName(leagueID, teamID, playerID, statName, newStatValue);
 	}
+	
+	public void createPlayer(String leagueID, String teamID, String firstName, String lastName)
+	{
+		dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
+	}
 
+	public void deletePlayer(String leagueID, String teamID, String playerID)
+	{
+		dbHelper.deletePlayer(leagueID, teamID, playerID);
+	}
 }

@@ -8,6 +8,7 @@ public class AccountGenerator {
 
 	private AccountDBInterator accountDBInterator;
 	private AccountParser accountParser;
+	private Account loggedInAccount = null;
 	
 	public AccountGenerator(DatabaseHelper dbHelper)
 	{
@@ -19,26 +20,31 @@ public class AccountGenerator {
 	{
 		String userID = accountDBInterator.getUserIDByUsername(username);
 		JSONObject accountData = accountDBInterator.getAccountDetails(userID);
-		
-		Account account = null;
-		
-		if (password.compareTo((String) accountData.get("password")) == 0)
+				
+		if (accountData != null)
 		{
-			accountParser.parseAccount(userID, accountData);
-			  
-			account = new Account(userID, accountParser.getUsername(),  accountParser.getFirstName(), accountParser.getLastName(),
-					 accountParser.getOwnedLeagueIDs(), accountParser.getLeagueCastedIDs(), accountParser.getFollowedLeagueIDs(), 
-					 accountParser.getOwnedTeamIDs(), accountParser.getManagedTeamIDs(), accountParser.getManagedTeamLeagueIDs(),
-					 accountParser.getFollowedTeamIDs(), accountDBInterator);
+			if (password.compareTo((String) accountData.get("password")) == 0)
+			{
+				accountParser.parseAccount(userID, accountData);
+				  
+				loggedInAccount = new Account(userID, accountParser.getUsername(),  accountParser.getFirstName(), accountParser.getLastName(),
+						 accountParser.getOwnedLeagueIDs(), accountParser.getLeagueCastedIDs(), accountParser.getFollowedLeagueIDs(), 
+						 accountParser.getOwnedTeamIDs(), accountParser.getManagedTeamIDs(), accountParser.getManagedTeamLeagueIDs(),
+						 accountParser.getFollowedTeamIDs(), accountDBInterator);
+			}
 		}
 		
-		
-		return account;
+		return loggedInAccount;
 	}
 	
 	public AccountDBInterator getAccountDBInterator()
 	{
 		return accountDBInterator;
+	}
+	
+	public Account getLoggedInAccount()
+	{
+		return loggedInAccount;
 	}
 	
 }

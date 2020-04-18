@@ -24,6 +24,11 @@ public class AccountDBInterator implements AccountDBInteratorInterface {
 	{
 		JSONObject accountData = null;
 		Document accountDocument = dbHelper.getDocument("Users", userID); 	
+		
+		if (accountDocument == null)
+		{
+			return null;
+		}
 				
 		try
 		{
@@ -54,6 +59,65 @@ public class AccountDBInterator implements AccountDBInteratorInterface {
 			return false;
 		}
 	}
-
 	
+	public void addOwnedLeagueID(String userID, String leagueID)
+	{
+		dbHelper.addOwnedLeagueID(userID, leagueID);
+	}
+	
+	public void addLeagueCastedID(String userID, String leagueID)
+	{
+		dbHelper.addLeagueCastedID(userID, leagueID);
+	}
+	
+	public void addFollowedLeagueID(String userID, String leagueID)
+	{
+		dbHelper.addFollowedLeagueID(userID, leagueID);
+	}
+	
+	public void removeOwnedLeagueID(String userID, String leagueID)
+	{
+		dbHelper.removeOwnedLeagueID(userID, leagueID);
+	}
+	
+	public void removeLeagueCastedID(String userID, String leagueID)
+	{
+		dbHelper.removeLeagueCastedID(userID, leagueID);
+	}
+	
+	public void removeFollowedLeagueID(String userID, String leagueID)
+	{
+		dbHelper.removeFollowedLeagueID(userID, leagueID);
+	}
+	
+
+	public void addOwnedTeamID(String userID, String teamID)
+	{
+		dbHelper.addOwnedTeamID(userID, teamID);
+	}
+	
+	public void addManagedTeamID(String userID, String teamID)
+	{
+		dbHelper.addManagedTeamID(userID, teamID);
+	}
+	
+	public void addFollowedTeamID(String userID, String teamID)
+	{
+		dbHelper.addFollowedTeamID(userID, teamID);
+	}
+	
+	public void removeOwnedTeamID(String userID, String teamID)
+	{
+		dbHelper.removeOwnedTeamID(userID, teamID);
+	}
+	
+	public void removeManagedTeamID(String userID, String teamID)
+	{
+		dbHelper.removeManagedTeamID(userID, teamID);
+	}
+	
+	public void removeFollowedTeamID(String userID, String teamID)
+	{
+		dbHelper.removeFollowedTeamID(userID, teamID);
+	}
 }

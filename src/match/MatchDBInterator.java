@@ -149,4 +149,14 @@ public class MatchDBInterator implements MatchDBInteratorInterface {
 		dbHelper.deleteMessageFromChat(leagueID, matchID, chatID);
 	}
 	
+	public void createMatch(String leagueID, String homeTeamID, String awayTeamID, String date)
+	{
+		dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date);
+	}
+	
+	public void deleteMatch(String leagueID, String matchID)
+	{
+		dbHelper.deleteMatch(leagueID, matchID);
+	}
+	
 }
