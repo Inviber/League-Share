@@ -132,29 +132,47 @@ public class DatabaseHelper {
 	
 	
 	public String getUserIDByUsername(String username)
-	{
-		try 
+	{		 
+        // Performing a read operation on the collection.
+        FindIterable<Document> fi = this.database.getCollection(USERS).find();
+        MongoCursor<Document> cursor = fi.iterator();
+        try {
+            while(cursor.hasNext()) 
+            {      
+            	
+            	Document userDocument = cursor.next();
+            	
+        		JSONParser parser = new JSONParser();
+        		
+        		try
+        		{
+        			Object obj = parser.parse(userDocument.toJson());
+        			JSONObject userData = (JSONObject) obj;
+        			        						
+    				String currentUsername = userData.get("username").toString();
+    				
+    				//System.out.println(currentLeagueName.split("\"")[0]); // all leagues that this search matches.
+    				
+    				if (currentUsername.split("\"")[0].toLowerCase().equals(username.toLowerCase())) //  go to the next ", name is stored in element 1.
+    				{        				
+    					String oid = userData.get("_id").toString(); 
+    					String[] id = oid.split("\""); // removing oid from string.
+        				return id[3];
+    				}
+        		}
+        		catch (Exception e) 
+        		{
+        			// do nothing, move on.
+        		}
+            }
+        }
+        catch (NullPointerException e)
 		{
-			//creating query request to be searched for
-			BasicDBObject query = new BasicDBObject();
-		    query.put("username", username);
-		        
-		    //retrieving all documents that match query
-		    FindIterable<Document> userDocuments = this.database.getCollection(USERS).find(query);
-		    
-		    //choosing the first document because it is known that all usernames are unique
-		    Document userDocument = userDocuments.first();
-		    
-		    //retrieving id
-		    ObjectId userID = (ObjectId) userDocument.get("_id");
-		    
-		    //toStringing it
-		    return userID.toString();
+            cursor.close();
+			return "error";
 		}
-		catch (NullPointerException e)
-		{
-			return "";
-		}
+        
+        return "";
 		
 	}
 	
@@ -267,26 +285,54 @@ public class DatabaseHelper {
 	
 	//LEAGUE METHODS
 	
-	public String getLeagueIDByLeagueName(String leagueName)
+	public ArrayList<String> getLeagueIDByLeagueName(String leagueName)
 	{
-		try
+		ArrayList<String> matchingIDs = new ArrayList<String>();
+				 
+        // Performing a read operation on the collection.
+        FindIterable<Document> fi = this.database.getCollection(LEAGUES).find();
+        MongoCursor<Document> cursor = fi.iterator();
+        try {
+            while(cursor.hasNext()) 
+            {      
+            	
+            	Document leagueDocument = cursor.next();
+            	
+        		JSONParser parser = new JSONParser();
+        		
+        		try
+        		{
+        			Object obj = parser.parse(leagueDocument.toJson());
+        			JSONObject leagueData = (JSONObject) obj;
+        			        						
+    				String currentLeagueName = leagueData.get("leagueName").toString();
+    				
+    				//System.out.println(currentLeagueName.split("\"")[0]); // all leagues that this search matches.
+    				
+    				if (currentLeagueName.split("\"")[0].toLowerCase().contains(leagueName.toLowerCase())) //  go to the next ", name is stored in element 1.
+    				{
+    					String oid = leagueData.get("_id").toString(); 
+    					String[] id = oid.split("\""); // removing oid from string.
+        				matchingIDs.add(id[3]); // id is stored in element 3.
+    					matchingIDs.add(currentLeagueName);
+        				
+        				//System.out.println(id[3]); // matched ID's
+    				}
+        		}
+        		catch (Exception e) 
+        		{
+        			System.out.println(e.getMessage());
+        			// do nothing, move on.
+        		}
+            }
+        }
+        catch (NullPointerException e)
 		{
-		    //retrieving all documents that match query
-		    FindIterable<Document> leagueDocuments = this.database.getCollection(LEAGUES).find(eq("leagueName", leagueName));
-		    
-		    //choosing the first document because currently the firstNames are unique... and Josh doesn't know what else to do currently. <3
-		    Document leagueDocument = leagueDocuments.first();
-		    
-		    //retrieving id
-		    ObjectId leagueID = (ObjectId) leagueDocument.get("_id");
-		    
-		    //toStringing it
-		    return leagueID.toString();
+            cursor.close();
+			return matchingIDs;
 		}
-		catch (NullPointerException e)
-		{
-			return "";
-		}
+        
+        return matchingIDs;
 	}
 	
 	public String createLeague(String leagueName, String ownerID, String sport, String description) 
@@ -330,6 +376,11 @@ public class DatabaseHelper {
 	public void removeLeagueCasterID(String leagueID, String leagueCasterID)
 	{
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.pull("casterIDs", leagueCasterID));
+	}
+	
+	public void deleteLeague(String leagueID)
+	{
+		this.database.getCollection(LEAGUES).deleteOne(eq("_id", new ObjectId(leagueID)));
 	}
 	
 	public String getTeamIDByTeamName(String leagueID, String teamName)
@@ -407,7 +458,6 @@ public class DatabaseHelper {
 		Bson set = new Document().append("$pull", update);
 
 		this.database.getCollection(LEAGUES).updateOne(where, set);
-
 	}
 	
 	
@@ -562,6 +612,10 @@ public class DatabaseHelper {
 		newMatchDocument.put("date", date);
 		newMatchDocument.put("homeScore", "0");
 		newMatchDocument.put("awayScore", "0");
+		
+		ArrayList<Document> chat = new ArrayList<Document>();
+		
+		newMatchDocument.put("chat", chat);
 	
 		this.database.getCollection(LEAGUES).updateOne(eq("_id", new ObjectId(leagueID)), Updates.addToSet("matches", newMatchDocument));
 		
@@ -706,6 +760,42 @@ public class DatabaseHelper {
 		}
 	}
 
+	public String addMessageToChat(String leagueID, String matchID, String username, String message, String time)
+	{
+		Document newChatDocument = new Document();
+		
+		newChatDocument.put("_id", new ObjectId());
+		newChatDocument.put("username", username);
+		newChatDocument.put("message", message);
+		newChatDocument.put("time", time);		
+			
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID));
+		
+		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("matches.$.chat", newChatDocument));
+		
+		return newChatDocument.get("_id").toString();
+	}
+	
+	public void  deleteMessageFromChat(String leagueID, String matchID, String chatID)
+	{
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID)).append("matches.chat._id",new ObjectId(chatID));
+
+		Bson update = new Document().append("matches.$.chat", new BasicDBObject("_id", new ObjectId(chatID)));
+		
+		Bson set = new Document().append("$pull", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
+	public Document getChatDocumentByMatchID(String leagueID, String matchID)
+	{
+		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("matches._id", new ObjectId(matchID));
+
+		return this.database.getCollection(LEAGUES).find(where).first();
+	}
+	
+	
+	
 	
 	void printAllUsers()
 	{		
@@ -811,7 +901,7 @@ public class DatabaseHelper {
 		
 		/*  NEW FUNCTIONS  */
 		
-		
+				
 //		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		
 //		dbHelper.printAllUsers();
@@ -827,25 +917,40 @@ public class DatabaseHelper {
 //		dbHelper.createUser("WhiteWolf", "Yennifer", "Geralt", "Of Rivia");
 //		System.out.println(dbHelper.getUserIDByUsername("WhiteWolf"));
 		
-		// -- CREATING NEW LEAGUE -- 
-//		String newLeagueID = dbHelper.createLeague("Your mothers favorite league", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
+		// -- FINDING USER BY NAME -- 
+//		System.out.println(dbHelper.getUserIDByUsername("leaf_consumer"));
+		
+		
+		// -- CREATING AND DELETING LEAGUES -- 
+//		String newLeagueID = dbHelper.createLeague("DeleteLeague", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
 //		dbHelper.printLeague(newLeagueID);
 		
+//		dbHelper.deleteLeague("5e9b12e63e7d5c58005be9ed");
+		
+		// -- FINDING LEAGUE BY NAME -- 
+//		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
+
+		
 		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
-//		dbHelper.createMatch("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "5e7129f4b0f12336fb6ad64c", "03/01/2020");
+//		dbHelper.createMatch("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "5e8cc3224272bc0dbc1320af", "04/18/2020");
 		
 //		dbHelper.updateMatchScore("5e7129f4b0f12336fb6ad648", "5e7247b449419c7c70020ed5", "5", "5");
 //		dbHelper.updateMatchDate("5e59763368ec36619a66bfdc", "5e72424369db37222c784f01", "3/25/2020");
 		
 //		dbHelper.deleteMatch("5e59763368ec36619a66bfdc", "5e6ba423b657f9411f758eea");
 		
+		
+		// -- CREATING AND DELETING CHAT MESSAGES --
+//		dbHelper.addMessageToChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "Brandon's mom", "FUC U.", "20:35");
+//		dbHelper.deleteMessageFromChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "5e99c0d99ff85804f922bee8");
+		
 		// -- CREATING AND DELETING NEW TEAMS -- 
 //		dbHelper.createTeam("5e8cc22649a7ee3fef1299d7", "Cringes Mom", "Her moms house");
 //		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e6ba667266a35632f569097");
 		
 		// -- CREATING AND DELETING NEW PLAYERS -- 
-//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "Brandons", "Mom");
-//		dbHelper.createPlayer("5e8cc22649a7ee3fef1299d7", "5e8cc3224272bc0dbc1320af", "Cringes", "Mom");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Penn", "Jillette");  //////////////////////////////////////////////////////////////////////////////////////////// For adding players
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Raymond", "Teller");
 //		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
 //		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
 

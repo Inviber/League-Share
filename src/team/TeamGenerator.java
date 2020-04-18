@@ -21,4 +21,15 @@ public class TeamGenerator {
 		  		  
 		return team;
 	}
+	
+	public void createTeam(String leagueID, String teamName, String zipcode)
+	{
+		teamDBInterator.createTeam(leagueID, teamName, zipcode);
+	}
+	
+	public void deleteTeam(String leagueID, String teamID)
+	{
+		teamDBInterator.deleteTeam(leagueID, teamID);
+	}
+	
 }
