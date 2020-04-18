@@ -93,6 +93,8 @@ public class CreateNewTeamComposite extends Composite {
 		fd_btnAdd.left = new FormAttachment(100, -448);
 		btnAdd.setLayoutData(fd_btnAdd);
 		btnAdd.setText("Add");
+		
+		setSize(863, 521);
 
 	}
 

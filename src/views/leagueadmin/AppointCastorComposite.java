@@ -58,6 +58,7 @@ public class AppointCastorComposite extends Composite {
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.setText("Appoint");
 
+		setSize(863, 521);
 	}
 
 	@Override

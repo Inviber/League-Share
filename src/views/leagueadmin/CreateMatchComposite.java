@@ -82,6 +82,8 @@ public class CreateMatchComposite extends Composite {
 		fd_btnNewButton.left = new FormAttachment(0, 336);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.setText("Add");
+		
+		setSize(863, 521);
 
 	}
 

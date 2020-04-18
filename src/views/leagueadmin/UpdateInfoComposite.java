@@ -92,7 +92,7 @@ public class UpdateInfoComposite extends Composite {
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.setText("Update");
 		
-
+		setSize(863, 521);
 	}
 
 	@Override
