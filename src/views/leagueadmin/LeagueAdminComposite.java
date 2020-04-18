@@ -52,6 +52,11 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		
+		EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
+		//editTeams.setLocation(0, 0);
+		displayedComposite = editTeams;
+		//displayedComposite.update();
+		displayedComposite.setSize(863, 521);
 		
 		
 		
@@ -84,7 +89,8 @@ public class LeagueAdminComposite extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Update League Information");
-				UpdateInfoComposite updateInfo = new UpdateInfoComposite(displayedComposite, SWT.NONE);
+				displayedComposite.dispose();
+				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE);
 				updateInfo.setLocation(0, 0);
 				displayedComposite = updateInfo;
 				displayedComposite.update();
@@ -103,10 +109,11 @@ public class LeagueAdminComposite extends Composite {
 //				{
 //					displayedComposite.dispose();
 //				}
-				EditTeamsComposite editTeams = new EditTeamsComposite(displayedComposite, SWT.NONE);
-				editTeams.setLocation(0, 0);
+				displayedComposite.dispose();
+				EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
+				//editTeams.setLocation(0, 0);
 				displayedComposite = editTeams;
-				displayedComposite.update();
+				//displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 				//displayedComposite.setParent(displayedComposite);
 			}
@@ -120,8 +127,9 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Create New Team");
 				
-				CreateNewTeamComposite createTeam = new CreateNewTeamComposite(displayedComposite, SWT.NONE);
-				createTeam.setLocation(0, 0);
+				displayedComposite.dispose();
+				CreateNewTeamComposite createTeam = new CreateNewTeamComposite(self, SWT.NONE);
+				//createTeam.setLocation(0, 0);
 				displayedComposite = createTeam;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
@@ -152,11 +160,11 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Create Match");
 				
-				//displayedComposite.dispose();
+				displayedComposite.dispose();
 				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE);
 				//createMatch.setLocation(0, 0);
 				displayedComposite = createMatch;
-				displayedComposite.update();
+				//displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
@@ -169,7 +177,7 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Appoint Caster");
 				
-				//displayedComposite.dispose();
+				displayedComposite.dispose();
 				AppointCastorComposite appointCastor = new AppointCastorComposite(self, SWT.NONE);
 				//appointCastor.setLocation(0, 0);
 				displayedComposite = appointCastor;
@@ -222,17 +230,6 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		fd_grpLeagueOptions.right = new FormAttachment(100, -962);
-		
-		displayedComposite = new Composite(this, SWT.NONE);
-		
-		
-		
-		FormData fd_composite_1 = new FormData();
-		fd_composite_1.left = new FormAttachment(grpLeagueOptions, 31);
-		fd_composite_1.bottom = new FormAttachment(lblNewLabel, 545, SWT.BOTTOM);
-		fd_composite_1.top = new FormAttachment(lblNewLabel, 24);
-		fd_composite_1.right = new FormAttachment(composite, -6);
-		displayedComposite.setLayoutData(fd_composite_1);
 		
 		/*
 		EditTeamsComposite editTeams = new EditTeamsComposite(displayedComposite, SWT.NONE);
