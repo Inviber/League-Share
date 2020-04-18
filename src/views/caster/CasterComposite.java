@@ -220,12 +220,12 @@ public class CasterComposite extends Composite {
 		this.match = match;
 	}
 	
-	public void setTeam1(Team homeTeam)
+	public void setHomeTeam(Team homeTeam)
 	{
 		this.homeTeam = homeTeam;
 	}
 	
-	public void setTeam2(Team awayTeam)
+	public void setAwayTeam(Team awayTeam)
 	{
 		this.awayTeam = awayTeam;
 	}
@@ -235,12 +235,12 @@ public class CasterComposite extends Composite {
 		this.playerDBInterator = playerDBInterator;
 	}
 	
-	public void setTeam1Players(ArrayList<Player> homePlayers)
+	public void setHomePlayers(ArrayList<Player> homePlayers)
 	{
 		this.homePlayers = homePlayers;
 	}
 	
-	public void setTeam2Players(ArrayList<Player> awayPlayers)
+	public void setAwayPlayers(ArrayList<Player> awayPlayers)
 	{
 		this.awayPlayers = awayPlayers;
 	}

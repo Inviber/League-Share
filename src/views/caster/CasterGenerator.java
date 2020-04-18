@@ -14,16 +14,16 @@ import views.GUIShell;
 public class CasterGenerator {
 	CasterComposite casterComposite;
 	private Match match;
-	private Team team1;
-	private Team team2;
-	private ArrayList<Player> team1Players;
-	private ArrayList<Player> team2Players;
+	private Team homeTeam;
+	private Team awayTeam;
+	private ArrayList<Player> homePlayers;
+	private ArrayList<Player> awayPlayers;
 	
-	public CasterGenerator(Composite parent, int style, Match match, Team team1, Team team2)
+	public CasterGenerator(Composite parent, int style, Match match, Team homeTeam, Team awayTeam)
 	{
 		this.match = match;
-		this.team1 = team1;
-		this.team2 = team2;
+		this.homeTeam = homeTeam;
+		this.awayTeam = awayTeam;
 		PlayerGenerator playerGenerator = ((GUIShell)parent).getPlayerGenerator();
 		MatchGenerator matchGenerator = ((GUIShell)parent).getMatchGenerator();
 		
@@ -36,28 +36,28 @@ public class CasterGenerator {
 	public void populateTeamPlayerLists(PlayerGenerator playerGenerator)
 	{
 		// Variables to use for generating players (helps with readability)
-		ArrayList<String> team1PlayerIDs = team1.getPlayerIDs();
-		ArrayList<String> team2PlayerIDs = team2.getPlayerIDs();
-		String team1ID = team1.getTeamID();
-		String team2ID = team2.getTeamID();
-		String leagueID = team1.getLeagueID();
+		ArrayList<String> homePlayerIDs = homeTeam.getPlayerIDs();
+		ArrayList<String> awayPlayerIDs = awayTeam.getPlayerIDs();
+		String team1ID = homeTeam.getTeamID();
+		String team2ID = awayTeam.getTeamID();
+		String leagueID = homeTeam.getLeagueID();
 		
-		team1Players = new ArrayList<Player>(); // Clear list before populating it again.
-		team2Players = new ArrayList<Player>(); // Clear list before populating it again.
+		homePlayers = new ArrayList<Player>(); // Clear list before populating it again.
+		awayPlayers = new ArrayList<Player>(); // Clear list before populating it again.
 		
 		// Verify both teams are in the same league before generating players otherwise don't generate players.
-		if ( team1.getLeagueID().equals(team2.getLeagueID()) )
+		if ( homeTeam.getLeagueID().equals(awayTeam.getLeagueID()) )
 		{
-			// Generate all players from team1 and add them to the team1 array list
-			for(int i = 0; i < team1PlayerIDs.size(); i++)
+			// Generate all players from homeTeam and add them to the homeTeam array list
+			for(int i = 0; i < homePlayerIDs.size(); i++)
 			{
-				team1Players.add( playerGenerator.generatePlayer(leagueID, team1ID, team1PlayerIDs.get(i)) );
+				homePlayers.add( playerGenerator.generatePlayer(leagueID, team1ID, homePlayerIDs.get(i)) );
 			}
 			
-			// Generate all players from team2 and add them to the team2 array list
-			for(int i = 0; i < team2PlayerIDs.size(); i++)
+			// Generate all players from awayTeam and add them to the awayTeam array list
+			for(int i = 0; i < awayPlayerIDs.size(); i++)
 			{
-				team2Players.add( playerGenerator.generatePlayer(leagueID, team2ID, team2PlayerIDs.get(i)) );
+				awayPlayers.add( playerGenerator.generatePlayer(leagueID, team2ID, awayPlayerIDs.get(i)) );
 			}
 		}
 		else
@@ -70,24 +70,24 @@ public class CasterGenerator {
 //		System.out.println(team2PlayerIDs);
 	}
 	
-	public ArrayList<Player> getTeam1Players()
+	public ArrayList<Player> getHomePlayers()
 	{
-		return team1Players;
+		return homePlayers;
 	}
 	
-	public ArrayList<Player> getTeam2Players()
+	public ArrayList<Player> getAwayPlayers()
 	{
-		return team2Players;
+		return awayPlayers;
 	}
 	
 	public void createComposite(Composite parent, int style)
 	{
 		casterComposite = new CasterComposite(parent, style);
 		casterComposite.setMatch(match);
-		casterComposite.setTeam1(team1);
-		casterComposite.setTeam2(team2);
-		casterComposite.setTeam1Players(team1Players);
-		casterComposite.setTeam2Players(team2Players);
+		casterComposite.setHomeTeam(homeTeam);
+		casterComposite.setAwayTeam(awayTeam);
+		casterComposite.setHomePlayers(homePlayers);
+		casterComposite.setAwayPlayers(awayPlayers);
 		casterComposite.fillComposite(parent);
 	}
 	
