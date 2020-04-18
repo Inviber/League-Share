@@ -12,7 +12,7 @@ import team.Team;
 import views.GUIShell;
 
 public class CasterGenerator {
-	CasterComposite casterComposite;
+	private CasterComposite casterComposite;
 	private Match match;
 	private Team homeTeam;
 	private Team awayTeam;

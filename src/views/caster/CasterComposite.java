@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -41,7 +42,8 @@ public class CasterComposite extends Composite {
 	private ArrayList<Player> awayPlayers;
 	private PlayerDBInterator playerDBInterator;
 	private MatchDBInterator matchDBInterator;
-
+	private int currentStatValue;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -64,22 +66,14 @@ public class CasterComposite extends Composite {
 		backButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// regenerate match based on updated DB
-				((GUIShell)parent).getMatchGenerator().setMatch(match.getLeagueID(), match.getMatchID());
-				
-				// get new POJOs based on updated DB stats
-				Match newMatch = ((GUIShell)parent).getMatchGenerator().getMatch();
-				Team newHomeTeam = ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getHomeTeamID());
-				Team newAwayTeam = ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getAwayTeamID());
-				
 				// Create new spectatorGenerator and spectatorComposite with new POJOs
-				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), newMatch, newHomeTeam, newAwayTeam);
+				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
 				Composite previousWindow = spectatorGenerator.getSpectatorComposite();
 				
 				// Display new spectator
 				((GUIShell) parent).setDisplayedComposite(previousWindow);
 			
-				System.out.println("Back button pressed.");
+//				System.out.println("Back button pressed.");
 			}
 		});
 		backButton.setText("Back");
@@ -91,7 +85,9 @@ public class CasterComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				match.setHomeScore( match.getHomeScore() + 1 );
 				matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
-				System.out.println("Home score incremented.");
+				CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+				((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
+//				System.out.println("Home score incremented.");
 			}
 		});
 		homeScoreIncrementButton.setBounds(355, 125, 30, 20);
@@ -104,8 +100,10 @@ public class CasterComposite extends Composite {
 				if ( match.getHomeScore() > 0 ) {
 					match.setHomeScore( match.getHomeScore() - 1 );
 					matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
+					CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+					((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
 				}
-				System.out.println("Home score decremented.");
+//				System.out.println("Home score decremented.");
 			}
 		});
 		homeScoreDecrementButton.setText("-");
@@ -117,7 +115,9 @@ public class CasterComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 				match.setAwayScore( match.getAwayScore() + 1 );
 				matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
-				System.out.println("Away score incremented.");
+				CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+				((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
+//				System.out.println("Away score incremented.");
 			}
 		});
 		awayScoreIncrementButton.setText("+");
@@ -130,8 +130,10 @@ public class CasterComposite extends Composite {
 				if ( match.getAwayScore() > 0 ) {
 					match.setAwayScore( match.getAwayScore() - 1 );
 					matchDBInterator.updateMatchData( match.getLeagueID(), match.getMatchID(), match.getHomeScore(), match.getAwayScore(), match.getDate() );
+					CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+					((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
 				}
-				System.out.println("Away score decremented.");
+//				System.out.println("Away score decremented.");
 			}
 		});
 		awayScoreDecrementButton.setText("-");
@@ -181,7 +183,7 @@ public class CasterComposite extends Composite {
 
 	}
 
-	private void displayPlayers(Team currentTeam, ArrayList<Player> players, GUIShell shell, Group groupToAddTo) {
+	private void displayPlayers(Team currentTeam, ArrayList<Player> players, Composite parent, Group groupToAddTo) {
 		Player displayedPlayer;
 		
 		ScrolledComposite scrollingPlayersComposite = new ScrolledComposite(groupToAddTo, SWT.BORDER | SWT.V_SCROLL);
@@ -215,20 +217,38 @@ public class CasterComposite extends Composite {
 			
 			for( int statIterator = 0; statIterator < statsPerPlayer; statIterator++ )
 			{
+				// get all data for updating a specific stat
+				String leagueID = currentTeam.getLeagueID();
+				String teamID = currentTeam.getTeamID();
+				String playerID = displayedPlayer.getPlayerID();
+				String currentStat = statisticNames.get(statIterator);
+				HashMap<String, String> statValues = displayedPlayer.getStatistics();				
+				
 				// integer for x value of setting player stat label bounds : 30 represents label height (20) plus spacing (10)
 				int nextStatPosition = nextPlayerPosition + 30 + (statIterator * 30);
 				
 				Label statLbl = new Label(playerInfo, SWT.NONE);
-				statLbl.setText(statisticNames.get(statIterator));
+				statLbl.setText( statisticNames.get(statIterator) + ": " + currentStatValue);
 				statLbl.setBounds(10, nextStatPosition, 200, 20);
 				
 				// to use statIterator value inside button listener
 				int nameLocation = statIterator;
 				
+				System.out.println("currentValue before button: " + currentStatValue);
 				Button incrementStat = new Button(playerInfo, SWT.NONE);
 				incrementStat.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
+						try {
+							currentStatValue = Integer.parseInt(statValues.get(currentStat));
+						} catch (NumberFormatException nfe) {
+							nfe.printStackTrace();
+							currentStatValue = -1;
+						}
+						System.out.println("currentValue increment button: " + currentStatValue);
+						playerDBInterator.updatePlayerStatistics(leagueID, teamID, playerID, currentStat, currentStatValue + 1 );
+						CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+						((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
 						System.out.println(statisticNames.get(nameLocation) + " incremented.");
 					}
 				});
@@ -239,7 +259,21 @@ public class CasterComposite extends Composite {
 				decrementStat.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						System.out.println(statisticNames.get(nameLocation) + " decremented.");
+						try {
+							currentStatValue = Integer.parseInt(statValues.get(currentStat));
+						} catch (NumberFormatException nfe) {
+							nfe.printStackTrace();
+							currentStatValue = -1;
+						}
+						System.out.println("currentValue decrement button: " + currentStatValue);
+						if (currentStatValue > 0)
+						{
+							playerDBInterator.updatePlayerStatistics(leagueID, teamID, playerID, currentStat, currentStatValue - 1 );
+							CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+							((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
+							System.out.println(statisticNames.get(nameLocation) + " decremented.");
+						}
+						
 					}
 				});
 				decrementStat.setBounds(260, nextStatPosition, 30, 20);
@@ -250,6 +284,25 @@ public class CasterComposite extends Composite {
 		}
 		scrollingPlayersComposite.setContent(playersComposite);
 		scrollingPlayersComposite.setMinSize(playersComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+	}
+
+	private Match getNewMatch(Composite parent) {
+		// regenerate match based on updated DB
+		((GUIShell)parent).getMatchGenerator().setMatch(match.getLeagueID(), match.getMatchID());
+		
+		// return new POJO based on updated DB stats
+		return ((GUIShell)parent).getMatchGenerator().getMatch();
+	}
+	
+	private Team getNewHomeTeam(Composite parent) {
+		Match newMatch = getNewMatch(parent);
+		return ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getHomeTeamID());
+	}
+	
+	private Team getNewAwayTeam(Composite parent) {
+		Match newMatch = getNewMatch(parent);
+		return ((GUIShell)parent).getTeamGenerator().generateTeam(newMatch.getLeagueID(), newMatch.getAwayTeamID());
 
 	}
 	
@@ -285,6 +338,11 @@ public class CasterComposite extends Composite {
 	public void setAwayPlayers(ArrayList<Player> awayPlayers)
 	{
 		this.awayPlayers = awayPlayers;
+	}
+	
+	private void refillCasterComposite()
+	{
+		
 	}
 
 	@Override
