@@ -191,22 +191,47 @@ public class CasterComposite extends Composite {
 		playersComposite.setLayout(fill);
 
 		int i = 0;
-		// Generating the list of team mates
+		// Populating stats for each player
 		while (i < players.size()) { 
 			Composite playerInfo = new Composite(playersComposite, SWT.NONE);
 			fill = new FillLayout(SWT.VERTICAL);
 			playerInfo.setLayout(fill);
 			
-			// making a player parser to access the players names
+			// to access the player name and stats
 			displayedPlayer = players.get(i);
 
 			Label playerName = new Label(playerInfo, SWT.NONE);
-			String playerStats = displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName();
+			playerName.setText( displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName() );
 
-			for(String statName : displayedPlayer.getStatisticNames())
-				playerStats += "\n     " + statName + ": " + displayedPlayer.getStatistics().get(statName);
+			ArrayList<String> statisticNames = displayedPlayer.getStatisticNames();
+			for( int iter = 0; iter < statisticNames.size(); iter++ )
+			{
+				Label statLbl = new Label(playerInfo, SWT.NONE);
+				statLbl.setText(statisticNames.get(iter));
+				statLbl.setBounds(10, iter * (20+10), 200, 20);
+				
+				int nameLocation = iter;
+				Button incrementStat = new Button(playerInfo, SWT.NONE);
+				incrementStat.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						System.out.println(statisticNames.get(nameLocation) + " incremented.");
+					}
+				});
+				incrementStat.setBounds(220, iter * (20+10), 30, 20);
+				incrementStat.setText("+");
+				
+				Button decrementStat = new Button(playerInfo, SWT.NONE);
+				decrementStat.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						System.out.println(statisticNames.get(nameLocation) + " decremented.");
+					}
+				});
+				decrementStat.setBounds(260, iter * (20+10), 30, 20);
+				decrementStat.setText("-");
+			}
 			
-			playerName.setText(playerStats);
 			i++;
 		}
 		scrollingPlayersComposite.setContent(playersComposite);
