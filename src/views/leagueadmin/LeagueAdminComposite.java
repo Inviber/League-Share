@@ -5,11 +5,20 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Label;
 
 import team.Team;
+import team.TeamGenerator;
+import user.AccountGenerator;
+import views.GUIShell;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.League;
+import league.LeagueGenerator;
+import match.MatchGenerator;
+import player.PlayerGenerator;
+
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,23 +34,44 @@ public class LeagueAdminComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public LeagueAdminComposite(Composite parent, int style, Team team) {
+	public LeagueAdminComposite(Composite parent, int style, GUIShell shell, String leagueID) {
 		super(parent, style);
+		
+		AccountGenerator accountGenerator = shell.getAccountGenerator();
+		LeagueGenerator leagueGenerator = shell.getLeagueGenerator();
+		MatchGenerator matchGenerator = shell.getMatchGenerator();
+		TeamGenerator teamGenerator = shell.getTeamGenerator();
+		PlayerGenerator playerGenerator = shell.getPlayerGenerator();
+		
+		
+		League league = leagueGenerator.generateLeague(leagueID);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		setLayout(new FormLayout());
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
+		lblNewLabel.setText(league.getLeagueName());
+		
 		lblNewLabel.setAlignment(SWT.CENTER);
 		FormData fd_lblNewLabel = new FormData();
 		fd_lblNewLabel.top = new FormAttachment(0, 23);
 		fd_lblNewLabel.right = new FormAttachment(100, -491);
 		lblNewLabel.setLayoutData(fd_lblNewLabel);
-		lblNewLabel.setText(team.getTeamName());
+		// lblNewLabel.setText(team.getTeamName());
 		
 		Group grpLeagueOptions = new Group(this, SWT.NONE);
 		grpLeagueOptions.setText("League Options");
 		FormData fd_grpLeagueOptions = new FormData();
-		fd_grpLeagueOptions.bottom = new FormAttachment(100, -44);
+		fd_grpLeagueOptions.bottom = new FormAttachment(100, -181);
 		fd_grpLeagueOptions.left = new FormAttachment(0, 73);
 		grpLeagueOptions.setLayoutData(fd_grpLeagueOptions);
 		
@@ -105,6 +135,17 @@ public class LeagueAdminComposite extends Composite {
 		btnAppointCastor.setText("Appoint Caster");
 		btnAppointCastor.setBounds(25, 360, 192, 48);
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		Composite composite = new Composite(this, SWT.NONE);
 		FormData fd_composite = new FormData();
 		fd_composite.top = new FormAttachment(0, 193);
@@ -113,6 +154,14 @@ public class LeagueAdminComposite extends Composite {
 		composite.setLayoutData(fd_composite);
 		
 		Button btnBack = new Button(this, SWT.NONE);
+		btnBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				System.out.println("Back button pressed");
+			}
+		});
+		
+		
 		fd_lblNewLabel.bottom = new FormAttachment(btnBack, 0, SWT.BOTTOM);
 		fd_lblNewLabel.left = new FormAttachment(btnBack, 308);
 		fd_grpLeagueOptions.top = new FormAttachment(btnBack, 24);
@@ -125,24 +174,32 @@ public class LeagueAdminComposite extends Composite {
 		btnBack.setText("Back");
 		
 		Composite displayedComposite = new Composite(this, SWT.NONE);
+		displayedComposite.setSize(400, 400);
+		
+		
+		
+		
 		fd_grpLeagueOptions.right = new FormAttachment(100, -962);
 		FormData fd_displayedComposite = new FormData();
-		fd_displayedComposite.bottom = new FormAttachment(100, -44);
-		fd_displayedComposite.top = new FormAttachment(lblNewLabel, 24);
-		fd_displayedComposite.left = new FormAttachment(grpLeagueOptions, 78);
+		fd_displayedComposite.left = new FormAttachment(grpLeagueOptions, 64);
 		fd_displayedComposite.right = new FormAttachment(composite, -22);
+		fd_displayedComposite.bottom = new FormAttachment(100, -73);
+		fd_displayedComposite.top = new FormAttachment(lblNewLabel, 24);
 		displayedComposite.setLayoutData(fd_displayedComposite);
 		
 		
 		
 		
 		/*
-		ScrolledComposite scrolledComposite = new ScrolledComposite(EditTeamComposite, SWT.BORDER | SWT.V_SCROLL);
+		
+		ScrolledComposite scrolledComposite = new ScrolledComposite(displayedComposite, SWT.BORDER | SWT.V_SCROLL);
 		scrolledComposite.setBounds(171, 149, 443, 208);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
-		Label lblTeams = new Label(EditTeamComposite, SWT.CENTER);
+		
+		
+		Label lblTeams = new Label(displayedComposite, SWT.CENTER);
 		lblTeams.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
 		lblTeams.setBounds(302, 107, 155, 36);
 		lblTeams.setText("Teams");

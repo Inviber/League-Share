@@ -1,6 +1,6 @@
 package views.landing;
 
-
+import views.leagueadmin.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -126,7 +126,7 @@ public class LandingComposite extends Composite {
 			list_1.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
-					System.out.println("Clickedeeee");
+					//System.out.println("Clickedeeee");
 					
 //					if (list.getSelectionIndex() != -1) // -1 means nothing selected
 //					{
@@ -138,7 +138,9 @@ public class LandingComposite extends Composite {
 					
 					if(list_1.getSelectionIndex() != -1)
 					{
-						System.out.println(ownedLeagueIDs.get(list_1.getSelectionIndex()));
+						//System.out.println(ownedLeagueIDs.get(list_1.getSelectionIndex()));
+						LeagueAdminComposite leagueAdminComposite = new LeagueAdminComposite(shell, SWT.NONE, shell, ownedLeagueIDs.get(list_1.getSelectionIndex()));
+						shell.setDisplayedComposite(leagueAdminComposite);
 					}
 					
 					
