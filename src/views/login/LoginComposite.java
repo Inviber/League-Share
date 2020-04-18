@@ -14,6 +14,7 @@ import views.landing.LandingComposite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Control;
 
 public class LoginComposite extends Composite {
 	private Text text_1;
@@ -85,6 +86,7 @@ public class LoginComposite extends Composite {
 		Label lblNewLabel_1_1 = new Label(this, SWT.NONE);
 		lblNewLabel_1_1.setText("Username");
 		lblNewLabel_1_1.setBounds(452, 299, 70, 17);
+		setTabList(new Control[]{text, text_1, btnNewButton, btnNewButton_1});
 		
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
