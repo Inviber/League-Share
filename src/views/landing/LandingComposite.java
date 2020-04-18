@@ -97,16 +97,18 @@ public class LandingComposite extends Composite {
 //				}
 				@Override
 				public void mouseDoubleClick(MouseEvent e) {
-					//System.out.println(list.getSelection()[0] + " selected...");
-//					System.out.println(list.getSelectionIndex());
+//					System.out.println(list.getSelection() + " selected...");
 					
 					ArrayList<String> followedLeagueIDs = shell.getAccount().getFollowedLeagueIDs();
 //					LeagueDBInterator leagueDBInterator = new LeagueDBInterator(dbHelper);
 //					LeagueParser parser = new LeagueParser(leagueDBInterator);
 					
-					ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-//					ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
-					shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+					if (list.getSelectionIndex() != -1) // -1 means nothing selected
+					{
+						ScheduleGenerator scheduleGenerator = new ScheduleGenerator(shell, SWT.NONE, followedLeagueIDs.get(list.getSelectionIndex()), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+//						ScheduleComposite scheduleComposite = new ScheduleComposite(shell, SWT.NONE, followedLeagueIDs.get(0), shell.getLeagueGenerator(), shell.getMatchGenerator(), shell.getTeamGenerator());
+						shell.setDisplayedComposite(scheduleGenerator.getScheduleComposite());
+					}
 				}
 			});
 			list.setBounds(178, 167, 350, 200);
