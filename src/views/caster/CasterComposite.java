@@ -42,7 +42,6 @@ public class CasterComposite extends Composite {
 	private ArrayList<Player> awayPlayers;
 	private PlayerDBInterator playerDBInterator;
 	private MatchDBInterator matchDBInterator;
-	private int currentStatValue;
 	
 	/**
 	 * Create the composite.
@@ -221,7 +220,14 @@ public class CasterComposite extends Composite {
 				String teamID = currentTeam.getTeamID();
 				String playerID = displayedPlayer.getPlayerID();
 				String currentStat = statisticNames.get(statIterator);
-				HashMap<String, String> statValues = displayedPlayer.getStatistics();				
+				HashMap<String, String> statValues = displayedPlayer.getStatistics();
+				int currentStatValue;
+				try {
+					currentStatValue = Integer.parseInt(statValues.get(currentStat));
+				} catch (NumberFormatException nfe) {
+					nfe.printStackTrace();
+					currentStatValue = -1;
+				}
 				
 				// integer for x value of setting player stat label bounds : 30 represents label height (20) plus spacing (10)
 				int nextStatPosition = 25 + (statIterator * 25);
@@ -233,22 +239,22 @@ public class CasterComposite extends Composite {
 				// to use statIterator value inside button listener
 				int nameLocation = statIterator;
 				
-				System.out.println("currentValue before button: " + currentStatValue);
 				Button incrementStat = new Button(playerInfo, SWT.NONE);
 				incrementStat.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
+						int currentStatValue;
 						try {
 							currentStatValue = Integer.parseInt(statValues.get(currentStat));
 						} catch (NumberFormatException nfe) {
 							nfe.printStackTrace();
 							currentStatValue = -1;
 						}
-						System.out.println("currentValue increment button: " + currentStatValue);
+
 						playerDBInterator.updatePlayerStatistics(leagueID, teamID, playerID, currentStat, currentStatValue + 1 );
 						CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
 						((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
-						System.out.println(statisticNames.get(nameLocation) + " incremented.");
+
 					}
 				});
 				incrementStat.setBounds(220, nextStatPosition, 30, 20);
@@ -258,19 +264,20 @@ public class CasterComposite extends Composite {
 				decrementStat.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
+						int currentStatValue;
 						try {
 							currentStatValue = Integer.parseInt(statValues.get(currentStat));
 						} catch (NumberFormatException nfe) {
 							nfe.printStackTrace();
 							currentStatValue = -1;
 						}
-						System.out.println("currentValue decrement button: " + currentStatValue);
+
 						if (currentStatValue > 0)
 						{
 							playerDBInterator.updatePlayerStatistics(leagueID, teamID, playerID, currentStat, currentStatValue - 1 );
 							CasterGenerator cg = new CasterGenerator(parent, SWT.NONE, getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
 							((GUIShell)parent).setDisplayedComposite(cg.getCasterComposite());
-							System.out.println(statisticNames.get(nameLocation) + " decremented.");
+
 						}
 						
 					}
