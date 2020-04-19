@@ -59,11 +59,6 @@ public class CreateMatchComposite extends Composite {
 		Combo combo_1 = new Combo(this, SWT.NONE);
 		combo_1.setBounds(329, 170, 245, 28);
 		
-		DateTime dateTime = new DateTime(this, SWT.BORDER);
-		dateTime.setBounds(329, 204, 143, 37);
-		
-		dateTime.setBounds(376, 199, 96, 37);
-		
 		
 //		combo.add("test 1");
 //		combo.add("test 2");
@@ -124,6 +119,9 @@ public class CreateMatchComposite extends Composite {
 		});
 		btnAdd.setBounds(478, 204, 96, 37);
 		btnAdd.setText("Add");
+		
+		DateTime dateTime = new DateTime(this, SWT.BORDER);
+		dateTime.setBounds(353, 204, 119, 37);
 
 	}
 
