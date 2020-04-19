@@ -27,6 +27,11 @@ public class TeamGenerator {
 		teamDBInterator.createTeam(leagueID, teamName, zipcode);
 	}
 	
+	public void updateTeam(String leagueID, String teamID, String teamName, String zipcode)
+	{
+		teamDBInterator.updateTeam(leagueID, teamID, teamName, zipcode);
+	}
+	
 	public void deleteTeam(String leagueID, String teamID)
 	{
 		teamDBInterator.deleteTeam(leagueID, teamID);

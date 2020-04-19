@@ -38,6 +38,11 @@ public class MatchGenerator {
 		matchDBInterator.createMatch(leagueID, homeTeamID, awayTeamID, date);
 	}
 	
+	public void updateMatch(String leagueID, String matchID, String homeTeamID, String awayTeamID, String date, String homeScore, String awayScore)
+	{
+		matchDBInterator.updateMatch(leagueID, matchID, homeTeamID, awayTeamID, date, homeScore, awayScore);
+	}
+	
 	public void deleteMatch(String leagueID, String matchID)
 	{
 		matchDBInterator.deleteMatch(leagueID, matchID);
