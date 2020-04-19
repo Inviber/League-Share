@@ -53,7 +53,7 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		
-		EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
+		EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE, shell, leagueID, leagueGenerator, teamGenerator, self);
 		FormData fd_editTeams = new FormData();
 		fd_editTeams.bottom = new FormAttachment(100, -181);
 		fd_editTeams.top = new FormAttachment(0, 55);
@@ -116,7 +116,7 @@ public class LeagueAdminComposite extends Composite {
 //					displayedComposite.dispose();
 //				}
 				displayedComposite.dispose();
-				EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
+				EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE, shell, leagueID, leagueGenerator, teamGenerator, self);
 				editTeams.setLocation(350, 100);
 				displayedComposite = editTeams;
 				displayedComposite.update();

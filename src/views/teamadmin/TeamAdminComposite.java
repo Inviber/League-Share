@@ -17,6 +17,7 @@ import user.AccountGenerator;
 import views.GUIShell;
 import views.landing.LandingComposite;
 import views.leagueadmin.EditTeamsComposite;
+import views.leagueadmin.LeagueAdminComposite;
 import views.leagueadmin.UpdateInfoComposite;
 
 import org.eclipse.wb.swt.SWTResourceManager;
@@ -36,7 +37,7 @@ public class TeamAdminComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public TeamAdminComposite(Composite parent, int style, GUIShell shell, String leagueId, String teamId) {
+	public TeamAdminComposite(Composite parent, int style, GUIShell shell, String leagueId, String teamId, Composite leagueAdminComposite) {
 		super(parent, style);
 		
 		AccountGenerator accountGenerator = shell.getAccountGenerator();
@@ -123,9 +124,11 @@ public class TeamAdminComposite extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Back button pressed");
-				shell.disposeDisplayedComposite();
-				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
-				shell.setDisplayedComposite(landingComposite);
+				//shell.disposeDisplayedComposite();
+				//LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
+				LeagueAdminComposite leagueAdminComposite = new LeagueAdminComposite(shell, SWT.NONE, shell, leagueId);
+				shell.setDisplayedComposite(leagueAdminComposite);
+				//shell.setDisplayedComposite(leagueAdminComposite);
 			}
 		});
 		
