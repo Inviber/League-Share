@@ -129,11 +129,6 @@ public class LeagueAdminComposite extends Composite {
 		btnEditTeams.setBounds(25, 100, 192, 48);
 		
 		Button btnCreateNewTeam = new Button(grpLeagueOptions, SWT.NONE);
-		btnCreateNewTeam.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
 		btnCreateNewTeam.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
