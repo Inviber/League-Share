@@ -55,6 +55,8 @@ public class LeagueAdminComposite extends Composite {
 		
 		EditTeamsComposite editTeams = new EditTeamsComposite(self, SWT.NONE);
 		FormData fd_editTeams = new FormData();
+		fd_editTeams.bottom = new FormAttachment(100, -181);
+		fd_editTeams.top = new FormAttachment(0, 55);
 		fd_editTeams.right = new FormAttachment(100, -23);
 		editTeams.setLayoutData(fd_editTeams);
 		//editTeams.setLocation(0, 0);
@@ -69,11 +71,9 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		setLayout(new FormLayout());
-		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
 		lblNewLabel.setText(league.getLeagueName());
-		
 		lblNewLabel.setAlignment(SWT.CENTER);
 		FormData fd_lblNewLabel = new FormData();
 		fd_lblNewLabel.top = new FormAttachment(0, 23);
@@ -82,12 +82,11 @@ public class LeagueAdminComposite extends Composite {
 		// lblNewLabel.setText(team.getTeamName());
 		
 		Group grpLeagueOptions = new Group(this, SWT.NONE);
-		fd_editTeams.left = new FormAttachment(grpLeagueOptions, 24);
-		fd_editTeams.bottom = new FormAttachment(grpLeagueOptions, 0, SWT.BOTTOM);
-		fd_editTeams.top = new FormAttachment(grpLeagueOptions, 0, SWT.TOP);
+		fd_editTeams.left = new FormAttachment(0, 308);
 		grpLeagueOptions.setText("League Options");
 		FormData fd_grpLeagueOptions = new FormData();
-		fd_grpLeagueOptions.bottom = new FormAttachment(100, -181);
+		fd_grpLeagueOptions.right = new FormAttachment(editTeams, -6);
+		fd_grpLeagueOptions.bottom = new FormAttachment(100, -171);
 		fd_grpLeagueOptions.left = new FormAttachment(0, 73);
 		grpLeagueOptions.setLayoutData(fd_grpLeagueOptions);
 		
@@ -97,7 +96,7 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Update League Information");
 				displayedComposite.dispose();
-				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE);
+				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE, leagueID, leagueGenerator);
 				updateInfo.setLocation(350, 150);
 				displayedComposite = updateInfo;
 				displayedComposite.update();
@@ -170,9 +169,9 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE, leagueID, leagueGenerator, teamGenerator, matchGenerator);
-				createMatch.setLocation(350, 100);
+				//createMatch.setLocation(350, 100);
 				displayedComposite = createMatch;
-				displayedComposite.update();
+				//displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
@@ -197,6 +196,7 @@ public class LeagueAdminComposite extends Composite {
 		btnAppointCastor.setBounds(25, 360, 192, 48);
 		
 		Button btnBack = new Button(this, SWT.NONE);
+		fd_grpLeagueOptions.top = new FormAttachment(btnBack, 16);
 		btnBack.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -206,23 +206,13 @@ public class LeagueAdminComposite extends Composite {
 				shell.setDisplayedComposite(landingComposite);
 			}
 		});
-		
-		
-		fd_lblNewLabel.bottom = new FormAttachment(btnBack, 0, SWT.BOTTOM);
-		fd_lblNewLabel.left = new FormAttachment(btnBack, 308);
-		fd_grpLeagueOptions.top = new FormAttachment(btnBack, 24);
 		FormData fd_btnBack = new FormData();
-		fd_btnBack.top = new FormAttachment(0, 34);
-		fd_btnBack.bottom = new FormAttachment(100, -645);
-		fd_btnBack.right = new FormAttachment(0, 138);
-		fd_btnBack.left = new FormAttachment(0, 50);
+		fd_btnBack.top = new FormAttachment(0, 10);
+		fd_btnBack.bottom = new FormAttachment(100, -630);
+		fd_btnBack.left = new FormAttachment(0, 33);
+		fd_btnBack.right = new FormAttachment(0, 139);
 		btnBack.setLayoutData(fd_btnBack);
 		btnBack.setText("Back");
-		
-		
-		
-		
-		fd_grpLeagueOptions.right = new FormAttachment(100, -962);
 		
 		/*
 		EditTeamsComposite editTeams = new EditTeamsComposite(displayedComposite, SWT.NONE);
