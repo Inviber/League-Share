@@ -37,8 +37,18 @@ public class LeagueGenerator {
 		leagueDBInterator.createLeague(leagueName, ownerID, sport, description);
 	}
 	
+	public void updateLeague(String leagueID, String leagueName, String ownerID, String sport, String description)
+	{
+		leagueDBInterator.updateLeague(leagueID, leagueName, ownerID, sport, description);
+	}
+	
 	public void deleteLeague(String leagueID)
 	{
 		leagueDBInterator.deleteLeague(leagueID);
+	}
+	
+	public LeagueDBInterator getLeagueDBInterator()
+	{
+		return this.leagueDBInterator;
 	}
 }

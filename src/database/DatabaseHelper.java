@@ -371,6 +371,38 @@ public class DatabaseHelper {
 		return newLeagueDocument.get("_id").toString();
 	}
 	
+	public void updateLeague(String leagueID, String leagueName, String ownerID, String sport, String description)
+	{
+		BasicDBObject where = new BasicDBObject().append("_id",new ObjectId(leagueID));
+								
+		Document update = new Document();
+		
+		if (!leagueName.equals("")) // if not blank
+		{
+			update.append("leagueName", leagueName);
+		}
+		
+		if (!ownerID.equals("")) // if not blank
+		{
+			update.append("ownerID", ownerID);
+		}
+		
+		if (!sport.equals("")) // if not blank
+		{
+			update.append("sport", sport);
+		}
+		
+		if (!description.equals("")) // if not blank
+		{
+			update.append("description", description);
+		}
+
+		
+		Bson set = new Document().append("$set", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
 	/*
 	 * deleteLeague
 	 */
@@ -456,6 +488,28 @@ public class DatabaseHelper {
 		return newTeamDocument.get("_id").toString();
 	}
 	
+	public void updateTeam(String leagueID, String teamID, String teamName, String zipcode)
+	{
+		BasicDBObject where = new BasicDBObject().append("_id",new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
+								
+		Document update = new Document();
+		
+		if (!teamName.equals("")) // if not blank
+		{
+			update.append("teams.$.teamName", teamName);
+		}
+		
+		if (!zipcode.equals("")) // if not blank
+		{
+			update.append("teams.$.zipcode", zipcode);
+		}
+
+		
+		Bson set = new Document().append("$set", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
 	public void deleteTeam(String leagueID, String teamID)
 	{
 		Bson where = new Document().append("_id", new ObjectId(leagueID)).append("teams._id", new ObjectId(teamID));
@@ -493,6 +547,76 @@ public class DatabaseHelper {
 		this.database.getCollection(LEAGUES).updateOne(where, Updates.addToSet("teams.$.players", newPlayerDocument));
 
 		return newPlayerDocument.get("_id").toString();
+	}
+	
+	public void updatePlayer(String leagueID, String teamID, String playerID, String firstName, String lastName)
+	{
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("teams._id",new ObjectId(teamID)).append("teams.players._id",new ObjectId(playerID));
+								
+		Document update = new Document();
+		
+		Document leagueDocument = this.database.getCollection(LEAGUES).find(where).first();
+		
+		JSONParser parser = new JSONParser();
+		
+		try
+		{	
+			int playerDocNum = 0;
+			
+			Object obj = parser.parse(leagueDocument.toJson());
+			JSONObject leagueData = (JSONObject) obj;
+			
+			JSONArray teamDataArray = (JSONArray) leagueData.get("teams");
+			
+			JSONObject teamData = (JSONObject) teamDataArray.get(0);
+			
+			for (int i = 0; i < teamDataArray.size(); i++) // get the team data, matching the ID so that we can get the number needed to be modified.
+			{
+				JSONObject currentTeamData = (JSONObject) teamDataArray.get(i);
+				String oid = currentTeamData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(teamID)) // if this is the id searched for...
+				{
+					teamData = currentTeamData; // save this data.
+					break;
+				}
+			}
+			
+
+			JSONArray playerDataArray = (JSONArray) teamData.get("players");
+			
+			for (int i = 0; i < playerDataArray.size(); i++)  // get the player data, matching the ID so that we can get the number needed to be modified.
+			{
+				JSONObject currentPlayerData = (JSONObject) playerDataArray.get(i);
+				String oid = currentPlayerData.get("_id").toString(); 
+				String[] id = oid.split("\""); // removing oid from string.
+				if (id[3].equals(playerID)) // if this is the id searched for...
+				{
+					playerDocNum = i;
+					break;
+				}
+			}
+			
+			if (!firstName.equals("")) // if not blank
+			{
+				update.append("teams." + playerDocNum + ".players.$.firstName", firstName);
+			}
+			
+			if (!lastName.equals("")) // if not blank
+			{
+				update.append("teams." + playerDocNum + ".players.$.lastName", lastName);
+			}
+
+			
+			Bson set = new Document().append("$set", update);
+			
+			this.database.getCollection(LEAGUES).updateOne(where, set);
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Error -- Document not found, Update Player");
+			return; // its not here.
+		}
 	}
 	
 	public void deletePlayer(String leagueID, String teamID, String playerID)
@@ -628,6 +752,44 @@ public class DatabaseHelper {
 		
 		return newMatchDocument.get("_id").toString();
 	}
+	
+	public void updateMatch(String leagueID, String matchID, String homeTeamID, String awayTeamID, String date, String homeScore, String awayScore)
+	{
+		Bson where = new Document().append("_id",new ObjectId(leagueID)).append("matches._id",new ObjectId(matchID));
+								
+		Document update = new Document();
+		
+		if (!homeTeamID.equals("")) // if not blank
+		{
+			update.append("matches.$.homeTeamID", homeTeamID);
+		}
+		
+		if (!awayTeamID.equals("")) // if not blank
+		{
+			update.append("matches.$.awayTeamID", awayTeamID);
+		}
+
+		if (!date.equals("")) // if not blank
+		{
+			update.append("matches.$.date", date);
+		}
+		
+		if (!homeScore.equals("")) // if not blank
+		{
+			update.append("matches.$.homeScore", homeScore);
+		}
+
+		if (!awayScore.equals("")) // if not blank
+		{
+			update.append("matches.$.awayScore", awayScore);
+		}
+		
+		
+		Bson set = new Document().append("$set", update);
+		
+		this.database.getCollection(LEAGUES).updateOne(where, set);
+	}
+	
 	
 	public void deleteMatch(String leagueID, String matchID)
 	{	
@@ -849,8 +1011,31 @@ public class DatabaseHelper {
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
 		
-//		String newUserID = dbHelper.createUser("aa", "aa", "Aristotle", "Totsworth");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*
+	 	5e7129f4b0f12336fb6ad64b	(Fast Finger Gang)
+		5e7129f4b0f12336fb6ad64c	(Paceful Picassos)
+		5e7129f4b0f12336fb6ad64d	(Slippery Sliders)
+	 */
+		
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64b", "Primrose", "Pineda");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64b", "Katya", "Spooner");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64b", "Sameha", "Chen");
 //		
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64c", "Ozan", "Bishop");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64c", "Emanual", "Davies");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64c", "Leia", "Jordan");
+//		
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "Hilda", "Olson");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "Zunaira", "McFadden");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "Ayva", "Holmes");
+		
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+////		String newUserID = dbHelper.createUser("aaa", "aaa", "Aristotle", "Totsworth");
+////		
 //		String newLeagueID = dbHelper.createLeague("Speed Finger Painting League", "5e55dcdf8fe1f34ed9f230ed", "finger painting", "timed painting for quick artists");
 //		
 //		String newTeamID1 = dbHelper.createTeam(newLeagueID, "Dashing Dali Doodlers", "32501");
@@ -880,19 +1065,18 @@ public class DatabaseHelper {
 //		String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID2, "3/24/20");
 //		String newMatch4 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/30/20");
 //		String newMatch5 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID4, "4/2/20");
-//		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/9/20");
+//		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "4/7/20");
 //		
 //		//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
 ////		dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
 ////		dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
 //		
 //		//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
-//		String newStatistic1 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Portraits Completed", "0");
-//		String newStatistic2 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Most Colors Used", "0");
-//		String newStatistic3 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Fastest Painting (seconds)", "0");
+//		String newStatistic1 = dbHelper.createStatistic(newLeagueID, "Portraits Completed", "0");
+//		String newStatistic2 = dbHelper.createStatistic(newLeagueID, "Most Colors Used", "0");
+//		String newStatistic3 = dbHelper.createStatistic(newLeagueID, "Fastest Painting (seconds)", "0");
 //		
 //		dbHelper.printLeague(newLeagueID.toString());
-//		
 //		
 //		
 //		dbHelper.addFollowedLeagueID(newUserID, newLeagueID);
@@ -904,6 +1088,63 @@ public class DatabaseHelper {
 //		
 //		dbHelper.addManagedTeamID(newUserID, newTeamID2);
 //		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
+			
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+//		
+////	String newUserID = dbHelper.createUser("aaa", "aaa", "Aristotle", "Totsworth");
+////	
+//	String newLeagueID = dbHelper.createLeague("Mario Kart League", "5e7129f3b0f12336fb6ad647", "Mario Kart Racing", "Racing League for Nintendo's Finest");
+//	
+//	String newTeamID1 = dbHelper.createTeam(newLeagueID, "The Toadstools", "23451");
+//	String newTeamID2 = dbHelper.createTeam(newLeagueID, "The Plumbers", "54673");
+//	String newTeamID3 = dbHelper.createTeam(newLeagueID, "The Big Boys", "23418");
+//
+//	
+//	//NEW TEAM DOES RETURN NEW VALUES SO THE PROBLEM IS DEFINITELY IN CREATE PLAYER
+////	System.out.println(newTeamID1);
+////	System.out.println(newTeamID2);
+////	System.out.println(newTeamID3);
+////	System.out.println(newTeamID4);
+////	System.out.println(newTeamID5);
+//	
+//	//THIS DOES NOT CREATE A PLAYER FOR A SPECIFIC TEAM BUT INSTEAD CREATES A PLAYER THAT IS ADDED TO EVERY TEAM IN THE LEAGUE
+//	String newPlayer1 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Toad", "Stool");
+//	String newPlayer2 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Toadette", "Stool");
+//	
+//	String newPlayer3 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Mario", "Mario");
+//	String newPlayer4 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Luigi", "Mario");
+//	
+//	String newPlayer5 = dbHelper.createPlayer(newLeagueID, newTeamID3, "Bowser", "UNKNOWN");
+//	String newPlayer6 = dbHelper.createPlayer(newLeagueID, newTeamID3, "Donkey", "Kong");
+//	
+//	String newMatch1 = dbHelper.createMatch(newLeagueID, newTeamID1, newTeamID2, "3/20/20");
+//	String newMatch2 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/24/20");
+//	String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/27/20");
+//
+//	
+//	//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
+////	dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
+////	dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
+//	
+//	//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
+//	String newStatistic1 = dbHelper.createStatistic(newLeagueID, "Distance Drifted", "0");
+//	String newStatistic2 = dbHelper.createStatistic(newLeagueID, "Most Items Used", "0");
+//	String newStatistic3 = dbHelper.createStatistic(newLeagueID, "Wins", "0");
+//	String newStatistic4 = dbHelper.createStatistic(newLeagueID, "Losses", "0");
+//	
+//	dbHelper.printLeague(newLeagueID.toString());
+//	
+//	
+//	dbHelper.addFollowedLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
+//	dbHelper.addOwnedLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
+//	
+//	//adding connect team/league pair
+//	dbHelper.addManagedTeamID("5e7129f3b0f12336fb6ad647", newTeamID1);
+//	dbHelper.addManagedTeamLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
+//	
+//	dbHelper.addManagedTeamID("5e7129f3b0f12336fb6ad647", newTeamID3);
+//	dbHelper.addManagedTeamLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
 			
 		
 		/*  NEW FUNCTIONS  */
@@ -928,19 +1169,45 @@ public class DatabaseHelper {
 //		System.out.println(dbHelper.getUserIDByUsername("leaf_consumer"));
 		
 		
-		// -- CREATING AND DELETING LEAGUES -- 
+		// -- CREATING, UPDATING, AND DELETING LEAGUES -- 
 //		String newLeagueID = dbHelper.createLeague("DeleteLeague", "Fuck you thats who", "Her favorite sport", "A league designed with your mom in mind");
 //		dbHelper.printLeague(newLeagueID);
 		
-//		dbHelper.deleteLeague("5e9b12e63e7d5c58005be9ed");
+//		dbHelper.updateLeague(newLeagueID, "Updated", "Who cares", "F", "z");
+
+//		dbHelper.deleteLeague(newLeagueID);
+
 		
 		// -- FINDING LEAGUE BY NAME -- 
 //		System.out.println(dbHelper.getLeagueByLeagueName("paint"));
 
 		
-		// -- CREATING AND DELETING NEW MATCHES, AND TESTING FUNCTIONS --
-//		dbHelper.createMatch("5e8cc22649a7ee3fef1299d7", "5e8cc2f36dd8747431be007c", "5e8cc3224272bc0dbc1320af", "04/18/2020");
+		// -- CREATING, UPDATING, AND DELETING NEW TEAMS -- 
+//		String newTeamID1 = dbHelper.createTeam(newLeagueID, "DeleteTeam1", "DeletedZipcode");
+//		String newTeamID2 = dbHelper.createTeam(newLeagueID, "DeleteTeam2", "DeletedZipcode");
 		
+//		dbHelper.updateTeam(newLeagueID, newTeamID1, "WillBeDeletedTeam1", "55555");
+//		dbHelper.updateTeam(newLeagueID, newTeamID2, "DeleteableTeam2", "12345");
+		
+//		dbHelper.deleteTeam(newLeagueID, newTeamID1);
+		
+		// -- CREATING, UPDATING, AND DELETING NEW PLAYERS -- 
+//		String newPlayerID1 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Team1Noob", "Jillette");  
+//		String newPlayerID2 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Team2Noob", "Teller");
+//		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
+//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
+
+//		dbHelper.updatePlayer(newLeagueID, newTeamID1, newPlayerID1, "Team1Pro", "WhoCares");
+//		dbHelper.updatePlayer(newLeagueID, newTeamID2, newPlayerID2, "Team2Butt", "Face");
+		
+//		dbHelper.deletePlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e600d8688302978a1ed1e52");
+		
+		
+		// -- CREATING, UPDATAING, DELETING NEW MATCHES, AND TESTING FUNCTIONS --
+//		String newMatchID = dbHelper.createMatch(newLeagueID, newTeamID1, newTeamID2, "04/18/2020");
+
+//		dbHelper.updateMatch(newLeagueID, newMatchID, newTeamID1, newTeamID2, "04/19/2020", "0", "5");
+
 //		dbHelper.updateMatchScore("5e7129f4b0f12336fb6ad648", "5e7247b449419c7c70020ed5", "5", "5");
 //		dbHelper.updateMatchDate("5e59763368ec36619a66bfdc", "5e72424369db37222c784f01", "3/25/2020");
 		
@@ -950,18 +1217,6 @@ public class DatabaseHelper {
 		// -- CREATING AND DELETING CHAT MESSAGES --
 //		dbHelper.addMessageToChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "Brandon's mom", "FUC U.", "20:35");
 //		dbHelper.deleteMessageFromChat("5e8cc22649a7ee3fef1299d7", "5e99bf52a9db252d7f945a0b", "5e99c0d99ff85804f922bee8");
-		
-		// -- CREATING AND DELETING NEW TEAMS -- 
-//		dbHelper.createTeam("5e8cc22649a7ee3fef1299d7", "Cringes Mom", "Her moms house");
-//		dbHelper.deleteTeam("5e59763368ec36619a66bfdc", "5e6ba667266a35632f569097");
-		
-		// -- CREATING AND DELETING NEW PLAYERS -- 
-//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Penn", "Jillette");  //////////////////////////////////////////////////////////////////////////////////////////// For adding players
-//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad649", "Raymond", "Teller");
-//		dbHelper.createPlayer("5e597b0b1b4ecc0001db20cc", "5e5d08bdfc189e00cf8ae12f", "Naomi", "Fluffington");
-//		dbHelper.createPlayer("5e59763368ec36619a66bfdc", "5e6ba620833bc36df92f85b9", "Fraila", "Dogington");
-
-//		dbHelper.deletePlayer("5e59763368ec36619a66bfdc", "5e5fdb13762e9912f7f22a1f", "5e600d8688302978a1ed1e52");
 		
 		
 		// -- CREATING, UPDATING, AND DELETING NEW TRACKED STATSTICS --
@@ -973,7 +1228,6 @@ public class DatabaseHelper {
 				
 //		dbHelper.deleteTrackedStatistic("5e7129f4b0f12336fb6ad648", "5e8e31bff0b91e51b70c4cb2");
 
-		
 		
 //		dbHelper.printLeague("5e8cc22649a7ee3fef1299d7");
 		

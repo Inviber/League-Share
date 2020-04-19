@@ -154,6 +154,11 @@ public class MatchDBInterator implements MatchDBInteratorInterface {
 		dbHelper.createMatch(leagueID, homeTeamID, awayTeamID, date);
 	}
 	
+	public void updateMatch(String leagueID, String matchID, String homeTeamID, String awayTeamID, String date, String homeScore, String awayScore)
+	{
+		dbHelper.updateMatch(leagueID, matchID, homeTeamID, awayTeamID, date, homeScore, awayScore);
+	}
+	
 	public void deleteMatch(String leagueID, String matchID)
 	{
 		dbHelper.deleteMatch(leagueID, matchID);

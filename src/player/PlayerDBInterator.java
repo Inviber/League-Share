@@ -80,6 +80,11 @@ public class PlayerDBInterator implements PlayerDBInteratorInterface {
 	{
 		dbHelper.createPlayer(leagueID, teamID, firstName, lastName);
 	}
+	
+	public void updatePlayer(String leagueID, String teamID, String playerID, String firstName, String lastName)
+	{
+		dbHelper.updatePlayer(leagueID, teamID, playerID, firstName, lastName);
+	}
 
 	public void deletePlayer(String leagueID, String teamID, String playerID)
 	{
