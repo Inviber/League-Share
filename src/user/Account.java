@@ -38,7 +38,7 @@ public class Account {
 		this.accountDBInterator = accountDBInterator;
 	}
 
-	String getID()
+	public String getID()
 	{
 		return this.userID;
 	}
@@ -48,11 +48,11 @@ public class Account {
 		return this.username;
 	}
 	
-	String getFirstName() {
+	public String getFirstName() {
 		return firstName;
 	}
 
-	String getLastName() {
+	public String getLastName() {
 		return lastName;
 	}
 	
@@ -71,7 +71,7 @@ public class Account {
 		return followedLeagueIDs;
 	}
 
-	ArrayList<String> getOwnedTeamIDs() 
+	public ArrayList<String> getOwnedTeamIDs() 
 	{
 		return ownedTeamIDs;
 	}
