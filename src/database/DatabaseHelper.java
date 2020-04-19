@@ -1011,8 +1011,31 @@ public class DatabaseHelper {
 		DatabaseHelper dbHelper = new DatabaseHelper("mongodb+srv://abachmann:mongodb@cluster0-zozah.mongodb.net/test?retryWrites=true&w=majority", "LeagueShare");
 		
 		
-//		String newUserID = dbHelper.createUser("aa", "aa", "Aristotle", "Totsworth");
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*
+	 	5e7129f4b0f12336fb6ad64b	(Fast Finger Gang)
+		5e7129f4b0f12336fb6ad64c	(Paceful Picassos)
+		5e7129f4b0f12336fb6ad64d	(Slippery Sliders)
+	 */
+		
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64b", "Primrose", "Pineda");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64b", "Katya", "Spooner");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64b", "Sameha", "Chen");
 //		
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64c", "Ozan", "Bishop");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64c", "Emanual", "Davies");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64c", "Leia", "Jordan");
+//		
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "Hilda", "Olson");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "Zunaira", "McFadden");
+//		dbHelper.createPlayer("5e7129f4b0f12336fb6ad648", "5e7129f4b0f12336fb6ad64d", "Ayva", "Holmes");
+		
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+////		String newUserID = dbHelper.createUser("aaa", "aaa", "Aristotle", "Totsworth");
+////		
 //		String newLeagueID = dbHelper.createLeague("Speed Finger Painting League", "5e55dcdf8fe1f34ed9f230ed", "finger painting", "timed painting for quick artists");
 //		
 //		String newTeamID1 = dbHelper.createTeam(newLeagueID, "Dashing Dali Doodlers", "32501");
@@ -1042,19 +1065,18 @@ public class DatabaseHelper {
 //		String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID2, "3/24/20");
 //		String newMatch4 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/30/20");
 //		String newMatch5 = dbHelper.createMatch(newLeagueID, newTeamID5, newTeamID4, "4/2/20");
-//		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/9/20");
+//		String newMatch6 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "4/7/20");
 //		
 //		//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
 ////		dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
 ////		dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
 //		
 //		//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
-//		String newStatistic1 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Portraits Completed", "0");
-//		String newStatistic2 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Most Colors Used", "0");
-//		String newStatistic3 = dbHelper.createStatistic(newLeagueID, newTeamID1, newPlayer1, "Fastest Painting (seconds)", "0");
+//		String newStatistic1 = dbHelper.createStatistic(newLeagueID, "Portraits Completed", "0");
+//		String newStatistic2 = dbHelper.createStatistic(newLeagueID, "Most Colors Used", "0");
+//		String newStatistic3 = dbHelper.createStatistic(newLeagueID, "Fastest Painting (seconds)", "0");
 //		
 //		dbHelper.printLeague(newLeagueID.toString());
-//		
 //		
 //		
 //		dbHelper.addFollowedLeagueID(newUserID, newLeagueID);
@@ -1066,6 +1088,63 @@ public class DatabaseHelper {
 //		
 //		dbHelper.addManagedTeamID(newUserID, newTeamID2);
 //		dbHelper.addManagedTeamLeagueID(newUserID, newLeagueID);
+			
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+//		
+////	String newUserID = dbHelper.createUser("aaa", "aaa", "Aristotle", "Totsworth");
+////	
+//	String newLeagueID = dbHelper.createLeague("Mario Kart League", "5e7129f3b0f12336fb6ad647", "Mario Kart Racing", "Racing League for Nintendo's Finest");
+//	
+//	String newTeamID1 = dbHelper.createTeam(newLeagueID, "The Toadstools", "23451");
+//	String newTeamID2 = dbHelper.createTeam(newLeagueID, "The Plumbers", "54673");
+//	String newTeamID3 = dbHelper.createTeam(newLeagueID, "The Big Boys", "23418");
+//
+//	
+//	//NEW TEAM DOES RETURN NEW VALUES SO THE PROBLEM IS DEFINITELY IN CREATE PLAYER
+////	System.out.println(newTeamID1);
+////	System.out.println(newTeamID2);
+////	System.out.println(newTeamID3);
+////	System.out.println(newTeamID4);
+////	System.out.println(newTeamID5);
+//	
+//	//THIS DOES NOT CREATE A PLAYER FOR A SPECIFIC TEAM BUT INSTEAD CREATES A PLAYER THAT IS ADDED TO EVERY TEAM IN THE LEAGUE
+//	String newPlayer1 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Toad", "Stool");
+//	String newPlayer2 = dbHelper.createPlayer(newLeagueID, newTeamID1, "Toadette", "Stool");
+//	
+//	String newPlayer3 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Mario", "Mario");
+//	String newPlayer4 = dbHelper.createPlayer(newLeagueID, newTeamID2, "Luigi", "Mario");
+//	
+//	String newPlayer5 = dbHelper.createPlayer(newLeagueID, newTeamID3, "Bowser", "UNKNOWN");
+//	String newPlayer6 = dbHelper.createPlayer(newLeagueID, newTeamID3, "Donkey", "Kong");
+//	
+//	String newMatch1 = dbHelper.createMatch(newLeagueID, newTeamID1, newTeamID2, "3/20/20");
+//	String newMatch2 = dbHelper.createMatch(newLeagueID, newTeamID3, newTeamID1, "3/24/20");
+//	String newMatch3 = dbHelper.createMatch(newLeagueID, newTeamID2, newTeamID3, "3/27/20");
+//
+//	
+//	//THIS DOES NOT BEHAVE AS EXPECTED.. IT MAY BE EASIER TO PASS IN EACH VALUE AT THE SAME TIME
+////	dbHelper.updateMatchScore(newLeagueID, newMatch1, "7", false);
+////	dbHelper.updateMatchScore(newLeagueID, newMatch1, "10", true);
+//	
+//	//THIS ONLY CREATES THE STATISTIC FOR 1 TEAM, NOT ALL TEAMS || WE WILL NEED AN UPDATE STATISTIC WHERE THE SPECIFIC PLAYER, THE STAT STRING TO UPDATE, AND NEW VALUE ARE PASSED IN
+//	String newStatistic1 = dbHelper.createStatistic(newLeagueID, "Distance Drifted", "0");
+//	String newStatistic2 = dbHelper.createStatistic(newLeagueID, "Most Items Used", "0");
+//	String newStatistic3 = dbHelper.createStatistic(newLeagueID, "Wins", "0");
+//	String newStatistic4 = dbHelper.createStatistic(newLeagueID, "Losses", "0");
+//	
+//	dbHelper.printLeague(newLeagueID.toString());
+//	
+//	
+//	dbHelper.addFollowedLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
+//	dbHelper.addOwnedLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
+//	
+//	//adding connect team/league pair
+//	dbHelper.addManagedTeamID("5e7129f3b0f12336fb6ad647", newTeamID1);
+//	dbHelper.addManagedTeamLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
+//	
+//	dbHelper.addManagedTeamID("5e7129f3b0f12336fb6ad647", newTeamID3);
+//	dbHelper.addManagedTeamLeagueID("5e7129f3b0f12336fb6ad647", newLeagueID);
 			
 		
 		/*  NEW FUNCTIONS  */
