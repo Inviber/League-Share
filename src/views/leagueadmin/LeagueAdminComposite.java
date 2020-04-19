@@ -174,7 +174,7 @@ public class LeagueAdminComposite extends Composite {
 				System.out.println("Create Match");
 				
 				displayedComposite.dispose();
-				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE);
+				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE, leagueID, leagueGenerator, teamGenerator, matchGenerator);
 				createMatch.setLocation(350, 100);
 				displayedComposite = createMatch;
 				displayedComposite.update();
