@@ -4,20 +4,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.LeagueGenerator;
+import team.TeamGenerator;
+
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class CreateNewTeamComposite extends Composite {
 	private Text text;
 	private Text text_1;
-	private Text text_2;
 
 	/**
 	 * Create the composite.
 	 * @param parent
 	 * @param style
 	 */
-	public CreateNewTeamComposite(Composite parent, int style) {
+	public CreateNewTeamComposite(Composite parent, int style, String leagueID, TeamGenerator teamGenerator) {
 		super(parent, style);
 		
 		setSize(863, 521);
@@ -46,17 +51,21 @@ public class CreateNewTeamComposite extends Composite {
 		text_1 = new Text(this, SWT.BORDER);
 		text_1.setBounds(299, 173, 229, 21);
 		
-		text_2 = new Text(this, SWT.BORDER);
-		text_2.setBounds(299, 200, 229, 21);
-		
-		Label lblOwnerUsername = new Label(this, SWT.NONE);
-		lblOwnerUsername.setText("Owner Username :");
-		lblOwnerUsername.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		lblOwnerUsername.setAlignment(SWT.CENTER);
-		lblOwnerUsername.setBounds(151, 200, 142, 21);
-		
 		Button btnNewButton = new Button(this, SWT.NONE);
-		btnNewButton.setBounds(358, 227, 97, 38);
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				System.out.println(text.getText());
+				System.out.println(text_1.getText());
+	
+				teamGenerator.getTeamDBInterator().createTeam(leagueID, text.getText(), text_1.getText());
+				
+				text.setText("");
+				text_1.setText("");
+
+			}
+		});
+		btnNewButton.setBounds(362, 200, 97, 38);
 		btnNewButton.setText("Add");
 		
 		

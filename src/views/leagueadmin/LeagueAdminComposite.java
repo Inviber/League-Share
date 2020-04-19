@@ -129,13 +129,18 @@ public class LeagueAdminComposite extends Composite {
 		btnEditTeams.setBounds(25, 100, 192, 48);
 		
 		Button btnCreateNewTeam = new Button(grpLeagueOptions, SWT.NONE);
+		btnCreateNewTeam.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnCreateNewTeam.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Create New Team");
 				
 				displayedComposite.dispose();
-				CreateNewTeamComposite createTeam = new CreateNewTeamComposite(self, SWT.NONE);
+				CreateNewTeamComposite createTeam = new CreateNewTeamComposite(self, SWT.NONE, leagueID, teamGenerator);
 				createTeam.setLocation(350, 125);
 				displayedComposite = createTeam;
 				displayedComposite.update();
@@ -152,7 +157,7 @@ public class LeagueAdminComposite extends Composite {
 				System.out.println("Track New Player Statistic");
 				
 				displayedComposite.dispose();
-				TrackNewPlayerStatsComposite newStat = new TrackNewPlayerStatsComposite(self, SWT.NONE);
+				TrackNewPlayerStatsComposite newStat = new TrackNewPlayerStatsComposite(self, SWT.NONE, leagueID, leagueGenerator);
 				newStat.setLocation(350, 150);
 				displayedComposite = newStat;
 				displayedComposite.update();

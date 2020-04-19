@@ -41,4 +41,9 @@ public class LeagueGenerator {
 	{
 		leagueDBInterator.deleteLeague(leagueID);
 	}
+	
+	public LeagueDBInterator getLeagueDBInterator()
+	{
+		return this.leagueDBInterator;
+	}
 }

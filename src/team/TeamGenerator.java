@@ -32,4 +32,8 @@ public class TeamGenerator {
 		teamDBInterator.deleteTeam(leagueID, teamID);
 	}
 	
+	public TeamDBInterator getTeamDBInterator()
+	{
+		return this.teamDBInterator;
+	}
 }
