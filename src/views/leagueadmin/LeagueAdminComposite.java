@@ -8,6 +8,7 @@ import team.Team;
 import team.TeamGenerator;
 import user.AccountGenerator;
 import views.GUIShell;
+import views.landing.LandingComposite;
 import views.login.LoginComposite;
 
 import org.eclipse.swt.SWT;
@@ -200,6 +201,9 @@ public class LeagueAdminComposite extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Back button pressed");
+				shell.disposeDisplayedComposite();
+				LandingComposite landingComposite = new LandingComposite(shell, SWT.NONE, shell);
+				shell.setDisplayedComposite(landingComposite);
 			}
 		});
 		
