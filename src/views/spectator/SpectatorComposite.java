@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.League;
 import match.ChatMessage;
 import match.Match;
 import player.Player;
@@ -31,6 +33,7 @@ import org.eclipse.swt.layout.FillLayout;
 public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
+	private ArrayList<String> casterIDs;
 	
 	private Composite chatComposite;
 	private ScrolledComposite scrolledComposite;
@@ -60,6 +63,9 @@ public class SpectatorComposite extends Composite {
 		leagueID = match.getLeagueID();
 		matchID = match.getMatchID();
 		
+		// generate league to get casterIDs
+		League league = shell.getLeagueGenerator().generateLeague(leagueID);
+		this.casterIDs = league.getCasterIDs();
 		
 		grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat");
@@ -106,10 +112,8 @@ public class SpectatorComposite extends Composite {
 	private void CreateComponents(GUIShell shell, Composite parent, Match match,
 			Team homeTeam, Team awayTeam, Composite previousWindow) {
 
-		CasterGenerator casterGenerator = new CasterGenerator(parent, SWT.NONE, match, homeTeam, awayTeam);
-		Composite caster = casterGenerator.getCasterComposite();
-
-		CreateTopButtons(previousWindow, caster, parent);
+		
+		CreateTopButtons(previousWindow, parent, match, homeTeam, awayTeam);
 
 		CreateChat(shell, match);
 
@@ -118,19 +122,24 @@ public class SpectatorComposite extends Composite {
 		CreateDynamicDataLabels(match, homeTeam, awayTeam, shell);
 	}
 
-	private void CreateTopButtons(Composite previousWindow, Composite caster, Composite parent) {
-		Button switchToCaster = new Button(this, SWT.NONE);
-		switchToCaster.addSelectionListener(new SelectionAdapter() {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				chatThread.stop();
-				((GUIShell) parent).setDisplayedComposite(caster);
-				System.out.println("Caster Selected");
-			}
-		});
-		switchToCaster.setBounds(10, 61, 134, 45);
-		switchToCaster.setText("Caster View");
+	private void CreateTopButtons(Composite previousWindow, Composite parent, Match match, Team homeTeam, Team awayTeam) {
+		if ( isCasterForLeague() ) {
+			CasterGenerator casterGenerator = new CasterGenerator(parent, SWT.NONE, match, homeTeam, awayTeam);
+			Composite caster = casterGenerator.getCasterComposite();
+			Button switchToCaster = new Button(this, SWT.NONE);
+			switchToCaster.addSelectionListener(new SelectionAdapter() {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					chatThread.stop();
+					((GUIShell) parent).setDisplayedComposite(caster);
+					
+				}
+			});
+			switchToCaster.setBounds(10, 61, 134, 45);
+			switchToCaster.setText("Caster View");
+		}
+		
 
 		// button to go back to schedule
 		Button backButton = new Button(this, SWT.NONE);
@@ -308,5 +317,22 @@ public class SpectatorComposite extends Composite {
 	      origin.y = Math.max(0, bounds.y + bounds.height - area.height);
 	    
 		scrolledComposite.setOrigin(origin);   
+	}
+	
+	public boolean isCasterForLeague() {
+		// userID for loggedInAccount
+		String userID = shell.getAccountGenerator().getLoggedInAccount().getID();
+		
+		// if userID not found in casterIDs then isCaster remains false
+		boolean isCaster = false;
+		
+		for ( int i = 0; i < casterIDs.size(); i++ ) {
+			if ( userID.contentEquals( casterIDs.get(i) ) ) {
+				isCaster = true;
+				return isCaster;
+			}
+		}
+		
+		return isCaster;
 	}
 }
