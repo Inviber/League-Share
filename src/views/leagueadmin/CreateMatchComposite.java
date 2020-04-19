@@ -2,8 +2,19 @@ package views.leagueadmin;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+
+import java.time.DateTimeException;
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.League;
+import league.LeagueGenerator;
+import match.MatchGenerator;
+import team.Team;
+import team.TeamGenerator;
+
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Button;
@@ -19,7 +30,7 @@ public class CreateMatchComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public CreateMatchComposite(Composite parent, int style) {
+	public CreateMatchComposite(Composite parent, int style, String leagueID, LeagueGenerator leagueGenerator, TeamGenerator teamGenerator, MatchGenerator matchGenerator) {
 		super(parent, style);
 		
 		setSize(863, 521);
@@ -51,19 +62,36 @@ public class CreateMatchComposite extends Composite {
 		DateTime dateTime = new DateTime(this, SWT.BORDER);
 		dateTime.setBounds(329, 204, 143, 37);
 		
-		
-		combo.add("test 1");
-		combo.add("test 2");
-		combo.add("test 3");
-		
-		combo_1.add("test 4");
-		combo_1.add("test 5");
-		combo_1.add("test 6");
+		dateTime.setBounds(376, 199, 96, 37);
 		
 		
+//		combo.add("test 1");
+//		combo.add("test 2");
+//		combo.add("test 3");
+//		
+//		combo_1.add("test 4");
+//		combo_1.add("test 5");
+//		combo_1.add("test 6");
 		
 		
+		League league = leagueGenerator.generateLeague(leagueID);
+		ArrayList<String> teamIDs = league.getTeamIDs();
+		ArrayList<Team> teams = new ArrayList<Team>();
 		
+		//System.out.println(teamIDs.toString());
+		
+		for(int i = 0; i < teamIDs.size(); i++)
+		{
+			Team newTeam = teamGenerator.generateTeam(leagueID, teamIDs.get(i));
+			teams.add(newTeam);
+		}
+		
+		for(int i = 0; i < teams.size(); i++)
+		{
+			//System.out.println(teams.get(i).getTeamName());
+			combo.add(teams.get(i).getTeamName());
+			combo_1.add(teams.get(i).getTeamName());
+		}
 		
 		
 		
@@ -76,8 +104,22 @@ public class CreateMatchComposite extends Composite {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				System.out.println(combo.getItem(combo.getSelectionIndex()));
-				System.out.println(combo_1.getItem(combo_1.getSelectionIndex()));
+				//System.out.println(combo.getItem(combo.getSelectionIndex()) + ": " + teams.get(combo.getSelectionIndex()).getTeamID());
+				//System.out.println(combo_1.getItem(combo_1.getSelectionIndex()) + ": " + teams.get(combo_1.getSelectionIndex()).getTeamID());
+				
+				String month = Integer.toString(dateTime.getMonth() + 1);
+				String day = Integer.toString(dateTime.getDay());
+				String year = Integer.toString(dateTime.getYear());
+				year = year.substring(2, 4);
+		
+				String date = month + "/" + day + "/" + year;
+				
+				String homeID = teams.get(combo.getSelectionIndex()).getTeamID();
+				String awayID = teams.get(combo_1.getSelectionIndex()).getTeamID();
+				
+				matchGenerator.createMatch(leagueID, homeID, awayID, date);
+								
+				//System.out.println(date);
 			}
 		});
 		btnAdd.setBounds(478, 204, 96, 37);
