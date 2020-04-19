@@ -29,38 +29,38 @@ public class UpdateInfoComposite extends Composite {
 		Label lblUpdateLeagueInformation = new Label(this, SWT.NONE);
 		lblUpdateLeagueInformation.setAlignment(SWT.CENTER);
 		lblUpdateLeagueInformation.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
-		lblUpdateLeagueInformation.setBounds(286, 77, 266, 25);
+		lblUpdateLeagueInformation.setBounds(286, 71, 266, 31);
 		lblUpdateLeagueInformation.setText("Update League Information");
 		
 		Label lblLeagueName = new Label(this, SWT.NONE);
 		lblLeagueName.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		lblLeagueName.setAlignment(SWT.CENTER);
-		lblLeagueName.setBounds(164, 108, 113, 25);
+		lblLeagueName.setAlignment(SWT.RIGHT);
+		lblLeagueName.setBounds(181, 104, 96, 28);
 		lblLeagueName.setText("League Name :");
 		
 		text = new Text(this, SWT.BORDER);
-		text.setBounds(283, 108, 266, 21);
+		text.setBounds(283, 108, 266, 28);
 		
 		Label lblSport = new Label(this, SWT.NONE);
-		lblSport.setText("Sport :");
+		lblSport.setText("Sport");
 		lblSport.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		lblSport.setAlignment(SWT.CENTER);
-		lblSport.setBounds(219, 139, 58, 25);
+		lblSport.setAlignment(SWT.RIGHT);
+		lblSport.setBounds(164, 139, 113, 28);
 		
 		text_1 = new Text(this, SWT.BORDER);
-		text_1.setBounds(283, 139, 266, 21);
+		text_1.setBounds(283, 139, 266, 28);
 		
 		Label lblLeagueName_1_1 = new Label(this, SWT.NONE);
-		lblLeagueName_1_1.setText("Description :");
+		lblLeagueName_1_1.setText("Description");
 		lblLeagueName_1_1.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		lblLeagueName_1_1.setAlignment(SWT.CENTER);
-		lblLeagueName_1_1.setBounds(174, 170, 103, 25);
+		lblLeagueName_1_1.setAlignment(SWT.RIGHT);
+		lblLeagueName_1_1.setBounds(164, 174, 113, 28);
 		
 		text_2 = new Text(this, SWT.BORDER);
-		text_2.setBounds(283, 174, 266, 21);
+		text_2.setBounds(283, 174, 266, 28);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
-		btnNewButton.setBounds(360, 201, 103, 45);
+		btnNewButton.setBounds(367, 208, 103, 45);
 		btnNewButton.setText("Update");
 		
 		

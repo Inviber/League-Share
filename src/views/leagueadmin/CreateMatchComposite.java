@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 public class CreateMatchComposite extends Composite {
 
@@ -25,7 +27,7 @@ public class CreateMatchComposite extends Composite {
 		Label lblCreateMatch = new Label(this, SWT.NONE);
 		lblCreateMatch.setAlignment(SWT.CENTER);
 		lblCreateMatch.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
-		lblCreateMatch.setBounds(354, 100, 143, 25);
+		lblCreateMatch.setBounds(329, 99, 245, 37);
 		lblCreateMatch.setText("Create Match");
 		
 		Label lblTeamA = new Label(this, SWT.NONE);
@@ -35,7 +37,7 @@ public class CreateMatchComposite extends Composite {
 		lblTeamA.setText("Team A :");
 		
 		Combo combo = new Combo(this, SWT.NONE);
-		combo.setBounds(329, 132, 196, 23);
+		combo.setBounds(329, 132, 245, 28);
 		
 		Label lblTeamB = new Label(this, SWT.NONE);
 		lblTeamB.setText("Team B :");
@@ -44,10 +46,10 @@ public class CreateMatchComposite extends Composite {
 		lblTeamB.setBounds(255, 168, 68, 25);
 		
 		Combo combo_1 = new Combo(this, SWT.NONE);
-		combo_1.setBounds(329, 170, 196, 23);
+		combo_1.setBounds(329, 170, 245, 28);
 		
 		DateTime dateTime = new DateTime(this, SWT.BORDER);
-		dateTime.setBounds(376, 199, 96, 37);
+		dateTime.setBounds(329, 204, 143, 37);
 		
 		
 		combo.add("test 1");
@@ -66,6 +68,11 @@ public class CreateMatchComposite extends Composite {
 		
 		
 		Button btnAdd = new Button(this, SWT.NONE);
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -73,7 +80,7 @@ public class CreateMatchComposite extends Composite {
 				System.out.println(combo_1.getItem(combo_1.getSelectionIndex()));
 			}
 		});
-		btnAdd.setBounds(376, 242, 96, 37);
+		btnAdd.setBounds(478, 204, 96, 37);
 		btnAdd.setText("Add");
 
 	}
