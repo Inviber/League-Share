@@ -6,9 +6,14 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.LeagueGenerator;
+
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class UpdateInfoComposite extends Composite {
 	private Text text;
@@ -21,7 +26,7 @@ public class UpdateInfoComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public UpdateInfoComposite(Composite parent, int style) {
+	public UpdateInfoComposite(Composite parent, int style, String leagueID, LeagueGenerator leagueGenerator) {
 		super(parent, style);
 		
 		setSize(863, 521);
@@ -60,6 +65,20 @@ public class UpdateInfoComposite extends Composite {
 		text_2.setBounds(283, 174, 266, 21);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+//				System.out.println(text.getText());
+//				System.out.println(text_1.getText());
+//				System.out.println(text_2.getText());
+				
+				leagueGenerator.getLeagueDBInterator().updateLeague(leagueID, text.getText(), "", text_1.getText(), text_2.getText());
+				
+				text.setText("");
+				text_1.setText("");
+				text_2.setText("");
+			}
+		});
 		btnNewButton.setBounds(360, 201, 103, 45);
 		btnNewButton.setText("Update");
 		

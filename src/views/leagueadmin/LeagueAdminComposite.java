@@ -97,7 +97,7 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Update League Information");
 				displayedComposite.dispose();
-				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE);
+				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE, leagueID, leagueGenerator);
 				updateInfo.setLocation(350, 150);
 				displayedComposite = updateInfo;
 				displayedComposite.update();
@@ -175,9 +175,9 @@ public class LeagueAdminComposite extends Composite {
 				
 				displayedComposite.dispose();
 				CreateMatchComposite createMatch = new CreateMatchComposite(self, SWT.NONE, leagueID, leagueGenerator, teamGenerator, matchGenerator);
-				createMatch.setLocation(350, 100);
+				//createMatch.setLocation(350, 100);
 				displayedComposite = createMatch;
-				displayedComposite.update();
+				//displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
