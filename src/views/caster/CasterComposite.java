@@ -193,7 +193,9 @@ public class CasterComposite extends Composite {
 		scrollingPlayersComposite.setBounds(0, 0, 606, 313);
 
 		Composite playersComposite = new Composite(scrollingPlayersComposite, SWT.NONE);
-		playersComposite.setLayout(new GridLayout(1, true));
+		FillLayout fill = new FillLayout(SWT.VERTICAL);
+		fill.spacing = 20;
+		playersComposite.setLayout(fill);
 
 		// to iterate through each player
 		int playerIterator = 0;
@@ -205,14 +207,11 @@ public class CasterComposite extends Composite {
 			ArrayList<String> statisticNames = displayedPlayer.getStatisticNames();
 			int statsPerPlayer = statisticNames.size();
 			
-			// integer for x value of setting player name label bounds : 30 represents label height (20) plus spacing (10)
-			int nextPlayerPosition = playerIterator * (30+(statsPerPlayer * 30));
-			
 			Composite playerInfo = new Composite(playersComposite, SWT.NONE);
 
 			Label playerName = new Label(playerInfo, SWT.NONE);
 			playerName.setText( displayedPlayer.getFirstName() + " " + displayedPlayer.getLastName() );
-			playerName.setBounds(0, nextPlayerPosition, 200, 20);
+			playerName.setBounds(0, 0, 200, 20);
 
 			
 			for( int statIterator = 0; statIterator < statsPerPlayer; statIterator++ )
@@ -225,7 +224,7 @@ public class CasterComposite extends Composite {
 				HashMap<String, String> statValues = displayedPlayer.getStatistics();				
 				
 				// integer for x value of setting player stat label bounds : 30 represents label height (20) plus spacing (10)
-				int nextStatPosition = nextPlayerPosition + 30 + (statIterator * 30);
+				int nextStatPosition = 25 + (statIterator * 25);
 				
 				Label statLbl = new Label(playerInfo, SWT.NONE);
 				statLbl.setText( statisticNames.get(statIterator) + ": " + currentStatValue);
