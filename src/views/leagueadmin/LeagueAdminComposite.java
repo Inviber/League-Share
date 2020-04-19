@@ -191,7 +191,7 @@ public class LeagueAdminComposite extends Composite {
 				System.out.println("Appoint Caster");
 				
 				displayedComposite.dispose();
-				AppointCasterComposite appointCastor = new AppointCasterComposite(self, SWT.NONE);
+				AppointCasterComposite appointCastor = new AppointCasterComposite(self, SWT.NONE, leagueID, accountGenerator, leagueGenerator);
 				appointCastor.setLocation(375, 100);
 				displayedComposite = appointCastor;
 				displayedComposite.update();

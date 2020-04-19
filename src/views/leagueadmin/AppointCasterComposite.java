@@ -5,7 +5,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.LeagueGenerator;
+import user.AccountGenerator;
+
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class AppointCasterComposite extends Composite {
 	private Text text;
@@ -15,7 +21,7 @@ public class AppointCasterComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public AppointCasterComposite(Composite parent, int style) {
+	public AppointCasterComposite(Composite parent, int style, String leagueID, AccountGenerator accountGenerator, LeagueGenerator leagueGenerator) {
 		super(parent, style);
 		
 		text = new Text(this, SWT.BORDER);
@@ -35,6 +41,17 @@ public class AppointCasterComposite extends Composite {
 		lblAppointCastor.setText("Appoint Caster");
 		
 		Button btnAppoint = new Button(this, SWT.NONE);
+		btnAppoint.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				System.out.println(text.getText());
+				
+				leagueGenerator.getLeagueDBInterator().addCasterIDs(leagueID, accountGenerator.getAccountDBInterator().getUserIDByUsername(text.getText()));
+				
+				text.setText("");
+				
+			}
+		});
 		btnAppoint.setBounds(353, 165, 89, 39);
 		btnAppoint.setText("Appoint");
 		
