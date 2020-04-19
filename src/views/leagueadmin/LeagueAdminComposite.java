@@ -71,6 +71,14 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		setLayout(new FormLayout());
+		Label lblNewLabel = new Label(this, SWT.NONE);
+		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
+		lblNewLabel.setText(league.getLeagueName());
+		lblNewLabel.setAlignment(SWT.CENTER);
+		FormData fd_lblNewLabel = new FormData();
+		fd_lblNewLabel.top = new FormAttachment(0, 23);
+		fd_lblNewLabel.right = new FormAttachment(100, -491);
+		lblNewLabel.setLayoutData(fd_lblNewLabel);
 		// lblNewLabel.setText(team.getTeamName());
 		
 		Group grpLeagueOptions = new Group(this, SWT.NONE);
