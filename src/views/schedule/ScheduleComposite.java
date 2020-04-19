@@ -3,30 +3,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import database.DatabaseHelper;
 import league.League;
-import league.LeagueGenerator;
-import league.LeagueParser;
 import match.Match;
-import match.MatchGenerator;
-import match.MatchParser;
 import team.Team;
-import team.TeamGenerator;
-import team.TeamParser;
 import views.GUIShell;
 import views.landing.LandingComposite;
-import views.spectator.SpectatorComposite;
 import views.spectator.SpectatorGenerator;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -48,7 +37,6 @@ public class ScheduleComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	@SuppressWarnings("deprecation")
 	public ScheduleComposite(Composite parent, int style) {
 		super(parent, style);
 	}
@@ -196,8 +184,8 @@ public class ScheduleComposite extends Composite {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						System.out.println("SPECTATING");
-						SpectatorGenerator spectator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x));
-						//((GUIShell) parent).setDisplayedComposite(spectator);
+						SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell) parent), matches.get(x), team1List.get(x), team2List.get(x));
+						((GUIShell)parent).setDisplayedComposite(spectatorGenerator.getSpectatorComposite());
 					}
 				});
 				spectateMatch.setText("SPECTATE");

@@ -26,6 +26,11 @@ public class PlayerGenerator {
 		  return player;
 	}
 
+	public PlayerDBInterator getPlayerDBInterator()
+	{
+		return playerDBInterator;
+	}
+
 	public void createPlayer(String leagueID, String teamID, String firstName, String lastName)
 	{
 		playerDBInterator.createPlayer(leagueID, teamID, firstName, lastName);
@@ -35,5 +40,5 @@ public class PlayerGenerator {
 	{
 		playerDBInterator.deletePlayer(leagueID, teamID, playerID);
 	}
-	
+
 }

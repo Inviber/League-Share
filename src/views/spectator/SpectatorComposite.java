@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import league.League;
 import match.ChatMessage;
 import match.Match;
 import player.Player;
+import player.PlayerGenerator;
 import team.Team;
 import views.GUIShell;
+import views.caster.CasterGenerator;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Text;
@@ -29,6 +33,7 @@ import org.eclipse.swt.layout.FillLayout;
 public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
 	private Player displayedPlayer;
+	private ArrayList<String> casterIDs;
 	
 	private Composite chatComposite;
 	private ScrolledComposite scrolledComposite;
@@ -58,6 +63,9 @@ public class SpectatorComposite extends Composite {
 		leagueID = match.getLeagueID();
 		matchID = match.getMatchID();
 		
+		// generate league to get casterIDs
+		League league = shell.getLeagueGenerator().generateLeague(leagueID);
+		this.casterIDs = league.getCasterIDs();
 		
 		grpChatToBe = new Group(this, SWT.NONE);
 		grpChatToBe.setText("Chat");
@@ -75,7 +83,7 @@ public class SpectatorComposite extends Composite {
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setMinSize(chatComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-				
+
 		CreateComponents(shell, parent, match, homeTeam, awayTeam, previousWindow);
 		
 		chatThread = new Thread(new Runnable() 
@@ -99,14 +107,13 @@ public class SpectatorComposite extends Composite {
 		});
 	
 		chatThread.start();
-  }
+	}
+	
+	private void CreateComponents(GUIShell shell, Composite parent, Match match,
+			Team homeTeam, Team awayTeam, Composite previousWindow) {
 
-	private void CreateComponents(GUIShell shell, Composite parent, Match match, Team homeTeam, Team awayTeam,
-			Composite previousWindow) {
-		// TODO make a caster composite and replace this blank one;
-		Composite temporaryCaster = new Composite(parent, SWT.NONE);
-
-		CreateTopButtons(previousWindow, temporaryCaster, parent);
+		
+		CreateTopButtons(previousWindow, parent, match, homeTeam, awayTeam);
 
 		CreateChat(shell, match);
 
@@ -115,20 +122,24 @@ public class SpectatorComposite extends Composite {
 		CreateDynamicDataLabels(match, homeTeam, awayTeam, shell);
 	}
 
-	private void CreateTopButtons(Composite previousWindow, Composite CasterComposite, Composite parent) {
-
-		// button to switch to caster (no caster composite for now)
-		Button switchToCaster = new Button(this, SWT.NONE);
-		switchToCaster.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				chatThread.stop();
-				((GUIShell) parent).setDisplayedComposite(CasterComposite);
-				System.out.println("Caster Selected");
-			}
-		});
-		switchToCaster.setBounds(10, 61, 134, 45);
-		switchToCaster.setText("Caster View");
+	private void CreateTopButtons(Composite previousWindow, Composite parent, Match match, Team homeTeam, Team awayTeam) {
+		if ( isCasterForLeague() ) {
+			CasterGenerator casterGenerator = new CasterGenerator(parent, SWT.NONE, match, homeTeam, awayTeam);
+			Composite caster = casterGenerator.getCasterComposite();
+			Button switchToCaster = new Button(this, SWT.NONE);
+			switchToCaster.addSelectionListener(new SelectionAdapter() {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					chatThread.stop();
+					((GUIShell) parent).setDisplayedComposite(caster);
+					
+				}
+			});
+			switchToCaster.setBounds(10, 61, 134, 45);
+			switchToCaster.setText("Caster View");
+		}
+		
 
 		// button to go back to schedule
 		Button backButton = new Button(this, SWT.NONE);
@@ -306,5 +317,22 @@ public class SpectatorComposite extends Composite {
 	      origin.y = Math.max(0, bounds.y + bounds.height - area.height);
 	    
 		scrolledComposite.setOrigin(origin);   
+	}
+	
+	public boolean isCasterForLeague() {
+		// userID for loggedInAccount
+		String userID = shell.getAccountGenerator().getLoggedInAccount().getID();
+		
+		// if userID not found in casterIDs then isCaster remains false
+		boolean isCaster = false;
+		
+		for ( int i = 0; i < casterIDs.size(); i++ ) {
+			if ( userID.contentEquals( casterIDs.get(i) ) ) {
+				isCaster = true;
+				return isCaster;
+			}
+		}
+		
+		return isCaster;
 	}
 }

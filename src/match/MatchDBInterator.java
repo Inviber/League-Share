@@ -1,5 +1,8 @@
 package match;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,7 +54,26 @@ public class MatchDBInterator implements MatchDBInteratorInterface {
 		
 		return matchData;
 	}
-	
+
+	public void updateMatchData(String leagueID, String matchID, int homeScore, int awayScore, Calendar matchDate) {
+		// Make int score values into string and send into DB
+		String home = "" + homeScore;
+		String away = "" + awayScore;
+		dbHelper.updateMatchScore(leagueID, matchID, home, away);
+//		System.out.println("home: " + home);
+//		System.out.println("away: " + away);
+		
+		// Make calendar date into string date then send into DB
+		String date;
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+		Date newDate = new Date();
+		newDate = matchDate.getTime();
+		date = sdf.format(newDate);
+		
+		dbHelper.updateMatchDate(leagueID, matchID, date);
+//		System.out.println("date: " + date);
+	}
+
 	public ArrayList<ChatMessage> getChat(String leagueID, String matchID)
 	{
 		ArrayList<ChatMessage> chat = new ArrayList<ChatMessage>();

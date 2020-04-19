@@ -24,7 +24,7 @@ public class Match {
     }
 
     public String getLeagueID() {
-        return leagueID;
+        return this.leagueID;
     }
     
     public String getMatchID() {
@@ -63,5 +63,13 @@ public class Match {
     	System.out.println(date.toString());
         this.date = date;
     }
+
+	public void setLeagueID(String leagueID) {
+		this.leagueID = leagueID;
+	}
+
+	public void setMatchID(String matchID) {
+		this.matchID = matchID;
+	}
 
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Composite;
 
-import views.GUIShell;
 import league.League;
 import league.LeagueGenerator;
 import match.MatchGenerator;
