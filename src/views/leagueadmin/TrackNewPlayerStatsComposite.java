@@ -28,16 +28,17 @@ public class TrackNewPlayerStatsComposite extends Composite {
 		Label lblTrackNewPlayer = new Label(this, SWT.NONE);
 		lblTrackNewPlayer.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
 		lblTrackNewPlayer.setAlignment(SWT.CENTER);
-		lblTrackNewPlayer.setBounds(297, 82, 248, 26);
+		lblTrackNewPlayer.setBounds(297, 82, 248, 30);
 		lblTrackNewPlayer.setText("Track New Player Statistic");
 		
 		Label lblStatisticName = new Label(this, SWT.NONE);
+		lblStatisticName.setAlignment(SWT.CENTER);
 		lblStatisticName.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.NORMAL));
-		lblStatisticName.setBounds(179, 114, 112, 26);
-		lblStatisticName.setText("Statistic Name :");
+		lblStatisticName.setBounds(162, 118, 134, 28);
+		lblStatisticName.setText("Statistic Name");
 		
 		text = new Text(this, SWT.BORDER);
-		text.setBounds(297, 114, 248, 21);
+		text.setBounds(297, 118, 248, 28);
 		
 		Button btnNewButton = new Button(this, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
@@ -50,7 +51,7 @@ public class TrackNewPlayerStatsComposite extends Composite {
 				text.setText("");
 			}
 		});
-		btnNewButton.setBounds(362, 141, 106, 41);
+		btnNewButton.setBounds(365, 152, 106, 41);
 		btnNewButton.setText("Add");
 		
 		
