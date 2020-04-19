@@ -7,6 +7,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class CreateMatchComposite extends Composite {
 
@@ -47,7 +49,30 @@ public class CreateMatchComposite extends Composite {
 		DateTime dateTime = new DateTime(this, SWT.BORDER);
 		dateTime.setBounds(376, 199, 96, 37);
 		
+		
+		combo.add("test 1");
+		combo.add("test 2");
+		combo.add("test 3");
+		
+		combo_1.add("test 4");
+		combo_1.add("test 5");
+		combo_1.add("test 6");
+		
+		
+		
+		
+		
+		
+		
+		
 		Button btnAdd = new Button(this, SWT.NONE);
+		btnAdd.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				System.out.println(combo.getItem(combo.getSelectionIndex()));
+				System.out.println(combo_1.getItem(combo_1.getSelectionIndex()));
+			}
+		});
 		btnAdd.setBounds(376, 242, 96, 37);
 		btnAdd.setText("Add");
 
