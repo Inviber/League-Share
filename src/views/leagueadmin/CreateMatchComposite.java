@@ -67,7 +67,8 @@ public class CreateMatchComposite extends Composite {
 //		combo_1.add("test 4");
 //		combo_1.add("test 5");
 //		combo_1.add("test 6");
-		
+		DateTime dateTime = new DateTime(this, SWT.BORDER);
+		dateTime.setBounds(353, 204, 119, 37);
 		
 		League league = leagueGenerator.generateLeague(leagueID);
 		ArrayList<String> teamIDs = league.getTeamIDs();
@@ -120,8 +121,7 @@ public class CreateMatchComposite extends Composite {
 		btnAdd.setBounds(478, 204, 96, 37);
 		btnAdd.setText("Add");
 		
-		DateTime dateTime = new DateTime(this, SWT.BORDER);
-		dateTime.setBounds(353, 204, 119, 37);
+		
 
 	}
 
