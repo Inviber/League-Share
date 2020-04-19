@@ -55,6 +55,11 @@ public class TeamDBInterator implements TeamDBInteratorInterface {
 		dbHelper.createTeam(leagueID, teamName, zipcode);
 	}
 	
+	public void updateTeam(String leagueID, String teamID, String teamName, String zipcode)
+	{
+		dbHelper.updateTeam(leagueID, teamID, teamName, zipcode);
+	}
+	
 	public void deleteTeam(String leagueID, String teamID)
 	{
 		dbHelper.deleteTeam(leagueID, teamID);

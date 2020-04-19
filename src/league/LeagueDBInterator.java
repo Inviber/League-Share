@@ -72,6 +72,10 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 		dbHelper.createLeague(leagueName, ownerID, sport, description);
 	}
 	
+	public void updateLeague(String leagueID, String leagueName, String ownerID, String sport, String description)
+	{
+		dbHelper.updateLeague(leagueID, leagueName, ownerID, sport, description);
+	}
 	public void deleteLeague(String leagueID)
 	{
 		dbHelper.deleteLeague(leagueID);
