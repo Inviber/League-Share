@@ -13,6 +13,7 @@ import user.Account;
 import database.DatabaseHelper;
 import league.League;
 import league.LeagueDBInterator;
+import league.LeagueGenerator;
 import league.LeagueParser;
 import team.TeamParser;
 import views.GUIShell;
@@ -90,6 +91,11 @@ public class LandingComposite extends Composite {
 				@Override
 				public void mouseDown(MouseEvent e) {
 					System.out.println("creating new league...");
+					String userId = shell.getAccountGenerator().getLoggedInAccount().getUsername();
+					
+					shell.getLeagueGenerator().createLeague("No League Name", userId, "No Sport Name", "New League");
+					
+					LeagueAdminComposite leagueAdmin = new LeagueAdminComposite(shell, SWT.NONE, shell, );
 				}
 			});
 			btnNewButton_1.setBounds(10, 10, 154, 40);
