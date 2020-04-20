@@ -4,6 +4,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import player.PlayerGenerator;
+import views.GUIShell;
+
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
@@ -23,10 +27,12 @@ public class AddPlayerComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public AddPlayerComposite(Composite parent, int style) {
+	public AddPlayerComposite(Composite parent, int style, GUIShell shell, String leagueID, String teamID) {
 		super(parent, style);
 		
 		setSize(863, 521);
+		
+		PlayerGenerator playerGenerator = shell.getPlayerGenerator();
 		
 		Label lblAddPlayer = new Label(this, SWT.NONE);
 		lblAddPlayer.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
@@ -55,6 +61,14 @@ public class AddPlayerComposite extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Added Player");
+				
+				System.out.println(text_2.getText());
+				System.out.println(text_3.getText());
+				
+				playerGenerator.createPlayer(leagueID, teamID, text_2.getText(), text_3.getText());
+				
+				text_2.setText("");
+				text_3.setText("");
 			}
 		});
 		btnNewButton.setBounds(374, 182, 98, 37);

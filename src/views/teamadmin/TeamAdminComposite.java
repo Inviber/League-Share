@@ -40,6 +40,9 @@ public class TeamAdminComposite extends Composite {
 	public TeamAdminComposite(Composite parent, int style, GUIShell shell, String leagueId, String teamId, Composite leagueAdminComposite) {
 		super(parent, style);
 		
+		
+		setLayout(new FormLayout());
+		
 		AccountGenerator accountGenerator = shell.getAccountGenerator();
 		LeagueGenerator leagueGenerator = shell.getLeagueGenerator();
 		MatchGenerator matchGenerator = shell.getMatchGenerator();
@@ -52,7 +55,7 @@ public class TeamAdminComposite extends Composite {
 		
 		
 		
-		ModifyRosterComposite modifyRoster = new ModifyRosterComposite(self, SWT.NONE);
+		ModifyRosterComposite modifyRoster = new ModifyRosterComposite(self, SWT.NONE, shell, leagueId, teamId);
 		FormData fd_modifyRoster = new FormData();
 		fd_modifyRoster.right = new FormAttachment(100, -23);
 		modifyRoster.setLayoutData(fd_modifyRoster);
@@ -64,7 +67,7 @@ public class TeamAdminComposite extends Composite {
 		
 		
 		
-		setLayout(new FormLayout());
+		
 		
 		Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
@@ -87,20 +90,23 @@ public class TeamAdminComposite extends Composite {
 		fd_grpTeamOptions.left = new FormAttachment(0, 73);
 		grpTeamOptions.setLayoutData(fd_grpTeamOptions);
 		
+		
+		
+		
 		Button btnModifyRoster = new Button(grpTeamOptions, SWT.NONE);
 		btnModifyRoster.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Modify Roster");
 				displayedComposite.dispose();
-				ModifyRosterComposite modifyRoster = new ModifyRosterComposite(self, SWT.NONE);
+				ModifyRosterComposite modifyRoster = new ModifyRosterComposite(self, SWT.NONE, shell, leagueId, teamId);
 				modifyRoster.setLocation(350, 150);
 				displayedComposite = modifyRoster;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
-		btnModifyRoster.setBounds(25, 35, 192, 48);
+		btnModifyRoster.setBounds(25, 97, 192, 48);
 		btnModifyRoster.setText("Modify Roster");
 		
 		Button btnAddPlayer = new Button(grpTeamOptions, SWT.NONE);
@@ -109,15 +115,23 @@ public class TeamAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Add Player");
 				displayedComposite.dispose();
-				AddPlayerComposite addPlayer = new AddPlayerComposite(self, SWT.NONE);
+				AddPlayerComposite addPlayer = new AddPlayerComposite(self, SWT.NONE, shell, leagueId, teamId);
 				addPlayer.setLocation(350, 150);
 				displayedComposite = addPlayer;
 				displayedComposite.update();
 				displayedComposite.setSize(863, 521);
 			}
 		});
-		btnModifyRoster.setBounds(25, 35, 192, 48);
-		btnModifyRoster.setText("Add Player");
+		btnAddPlayer.setBounds(25, 35, 192, 48);
+		btnAddPlayer.setText("Add Player");
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		Button btnBack = new Button(this, SWT.NONE);
 		btnBack.addMouseListener(new MouseAdapter() {
@@ -131,6 +145,12 @@ public class TeamAdminComposite extends Composite {
 				//shell.setDisplayedComposite(leagueAdminComposite);
 			}
 		});
+		
+		
+		
+		
+		
+		
 		
 		fd_lblNewLabel.bottom = new FormAttachment(btnBack, 0, SWT.BOTTOM);
 		fd_lblNewLabel.left = new FormAttachment(btnBack, 308);
