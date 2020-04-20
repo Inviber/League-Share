@@ -335,4 +335,14 @@ public class SpectatorComposite extends Composite {
 		
 		return isCaster;
 	}
+	
+	public void postAnnouncement(Text casterAnnouncement, String casterName) {
+		Format f = new SimpleDateFormat("hh:mm:ss");
+		String timeString = "(" + f.format(new Date()) + ")";
+		String chatMessage = casterAnnouncement.getText();
+		
+		shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, casterName, chatMessage, timeString);
+		
+        refreshChat();
+	}
 }
