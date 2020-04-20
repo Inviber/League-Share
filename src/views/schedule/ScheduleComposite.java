@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -23,6 +24,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.GridLayout;
 
@@ -90,7 +92,7 @@ public class ScheduleComposite extends Composite {
 		lblSchedule.setAlignment(SWT.CENTER);
 		
 		Group grpMatches = new Group(this, SWT.NONE);
-		grpMatches.setLayout(new GridLayout(3, true));
+		grpMatches.setLayout(new FillLayout());
 		grpMatches.setBackground(dark_gray);
 		FormData fd_grpMatches = new FormData();
 		fd_grpMatches.bottom = new FormAttachment(0, 680);
@@ -137,9 +139,18 @@ public class ScheduleComposite extends Composite {
 		fd_btnFollow.right = new FormAttachment(lblNewLabel, 0, SWT.RIGHT);
 		btnFollow.setLayoutData(fd_btnFollow);
 		
+		ScrolledComposite scrollingMatchesComposite = new ScrolledComposite(grpMatches, SWT.BORDER | SWT.V_SCROLL);
+		scrollingMatchesComposite.setAlwaysShowScrollBars(true);
+		scrollingMatchesComposite.setExpandVertical(true); 
+		
+		Composite matchcontainer = new Composite(scrollingMatchesComposite, SWT.NONE);
+		GridLayout matchLayout = new GridLayout(3, true);
+		matchcontainer.setLayout(matchLayout);
+		
+		
 		for(int i = 0; i < matches.size(); i++)
 		{			
-			Composite matchComp = new Composite(grpMatches, SWT.NONE);
+			Composite matchComp = new Composite(matchcontainer, SWT.NONE);
 			GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 			gd_composite.widthHint = 405;
 			gd_composite.heightHint = 270;
@@ -193,6 +204,7 @@ public class ScheduleComposite extends Composite {
 	        }
 
 		}
+		scrollingMatchesComposite.setContent(matchcontainer);
 	}
 	
 	public void setLeague(League league)
