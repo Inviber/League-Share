@@ -83,8 +83,9 @@ public class LeagueAdminComposite extends Composite {
 		lblNewLabel.setText(league.getLeagueName());
 		lblNewLabel.setAlignment(SWT.CENTER);
 		FormData fd_lblNewLabel = new FormData();
-		fd_lblNewLabel.top = new FormAttachment(0, 23);
-		fd_lblNewLabel.right = new FormAttachment(100, -491);
+		fd_lblNewLabel.right = new FormAttachment(editTeams, 0, SWT.RIGHT);
+		fd_lblNewLabel.left = new FormAttachment(editTeams, 0, SWT.LEFT);
+		fd_lblNewLabel.bottom = new FormAttachment(editTeams, -6);
 		lblNewLabel.setLayoutData(fd_lblNewLabel);
 		// lblNewLabel.setText(team.getTeamName());
 		
