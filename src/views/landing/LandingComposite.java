@@ -92,8 +92,12 @@ public class LandingComposite extends Composite {
 				public void mouseDown(MouseEvent e) {
 					System.out.println("creating new league...");
 					String userId = shell.getAccountGenerator().getLoggedInAccount().getUsername();
+					String userID = shell.getAccountGenerator().getAccountDBInterator().getUserIDByUsername(userId);
 					
 					String leagueID = shell.getLeagueGenerator().createLeague("No League Name", userId, "No Sport Name", "New League");
+					
+					shell.getAccountGenerator().getAccountDBInterator().addOwnedLeagueID(userID, leagueID);
+					shell.getAccountGenerator().getAccountDBInterator().addFollowedLeagueID(userID, leagueID);
 					
 					LeagueAdminComposite leagueAdmin = new LeagueAdminComposite(shell, SWT.NONE, shell, leagueID);
 					shell.setDisplayedComposite(leagueAdmin);
