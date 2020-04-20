@@ -115,7 +115,7 @@ public class TeamAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Add Player");
 				displayedComposite.dispose();
-				AddPlayerComposite addPlayer = new AddPlayerComposite(self, SWT.NONE);
+				AddPlayerComposite addPlayer = new AddPlayerComposite(self, SWT.NONE, shell, leagueId, teamId);
 				addPlayer.setLocation(350, 150);
 				displayedComposite = addPlayer;
 				displayedComposite.update();
