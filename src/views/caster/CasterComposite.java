@@ -3,7 +3,10 @@ package views.caster;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
@@ -27,8 +30,11 @@ import player.Player;
 import player.PlayerDBInterator;
 import team.Team;
 import views.GUIShell;
+import views.spectator.SpectatorComposite;
 import views.spectator.SpectatorGenerator;
 
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
@@ -57,6 +63,53 @@ public class CasterComposite extends Composite {
 		CreateTopButtons(parent);
 		CreateConstantLabels();
 		CreateDynamicDataLabels(((GUIShell)parent));
+		CreateAnouncement(parent);
+	}
+	
+	private void CreateAnouncement(Composite parent) {
+
+		Label lblPostAnnouncement = new Label(this, SWT.NONE);
+		lblPostAnnouncement.setBounds(250, 490, 135, 25);
+		lblPostAnnouncement.setAlignment(SWT.CENTER);
+		lblPostAnnouncement.setText("Post Announcement:");
+		
+		Text announcement = new Text(this, SWT.BORDER);
+		announcement.setBounds(395, 485, 465, 25);
+		announcement.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				announcement.setText("");
+				
+			}
+		});
+		
+		Button btnSubmit = new Button(this, SWT.NONE);
+		btnSubmit.setBounds(870, 485, 90, 25);
+		btnSubmit.setText("Submit");
+		btnSubmit.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+				SpectatorComposite spectator = ((SpectatorComposite)spectatorGenerator.getSpectatorComposite());
+				spectator.postAnnouncement(announcement, ((GUIShell)parent).getAccountGenerator().getLoggedInAccount().getUsername() );
+				
+				announcement.setText("");	
+			}
+		});
+		
+		announcement.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
+					SpectatorComposite spectator = ((SpectatorComposite)spectatorGenerator.getSpectatorComposite());
+					spectator.postAnnouncement(announcement, ((GUIShell)parent).getAccountGenerator().getLoggedInAccount().getUsername() );
+					
+					announcement.setText("");	
+				}
+			}
+		});
+
 	}
 	
 	private void CreateTopButtons(Composite parent) {
@@ -345,11 +398,7 @@ public class CasterComposite extends Composite {
 	{
 		this.awayPlayers = awayPlayers;
 	}
-	
-	private void refillCasterComposite()
-	{
-		
-	}
+
 
 	@Override
 	protected void checkSubclass() {
