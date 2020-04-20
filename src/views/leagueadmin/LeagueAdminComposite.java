@@ -33,6 +33,10 @@ public class LeagueAdminComposite extends Composite {
 
 	private Composite displayedComposite = null;
 	private LeagueAdminComposite self = this;
+	private Label lblNewLabel;
+	private GUIShell shell;
+	private String leagueID;
+	private LeagueAdminComposite leagueAdminComposite = this;
 	
 	/**
 	 * Create the composite.
@@ -42,6 +46,8 @@ public class LeagueAdminComposite extends Composite {
 	public LeagueAdminComposite(Composite parent, int style, GUIShell shell, String leagueID) {
 		super(parent, style);
 		
+		this.shell = shell;
+		this.leagueID = leagueID;
 		AccountGenerator accountGenerator = shell.getAccountGenerator();
 		LeagueGenerator leagueGenerator = shell.getLeagueGenerator();
 		MatchGenerator matchGenerator = shell.getMatchGenerator();
@@ -71,7 +77,8 @@ public class LeagueAdminComposite extends Composite {
 		
 		
 		setLayout(new FormLayout());
-		Label lblNewLabel = new Label(this, SWT.NONE);
+		lblNewLabel = new Label(this, SWT.NONE);
+		//Label lblNewLabel = new Label(this, SWT.NONE);
 		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
 		lblNewLabel.setText(league.getLeagueName());
 		lblNewLabel.setAlignment(SWT.CENTER);
@@ -96,7 +103,7 @@ public class LeagueAdminComposite extends Composite {
 			public void mouseDown(MouseEvent e) {
 				System.out.println("Update League Information");
 				displayedComposite.dispose();
-				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE, leagueID, leagueGenerator);
+				UpdateInfoComposite updateInfo = new UpdateInfoComposite(self, SWT.NONE, leagueID, leagueGenerator, leagueAdminComposite);
 				updateInfo.setLocation(350, 150);
 				displayedComposite = updateInfo;
 				displayedComposite.update();
@@ -227,6 +234,12 @@ public class LeagueAdminComposite extends Composite {
 		
 	}
 	
+	public void refreshLeagueTitle()
+	{
+		LeagueGenerator leagueGenerator = shell.getLeagueGenerator();
+		League league = leagueGenerator.generateLeague(leagueID);
+		lblNewLabel.setText(league.getLeagueName());
+	}
 	
 
 	@Override

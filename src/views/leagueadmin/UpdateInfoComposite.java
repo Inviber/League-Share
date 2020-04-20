@@ -26,7 +26,7 @@ public class UpdateInfoComposite extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public UpdateInfoComposite(Composite parent, int style, String leagueID, LeagueGenerator leagueGenerator) {
+	public UpdateInfoComposite(Composite parent, int style, String leagueID, LeagueGenerator leagueGenerator, LeagueAdminComposite leagueAdminComposite) {
 		super(parent, style);
 
 		setSize(863, 521);
@@ -73,7 +73,8 @@ public class UpdateInfoComposite extends Composite {
 //				System.out.println(text_2.getText());
 
 				leagueGenerator.getLeagueDBInterator().updateLeague(leagueID, text.getText(), "", text_1.getText(), text_2.getText());
-
+				
+				leagueAdminComposite.refreshLeagueTitle();
 				text.setText("");
 				text_1.setText("");
 				text_2.setText("");
