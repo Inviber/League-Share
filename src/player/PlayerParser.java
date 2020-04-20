@@ -35,24 +35,32 @@ public class PlayerParser implements PlayerParserInterface {
 		this.statisticNames = new ArrayList<String>();
 		this.statistics = new HashMap<String, String>();
 		
-		// separating stat name from value for hashmap
-		for (int i = 0; i < matchStatistics.size(); i++)
+		try // leagues can have no statistics.
 		{
-			JSONObject stat = (JSONObject) matchStatistics.get(i);
-			String statName = stat.get("statisticName").toString(); 
-			statisticNames.add(statName.split("\"")[0]); //  go to the next ", name is stored in element 1.
+			// separating stat name from value for hashmap
+			for (int i = 0; i < matchStatistics.size(); i++)
+			{
+				JSONObject stat = (JSONObject) matchStatistics.get(i);
+				String statName = stat.get("statisticName").toString(); 
+				statisticNames.add(statName.split("\"")[0]); //  go to the next ", name is stored in element 1.
+				
+				String statValue = stat.get("statisticValue").toString(); 
+				statisticValues.add(statValue.split("\"")[0]); //  go to the next ", value is stored in element 1.
+			}
 			
-			String statValue = stat.get("statisticValue").toString(); 
-			statisticValues.add(statValue.split("\"")[0]); //  go to the next ", value is stored in element 1.
+			// adding values to hashmap.
+			for (int i = 0; i < statisticValues.size(); i++)
+			{
+				statistics.put(statisticNames.get(i), statisticValues.get(i)); // append each statisitic to the hash map
+			}
 		}
-		
-		// adding values to hashmap.
-		for (int i = 0; i < statisticValues.size(); i++)
+		catch (NullPointerException e)
 		{
-			statistics.put(statisticNames.get(i), statisticValues.get(i)); // append each statisitic to the hash map
+			System.out.println("No statistcis found.");
 		}
 		
 		//System.out.println(firstName + " " + lastName  + " " + statisticNames.toString() + " " + statistics.toString());
+
 	}
 
 	
