@@ -69,7 +69,7 @@ public class LoginComposite extends Composite {
 		btnNewButton.setBounds(590, 380, 93, 29);
 		btnNewButton.setText("Login");
 		
-		text_1 = new Text(this, SWT.BORDER);
+		text_1 = new Text(this, SWT.BORDER | SWT.PASSWORD);
 		text_1.setBounds(528, 334, 214, 40);
 		
 		text = new Text(this, SWT.BORDER);
