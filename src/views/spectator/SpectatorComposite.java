@@ -14,7 +14,6 @@ import league.League;
 import match.ChatMessage;
 import match.Match;
 import player.Player;
-import player.PlayerGenerator;
 import team.Team;
 import views.GUIShell;
 import views.caster.CasterGenerator;
@@ -32,12 +31,8 @@ import org.eclipse.swt.layout.FillLayout;
 
 public class SpectatorComposite extends Composite {
 	private Text txtEnterAMessage;
-	private Player displayedPlayer;
 	private ArrayList<String> casterIDs;
 	
-	private ScrolledComposite scrollingPlayersComposite;
-	private Composite playersComposite;
-	private Composite playerInfo;
 	private Composite chatComposite;
 	private ScrolledComposite scrolledComposite;
 	private Group grpChatToBe;
@@ -46,7 +41,6 @@ public class SpectatorComposite extends Composite {
 	private String matchID;
 	private GUIShell shell;
 	private Thread chatThread;
-	//private boolean chatThread = true;
 
 	/**
 	 * Create the composite.
@@ -100,8 +94,7 @@ public class SpectatorComposite extends Composite {
 		        {
 		           public void run() 
 		           {
-		              refreshChat();
-		              CreateDynamicDataLabels(match, homeTeam, awayTeam, shell);
+	        		   refreshChat();
 		           }
 		        });
 		        
@@ -208,13 +201,13 @@ public class SpectatorComposite extends Composite {
 	}
 
 	private void displayPlayers(Team currentTeam, GUIShell shell, Group groupToAddTo) {
-		scrollingPlayersComposite = new ScrolledComposite(groupToAddTo, SWT.BORDER | SWT.V_SCROLL);
+		ScrolledComposite scrollingPlayersComposite = new ScrolledComposite(groupToAddTo, SWT.BORDER | SWT.V_SCROLL);
 		scrollingPlayersComposite.setAlwaysShowScrollBars(true);
 		scrollingPlayersComposite.setExpandHorizontal(true);
 		scrollingPlayersComposite.setExpandVertical(true);
 		scrollingPlayersComposite.setBounds(0, 0, 606, 313);
 
-		playersComposite = new Composite(scrollingPlayersComposite, SWT.NONE);
+		Composite playersComposite = new Composite(scrollingPlayersComposite, SWT.NONE);
 		FillLayout fill = new FillLayout(SWT.VERTICAL);
 		fill.spacing = 5;
 		playersComposite.setLayout(fill);
@@ -226,12 +219,12 @@ public class SpectatorComposite extends Composite {
 		{	
 			for (int i = 0; i < players.size(); i++)
 			{
-				playerInfo = new Composite(playersComposite, SWT.NONE);
+				Composite playerInfo = new Composite(playersComposite, SWT.NONE);
 				fill = new FillLayout(SWT.VERTICAL);
 				playerInfo.setLayout(fill);
 				
 				// making a player parser to access the players names
-				displayedPlayer = shell.getPlayerGenerator().generatePlayer(currentTeam.getLeagueID(),
+				Player displayedPlayer = shell.getPlayerGenerator().generatePlayer(currentTeam.getLeagueID(),
 						currentTeam.getTeamID(), players.get(i));
 
 				Label playerName = new Label(playerInfo, SWT.NONE);
@@ -345,15 +338,5 @@ public class SpectatorComposite extends Composite {
 		}
 		
 		return isCaster;
-	}
-	
-	public void postAnnouncement(Text casterAnnouncement, String casterName) {
-		Format f = new SimpleDateFormat("hh:mm:ss");
-		String timeString = "(" + f.format(new Date()) + ")";
-		String chatMessage = casterAnnouncement.getText();
-		
-		shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(leagueID, matchID, casterName, chatMessage, timeString);
-		
-        refreshChat();
 	}
 }

@@ -11,16 +11,9 @@ import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -88,10 +81,14 @@ public class CasterComposite extends Composite {
 		btnSubmit.setText("Submit");
 		btnSubmit.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
-				SpectatorComposite spectator = ((SpectatorComposite)spectatorGenerator.getSpectatorComposite());
-				spectator.postAnnouncement(announcement, ((GUIShell)parent).getAccountGenerator().getLoggedInAccount().getUsername() );
+			public void widgetSelected(SelectionEvent e) {				
+				Format f = new SimpleDateFormat("hh:mm:ss");
+				String timeString = "(" + f.format(new Date()) + ")";
+				String chatMessage = announcement.getText();
+				
+				GUIShell shell = (GUIShell)parent;
+				shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(match.getLeagueID(), match.getMatchID(), 
+						((GUIShell)parent).getAccountGenerator().getLoggedInAccount().getUsername(), chatMessage, timeString);
 				
 				announcement.setText("");	
 			}
@@ -101,11 +98,15 @@ public class CasterComposite extends Composite {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					SpectatorGenerator spectatorGenerator = new SpectatorGenerator(parent, SWT.NONE, ((GUIShell)parent), getNewMatch(parent), getNewHomeTeam(parent), getNewAwayTeam(parent) );
-					SpectatorComposite spectator = ((SpectatorComposite)spectatorGenerator.getSpectatorComposite());
-					spectator.postAnnouncement(announcement, ((GUIShell)parent).getAccountGenerator().getLoggedInAccount().getUsername() );
+					Format f = new SimpleDateFormat("hh:mm:ss");
+					String timeString = "(" + f.format(new Date()) + ")";
+					String chatMessage = announcement.getText();
 					
-					announcement.setText("");	
+					GUIShell shell = (GUIShell)parent;
+					shell.getMatchGenerator().getMatchDBInterator().postMessageToChat(match.getLeagueID(), match.getMatchID(),
+((GUIShell)parent).getAccountGenerator().getLoggedInAccount().getUsername(), chatMessage, timeString);
+					
+					announcement.setText("");
 				}
 			}
 		});
