@@ -67,9 +67,9 @@ public class LeagueDBInterator implements LeagueDBInteratorInterface  {
 		dbHelper.deleteTrackedStatistic(leagueID, trackedStatisticID);
 	}
 	
-	public void createLeague(String leagueName, String ownerID, String sport, String description)
+	public String createLeague(String leagueName, String ownerID, String sport, String description)
 	{
-		dbHelper.createLeague(leagueName, ownerID, sport, description);
+		return dbHelper.createLeague(leagueName, ownerID, sport, description);
 	}
 	
 	public void updateLeague(String leagueID, String leagueName, String ownerID, String sport, String description)

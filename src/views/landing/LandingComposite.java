@@ -93,9 +93,10 @@ public class LandingComposite extends Composite {
 					System.out.println("creating new league...");
 					String userId = shell.getAccountGenerator().getLoggedInAccount().getUsername();
 					
-					shell.getLeagueGenerator().createLeague("No League Name", userId, "No Sport Name", "New League");
+					String leagueID = shell.getLeagueGenerator().createLeague("No League Name", userId, "No Sport Name", "New League");
 					
-					LeagueAdminComposite leagueAdmin = new LeagueAdminComposite(shell, SWT.NONE, shell, );
+					LeagueAdminComposite leagueAdmin = new LeagueAdminComposite(shell, SWT.NONE, shell, leagueID);
+					shell.setDisplayedComposite(leagueAdmin);
 				}
 			});
 			btnNewButton_1.setBounds(10, 10, 154, 40);
