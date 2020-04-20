@@ -32,9 +32,9 @@ public class LeagueGenerator {
 		return leagueDBInterator.getLeagueByName(search);
 	}
 	
-	public void createLeague(String leagueName, String ownerID, String sport, String description)
+	public String createLeague(String leagueName, String ownerID, String sport, String description)
 	{
-		leagueDBInterator.createLeague(leagueName, ownerID, sport, description);
+		return leagueDBInterator.createLeague(leagueName, ownerID, sport, description);
 	}
 	
 	public void updateLeague(String leagueID, String leagueName, String ownerID, String sport, String description)
