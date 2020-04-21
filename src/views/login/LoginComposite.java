@@ -1,7 +1,11 @@
 package views.login;
 import org.eclipse.swt.widgets.Composite;
+
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Text;
 
 import database.DatabaseHelper;
@@ -14,13 +18,16 @@ import views.landing.LandingComposite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Control;
 
 public class LoginComposite extends Composite {
 	private Text text_1;
 	private Text text;
-	private Composite loginComposite = this;
-	
+	//private Composite loginComposite = this;
 	Account currentUser;
 	
 
@@ -83,9 +90,29 @@ public class LoginComposite extends Composite {
 		lblNewLabel_1.setBounds(452, 345, 70, 17);
 		lblNewLabel_1.setText("Password");
 		
-		Label lblNewLabel_1_1 = new Label(this, SWT.NONE);
-		lblNewLabel_1_1.setText("Username");
-		lblNewLabel_1_1.setBounds(452, 299, 70, 17);
+		Label userNameLabel = new Label(this, SWT.NONE);
+		userNameLabel.setText("Username");
+		userNameLabel.setBounds(452, 299, 70, 17);
+		//userNameLabel.setBackground();
+		
+		
+		String imagepath = new File("src/images/WelcomeSign.png").getAbsolutePath();
+	    Image welcomeSign = new Image(shell.getDisplay(), imagepath);
+		Canvas canvas = new Canvas(this, SWT.NONE);
+		canvas.setBounds(10, 10, 1305, 272);
+		System.out.println(canvas.getBounds());
+		canvas.setLayout(new FillLayout());
+		
+		canvas.addPaintListener(new PaintListener() {
+            public void paintControl(PaintEvent e) {
+                e.gc.drawImage(welcomeSign, 0, 0, welcomeSign.getImageData().width,welcomeSign.getImageData().height, 0,0, 
+                		canvas.getBounds().width - 5 *(canvas.getBounds().x), canvas.getClientArea().height); 
+            }
+        });
+		
+
+	    
+		
 		setTabList(new Control[]{text, text_1, btnNewButton, btnNewButton_1});
 		
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
