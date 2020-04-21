@@ -20,6 +20,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Control;
@@ -29,7 +30,6 @@ public class LoginComposite extends Composite {
 	private Text text;
 	//private Composite loginComposite = this;
 	Account currentUser;
-	
 
 	/**
 	 * Create the composite.
@@ -40,8 +40,8 @@ public class LoginComposite extends Composite {
 		super(parent, SWT.NONE);
 		setLayout(null);
 		
-		Button btnNewButton = new Button(this, SWT.CENTER);
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		Button loginButton = new Button(this, SWT.CENTER);
+		loginButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				
@@ -73,8 +73,10 @@ public class LoginComposite extends Composite {
 				}				
 			}
 		});
-		btnNewButton.setBounds(590, 380, 93, 29);
-		btnNewButton.setText("Login");
+		loginButton.setBounds(590, 380, 93, 29);
+		loginButton.setText("Login");
+		loginButton.setBackground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		loginButton.setForeground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		
 		text_1 = new Text(this, SWT.BORDER | SWT.PASSWORD);
 		text_1.setBounds(528, 334, 214, 40);
@@ -82,18 +84,24 @@ public class LoginComposite extends Composite {
 		text = new Text(this, SWT.BORDER);
 		text.setBounds(528, 288, 214, 40);
 		
-		Button btnNewButton_1 = new Button(this, SWT.NONE);
-		btnNewButton_1.setBounds(590, 415, 93, 29);
-		btnNewButton_1.setText("Register");
+		Button rgstrButton = new Button(this, SWT.NONE);
+		rgstrButton.setBounds(590, 415, 93, 29);
+		rgstrButton.setText("Register");
+		rgstrButton.setBackground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		rgstrButton.setForeground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		
-		Label lblNewLabel_1 = new Label(this, SWT.NONE);
-		lblNewLabel_1.setBounds(452, 345, 70, 17);
-		lblNewLabel_1.setText("Password");
+		Label passwdLabel = new Label(this, SWT.NONE);
+		passwdLabel.setBounds(452, 345, 70, 17);
+		passwdLabel.setText("Password");
+		passwdLabel.setBackground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		passwdLabel.setForeground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		
 		
 		Label userNameLabel = new Label(this, SWT.NONE);
 		userNameLabel.setText("Username");
 		userNameLabel.setBounds(452, 299, 70, 17);
-		//userNameLabel.setBackground();
+		userNameLabel.setBackground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		userNameLabel.setForeground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		
 		
 		String imagepath = new File("src/images/WelcomeSign.png").getAbsolutePath();
@@ -102,6 +110,8 @@ public class LoginComposite extends Composite {
 		canvas.setBounds(10, 10, 1305, 272);
 		System.out.println(canvas.getBounds());
 		canvas.setLayout(new FillLayout());
+		
+		this.setBackground(getDisplay().getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		
 		canvas.addPaintListener(new PaintListener() {
             public void paintControl(PaintEvent e) {
@@ -113,9 +123,9 @@ public class LoginComposite extends Composite {
 
 	    
 		
-		setTabList(new Control[]{text, text_1, btnNewButton, btnNewButton_1});
+		setTabList(new Control[]{text, text_1, loginButton, rgstrButton});
 		
-		btnNewButton_1.addMouseListener(new MouseAdapter() {
+		rgstrButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				
